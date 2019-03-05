@@ -9,7 +9,7 @@ function resolve(filename)
     // console.log("Resolve " + filename + " relative to " + window.location.href);
 
     // Get path to current display
-    var display = window.location.search.replace("?display=", "");
+    var display = dbwr.getDisplay();
     var end = display.lastIndexOf("/");
     var path = display.substring(0, end+1);
 
