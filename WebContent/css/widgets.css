@@ -1,0 +1,53 @@
+/* Styles for display widgets */
+
+.Screen
+{
+	position: relative;
+}
+
+.Widget
+{
+	/* Position via top, left, width, height */
+	position: absolute;
+	
+	/* Include padding and border in width, height */
+	box-sizing: border-box;
+}
+
+svg.Widget
+{
+	overflow: visible;
+}
+
+/* Border used to debug layout */
+.Debug
+{
+	border: 1px solid blue;
+}
+
+/* Alarm borders: 3 pixel wide,
+ * using outline for the first and maybe only line.
+ * When multiple lines are needed, using box shadow.
+ */
+.BorderMinor
+{
+	outline: 3px solid #F80;
+}
+.BorderMajor
+{
+	/* Inner line */
+	outline: 1px solid #F00;
+	/* Gap between lines, outer line.
+	 * Gap has to have a color. Using somewhat-transparent white.
+	 */
+	box-shadow: 0 0 0 2px #FFFA, 0 0 0 3px #F00;
+}
+.BorderDisconnected
+{
+	outline: 3px dashed #F0F;
+}
+
+#info
+{
+	font-style: italic;
+}

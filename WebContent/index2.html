@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+<title>Display Builder Web Runtime</title>
+
+<link rel="stylesheet" type="text/css" href="css/widgets.css">
+
+<script type="text/javascript" src="js/jquery-3.3.1.js"></script> 
+<script type="text/javascript" src="js/pvs.js"></script> 
+</head>
+
+<body>
+
+<div class="Screen" style="width: 600px; height: 300px; background-color: #AAA;">
+	<div id="pv1" class="Widget Debug" style="top: 30px; left: 150px; width: 350px; height: 30px;">PV 1</div>
+	<div id="pv2" class="Widget BorderMinor" style="top: 70px; left: 150px; width: 350px; height: 30px;">PV 2</div>
+	
+	<div class="Widget Debug" style="top: 150px; left: 200px; width: 380px; height: 130px;">
+		<div id="pv3" class="Widget BorderMajor" style="top: 20px; left: 20px; width: 350px; height: 30px; background-color: green;">PV 2</div>
+		
+  		<div class="Widget Debug" style="top: 55px; left: 20px; width: 250px; height: 60px;">
+			<div id="pv4" class="Widget BorderDisconnected" style="top: 5px; left: 5px; width: 200px; height: 45px;">PV 2</div>
+		</div>
+	</div>
+</div>
+<div id="info">INFO</div>
+
+<script type="text/javascript">
+var pvs = new PVs();
+var info = jQuery("#info");
+
+var content = jQuery("#content");
+
+on_pv_update = function(pv_info, id)
+{
+	console.log("PV Update: ");
+	console.log(pv_info);
+	console.log("for " + id);
+	jQuery(id).html(pv_info.pv_name + " = " + pv_info.value);
+}
+
+on_connect = function()
+{
+	console.log("I'm CONNECTED!");
+	pvs.subscribe('DTL_LLRF:IOC1:Load', pv_info => on_pv_update(pv_info, "#pv1"));
+	pvs.subscribe('DTL_LLRF:IOC2:Load', pv_info => on_pv_update(pv_info, "#pv2"));
+	pvs.subscribe('CCL_LLRF:IOC2:Load', pv_info => on_pv_update(pv_info, "#pv3"));
+	pvs.subscribe('ICS_Tim:MPS_Mode:MachMode', pv_info => on_pv_update(pv_info, "#pv4"));
+	info.html("Subscribed.");
+}
+
+jQuery(function()
+{
+	info.html("Starting...");
+    pvs.open(on_connect);
+});
+</script>
+
+</body>
+
+</html>

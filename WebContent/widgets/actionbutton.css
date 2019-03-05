@@ -1,0 +1,11 @@
+
+button.Widget
+{
+    /* Slightly rounded corner would match JFX button,
+     * but adding border radius removes all styling and
+     * leaves a flat gray button
+     *
+     * -> Don't modify default button
+    border-radius: 5px;
+     */
+}

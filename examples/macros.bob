@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<display version="2.0.0">
+  <name>Display</name>
+  <macros>
+    <T>Display Macro</T>
+  </macros>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <class>TITLE</class>
+    <text>$(T)</text>
+    <x use_class="true">0</x>
+    <y use_class="true">0</y>
+    <width>550</width>
+    <height>31</height>
+    <font use_class="true">
+      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
+      </font>
+    </font>
+    <foreground_color use_class="true">
+      <color name="Text" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <transparent use_class="true">true</transparent>
+  </widget>
+  <widget type="group" version="2.0.0">
+    <name>$(N)</name>
+    <macros>
+      <N>The Group</N>
+      <T>Group Macro</T>
+    </macros>
+    <x>20</x>
+    <y>120</y>
+    <width>230</width>
+    <height>130</height>
+    <widget type="label" version="2.0.0">
+      <name>Label_1</name>
+      <text>$(T)</text>
+      <x>22</x>
+      <y>32</y>
+      <width>200</width>
+    </widget>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_2</name>
+    <text>Macro M that was passed in: $(M)</text>
+    <x>10</x>
+    <y>50</y>
+    <width>460</width>
+  </widget>
+</display>
