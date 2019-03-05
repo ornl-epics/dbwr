@@ -49,6 +49,9 @@ public class GroupWidget extends Widget
 
 		font = XMLUtil.getFont(xml, "font").orElse(LabelWidget.DEFAULT_FONT);
 
+		System.out.println("GROUP " + name + ": " + font);
+
+
 		classes.add("Group");
 		// classes.add("Debug");
 

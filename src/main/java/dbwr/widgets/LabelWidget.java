@@ -11,7 +11,7 @@ import dbwr.parser.XMLUtil;
 
 public class LabelWidget extends Widget
 {
-	static final FontInfo DEFAULT_FONT = new FontInfo(14);
+	static final FontInfo DEFAULT_FONT = new FontInfo(14, false);
 	private final String text;
 
 	public LabelWidget(final MacroProvider parent, final Element xml) throws Exception
@@ -21,6 +21,10 @@ public class LabelWidget extends Widget
 
 		final FontInfo font = XMLUtil.getFont(xml, "font").orElse(DEFAULT_FONT);
 		font.addToStyles(styles);
+
+		final int align = XMLUtil.getChildInteger(xml, "horizontal_alignment").orElse(0);
+		if (align == 1)
+		    styles.put("text-align", "center");
 	}
 
 	@Override

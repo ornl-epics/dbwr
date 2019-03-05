@@ -346,7 +346,8 @@ public class XMLUtil
 	            if (! attr.isEmpty())
 	            {
                     final int size = (int) Double.parseDouble(attr);
-        	        return Optional.of(new FontInfo(size));
+                    final boolean bold = false;
+        	        return Optional.of(new FontInfo(size, bold));
 	            }
 	        }
 	        // Fall back to <fontdata fontName="Sans" height="11" style="0"/>
@@ -357,15 +358,18 @@ public class XMLUtil
                 if (! attr.isEmpty())
                 {
                     final int size = (int) Double.parseDouble(attr);
-                    return Optional.of(new FontInfo(size));
+                    final boolean bold = false;
+                    return Optional.of(new FontInfo(size, bold));
                 }
             }
             // Give up
             logger.log(Level.WARNING, "Font element <" + name +"> is missing <font>");
 			return Optional.empty();
 		}
+
 		// <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0"></font>
 		final int size = (int) Double.parseDouble(font_xml.getAttribute("size"));
-		return Optional.of(new FontInfo(size));
+		final boolean bold = font_xml.getAttribute("style").equals("BOLD");
+		return Optional.of(new FontInfo(size, bold));
 	}
 }

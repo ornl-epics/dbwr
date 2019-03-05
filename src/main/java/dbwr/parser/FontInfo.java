@@ -5,10 +5,12 @@ import java.util.Map;
 public class FontInfo
 {
 	private final int size;
+    private final boolean bold;
 
-	public FontInfo(final int size)
+	public FontInfo(final int size, final boolean bold)
 	{
 		this.size = size;
+		this.bold = bold;
 	}
 
 	public int getSize()
@@ -19,11 +21,17 @@ public class FontInfo
 	public void addToStyles(Map<String, String> styles)
 	{
 		styles.put("font-size", size + "px");
+		if (bold)
+	        styles.put("font-weight", "bold");
 	}
 
 	@Override
 	public String toString()
 	{
-		return String.format("font-size: %dpx;", size);
+	    final StringBuilder buf = new StringBuilder();
+	    buf.append("font-size: ").append(size).append("px;");
+	    if (bold)
+	        buf.append("font-weight: bold;");
+	    return buf.toString();
 	}
 }
