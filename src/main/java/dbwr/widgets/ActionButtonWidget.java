@@ -64,7 +64,7 @@ public class ActionButtonWidget extends Widget
 		// TODO Handle $(actions) as text
 		if (text.equals("$(actions)"))
 		    if (attributes.containsKey("data-linked-label-0"))
-		        text = attributes.get("data-linked-label-0");
+		        text = HTMLUtil.unescape(attributes.get("data-linked-label-0"));
 		    else
 		        text = "Button";
 	}
