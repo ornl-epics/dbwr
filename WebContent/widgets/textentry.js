@@ -1,4 +1,8 @@
 DataBrowserWebRuntime.prototype.widget_subscribe_methods["textentry"] = function(widget, pv_info)
 {
-	widget.html(parseFloat(pv_info.value).toPrecision(4));
+    // TODO Format...
+    if (isNaN(pv_info.value))
+        widget.html(pv_info.value);
+    else
+        widget.html(parseFloat(pv_info.value).toPrecision(4));
 };
