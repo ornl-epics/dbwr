@@ -27,7 +27,7 @@ import dbwr.widgets.Widget;
  */
 public class DisplayParser implements MacroProvider
 {
-	final int width, height;
+	public final int width, height;
 	final Map<String, String> macros;
 
 	static
