@@ -104,9 +104,15 @@ public class MacroUtil
             for (final String name : macros.getMacroNames())
                 result = result.replace("$(" + name + ")", macros.getMacroValue(name));
 
+        // Also expand the less frequently used ${M} syntax
+        recursions = 3;
+        while (result.contains("${")  &&  --recursions > 0)
+            for (final String name : macros.getMacroNames())
+                result = result.replace("${" + name + "}", macros.getMacroValue(name));
+
+
         if (recursions <= 0)
             logger.log(Level.WARNING, "Unresolved macro " + text);
         return result;
     }
-
 }
