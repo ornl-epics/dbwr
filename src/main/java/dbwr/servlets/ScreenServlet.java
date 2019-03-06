@@ -1,3 +1,9 @@
+/*******************************************************************************
+ * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the LICENSE
+ * which accompanies this distribution
+ ******************************************************************************/
 package dbwr.servlets;
 
 import static dbwr.WebDisplayRepresentation.logger;
@@ -6,7 +12,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Level;
@@ -18,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dbwr.macros.MacroUtil;
-import dbwr.parser.CertificateHandler;
 import dbwr.parser.DisplayParser;
 import dbwr.parser.HTMLUtil;
 
@@ -29,40 +33,6 @@ import dbwr.parser.HTMLUtil;
 public class ScreenServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-
-	static
-    {
-        try
-        {
-            CertificateHandler.trustAnybody();
-        }
-        catch (final Exception ex)
-        {
-            logger.log(Level.WARNING, "Cannot install certificate handler", ex);
-        }
-    }
-
-	private InputStream open(final String display_name) throws Exception
-	{
-	    try
-	    {
-	        // Try to 'upgrade' to *.bob file
-    	    if (display_name.contains(".opi"))
-            {
-                final URL url = new URL(display_name.replace(".opi", ".bob"));
-                final InputStream stream = url.openStream();
-                logger.log(Level.INFO, "Opening *.bob instead of " + display_name);
-                return stream;
-            }
-	    }
-	    catch (final Exception ex)
-	    {
-	        // Ignore error from *.bob attempts
-	    }
-
-	    final URL url = new URL(display_name);
-        return url.openStream();
-	}
 
 	@Override
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException
@@ -87,7 +57,7 @@ public class ScreenServlet extends HttpServlet
 
 		try
 		{
-		    final InputStream stream = open(display_name);
+		    final InputStream stream = DisplayParser.open(display_name);
 			final ByteArrayOutputStream html_buf = new ByteArrayOutputStream();
 			final PrintWriter html = new PrintWriter(html_buf);
 			new DisplayParser(stream, macros, html);

@@ -1,3 +1,9 @@
+/*******************************************************************************
+ * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the LICENSE
+ * which accompanies this distribution
+ ******************************************************************************/
 package dbwr.widgets;
 
 import java.io.PrintWriter;
@@ -48,9 +54,6 @@ public class GroupWidget extends Widget
 		    style = XMLUtil.getChildInteger(xml, "style").orElse(0);
 
 		font = XMLUtil.getFont(xml, "font").orElse(LabelWidget.DEFAULT_FONT);
-
-		System.out.println("GROUP " + name + ": " + font);
-
 
 		classes.add("Group");
 		// classes.add("Debug");

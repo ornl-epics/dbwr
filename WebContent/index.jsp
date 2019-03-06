@@ -41,7 +41,7 @@ String macro_text = request.getParameter("macros");
 if (macro_text == null)
 {
     // For manually entered URLs, allow the more convenient
-    // $(NAME)=value&$OTHER=other
+    // $(NAME)=value&$(OTHER)=other
     final Map<String, String> macros = new HashMap<String, String>();
     final Enumeration<String> params = request.getParameterNames();
     while (params.hasMoreElements())

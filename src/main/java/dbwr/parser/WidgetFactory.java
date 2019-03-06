@@ -1,3 +1,9 @@
+/*******************************************************************************
+ * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the LICENSE
+ * which accompanies this distribution
+ ******************************************************************************/
 package dbwr.parser;
 
 import static dbwr.WebDisplayRepresentation.logger;
@@ -16,12 +22,26 @@ import dbwr.macros.MacroProvider;
 import dbwr.widgets.UnknownWidget;
 import dbwr.widgets.Widget;
 
+/** Factory for creating widget based on XML
+ *
+ *  <p>Creates widget class for each type based on
+ *  mapping defined in <file>widget.properties</file>.
+ *
+ *  @author Kay Kasemir
+ */
 @SuppressWarnings("unchecked")
 public class WidgetFactory
 {
+    /** Mapping of legacy BOY widget types to current widget types */
 	private static final Map<String, String> BOY_TYPES = new HashMap<>();
+
+	/** Map of widget type like 'label' to {@link Widget} class */
 	private static final Map<String, Class<Widget>> widget_classes = new HashMap<>();
+
+	/** Javascript files that are used by the widgets */
 	public static final List<String> js = new ArrayList<>();
+
+	/** Stylesheet files that are used by the widgets */
 	public static final List<String> css = new ArrayList<>();
 
 	static
@@ -38,7 +58,7 @@ public class WidgetFactory
 		BOY_TYPES.put("org.csstudio.opibuilder.widgets.polyline", "polyline");
         BOY_TYPES.put("org.csstudio.opibuilder.widgets.polygon", "polygon");
         BOY_TYPES.put("org.csstudio.opibuilder.widgets.arc", "arc");
-//      BOY_TYPES.put("", "");
+        BOY_TYPES.put("org.csstudio.opibuilder.widgets.linkingContainer", "embedded");
 //      BOY_TYPES.put("", "");
 //      BOY_TYPES.put("", "");
 //      BOY_TYPES.put("", "");
@@ -70,6 +90,11 @@ public class WidgetFactory
 		logger.log(Level.CONFIG, "CSS: " + css);
 	}
 
+	/** @param parent Parent (widget), provides hierarchical macro settings
+	 *  @param xml XML for this widget
+	 *  @return {@link Widget}
+	 *  @throws Exception on error
+	 */
 	public static Widget createWidget(final MacroProvider parent, final Element xml) throws Exception
 	{
 		String type = xml.getAttribute("type");
