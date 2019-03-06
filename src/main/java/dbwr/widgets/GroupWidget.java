@@ -14,7 +14,6 @@ import java.util.Map;
 
 import org.w3c.dom.Element;
 
-import dbwr.macros.MacroProvider;
 import dbwr.macros.MacroUtil;
 import dbwr.parser.FontInfo;
 import dbwr.parser.HTMLUtil;
@@ -29,7 +28,7 @@ public class GroupWidget extends Widget
 	private final List<Widget> children = new ArrayList<>();
 	private final Map<String, String> macros;
 
-	public GroupWidget(final MacroProvider parent, final Element xml) throws Exception
+	public GroupWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 		super(parent, xml, "group", 300, 200);
 		// Get macros first in case they're used for the name etc.

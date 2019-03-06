@@ -7,6 +7,7 @@
 package dbwr.widgets;
 
 import java.io.PrintWriter;
+import java.net.URL;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -16,17 +17,16 @@ import java.util.stream.Collectors;
 
 import org.w3c.dom.Element;
 
-import dbwr.macros.MacroProvider;
 import dbwr.parser.HTMLUtil;
 import dbwr.parser.XMLUtil;
 
 /** Base for all widgets
  *  @author Kay Kasemir
  */
-public class Widget implements MacroProvider
+public class Widget implements ParentWidget
 {
-    /** Parent (widget) that provides macros */
-    protected final MacroProvider parent;
+    /** Parent widget */
+    protected final ParentWidget parent;
 
     /** Classes to add to the HTML for this widget */
 	protected final Set<String> classes = new HashSet<>();
@@ -40,24 +40,24 @@ public class Widget implements MacroProvider
 	/** Widget position and size */
 	protected final int x, y, width, height;
 
-	/** @param parent Parent (widget) that provides macros
+	/** @param parent Parent widget
 	 *  @param xml XML for this widget
 	 *  @param type Type to declare in data-type
 	 *  @throws Exception on error
 	 */
-	public Widget(final MacroProvider parent, final Element xml, final String type) throws Exception
+	public Widget(final ParentWidget parent, final Element xml, final String type) throws Exception
 	{
 		this(parent, xml, type, 100, 20);
 	}
 
-    /** @param parent Parent (widget) that provides macros
+    /** @param parent Parent widget
      *  @param xml XML for this widget
      *  @param type Type to declare in data-type
      *  @param default_width Width ..
      *  @param default_height .. and height to use when not provided in XML
      *  @throws Exception on error
      */
-	public Widget(final MacroProvider parent, final Element xml, final String type, final int default_width, final int default_height) throws Exception
+	public Widget(final ParentWidget parent, final Element xml, final String type, final int default_width, final int default_height) throws Exception
 	{
 	    this.parent = parent;
 		x = XMLUtil.getChildInteger(xml, "x").orElse(0);
@@ -75,6 +75,12 @@ public class Widget implements MacroProvider
 	}
 
 	@Override
+    public URL getDisplay()
+	{
+        return parent.getDisplay();
+    }
+
+    @Override
     public Collection<String> getMacroNames()
 	{
         return parent.getMacroNames();

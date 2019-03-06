@@ -10,7 +10,6 @@ import static dbwr.WebDisplayRepresentation.logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Map;
@@ -26,6 +25,7 @@ import dbwr.macros.MacroProvider;
 import dbwr.macros.MacroUtil;
 import dbwr.parser.DisplayParser;
 import dbwr.parser.HTMLUtil;
+import dbwr.parser.Resolver;
 
 /** Servlet that fetches HTML for a display
  *  @author Kay Kasemir
@@ -58,10 +58,10 @@ public class ScreenServlet extends HttpServlet
 
 		try
 		{
-		    final InputStream stream = DisplayParser.open(display_name);
+		    final Resolver display = new Resolver(display_name);
 			final ByteArrayOutputStream html_buf = new ByteArrayOutputStream();
 			final PrintWriter html = new PrintWriter(html_buf);
-			new DisplayParser(stream, MacroProvider.forMap(macro_map), html);
+			new DisplayParser(display, MacroProvider.forMap(macro_map), html);
 			html.flush();
 			html.close();
 

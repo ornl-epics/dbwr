@@ -18,7 +18,7 @@ import java.util.logging.Level;
 
 import org.w3c.dom.Element;
 
-import dbwr.macros.MacroProvider;
+import dbwr.widgets.ParentWidget;
 import dbwr.widgets.UnknownWidget;
 import dbwr.widgets.Widget;
 
@@ -90,12 +90,12 @@ public class WidgetFactory
 		logger.log(Level.CONFIG, "CSS: " + css);
 	}
 
-	/** @param parent Parent (widget), provides hierarchical macro settings
+	/** @param parent Parent widget
 	 *  @param xml XML for this widget
 	 *  @return {@link Widget}
 	 *  @throws Exception on error
 	 */
-	public static Widget createWidget(final MacroProvider parent, final Element xml) throws Exception
+	public static Widget createWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 		String type = xml.getAttribute("type");
 		if (type.isEmpty())
@@ -105,7 +105,7 @@ public class WidgetFactory
 		if (clazz == null)
 			return new UnknownWidget(parent, xml, type);
 
-		final Constructor<Widget> constructor = clazz.getDeclaredConstructor(MacroProvider.class, Element.class);
+		final Constructor<Widget> constructor = clazz.getDeclaredConstructor(ParentWidget.class, Element.class);
 		return constructor.newInstance(parent, xml);
 	}
 }

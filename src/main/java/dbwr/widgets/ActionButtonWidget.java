@@ -11,17 +11,17 @@ import java.util.Map;
 
 import org.w3c.dom.Element;
 
-import dbwr.macros.MacroProvider;
 import dbwr.macros.MacroUtil;
 import dbwr.parser.FontInfo;
 import dbwr.parser.HTMLUtil;
+import dbwr.parser.Resolver;
 import dbwr.parser.XMLUtil;
 
 public class ActionButtonWidget extends Widget
 {
 	private String text;
 
-	public ActionButtonWidget(final MacroProvider parent, final Element xml) throws Exception
+	public ActionButtonWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 		super(parent, xml, "action_button");
 
@@ -58,7 +58,8 @@ public class ActionButtonWidget extends Widget
     				final Map<String, String> macros = MacroUtil.fromXML(ae);
 
     				// TODO Escape file
-    				attributes.put("data-linked-file-" + index, file);
+    				final String resolved = Resolver.resolve(this, file);
+    				attributes.put("data-linked-file-" + index, resolved);
     				if (! macros.isEmpty())
                         attributes.put("data-linked-macros-" + index, HTMLUtil.escape(MacroUtil.toJSON(macros)));
 			    }

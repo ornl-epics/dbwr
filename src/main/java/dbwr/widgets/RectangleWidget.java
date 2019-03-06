@@ -10,7 +10,6 @@ import java.io.PrintWriter;
 
 import org.w3c.dom.Element;
 
-import dbwr.macros.MacroProvider;
 import dbwr.parser.HTMLUtil;
 import dbwr.parser.XMLUtil;
 
@@ -18,7 +17,7 @@ public class RectangleWidget extends EllipseWidget
 {
     private final double rx, ry;
 
-	public RectangleWidget(final MacroProvider parent, final Element xml) throws Exception
+	public RectangleWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 		super(parent, xml, "rectangle");
 		rx = XMLUtil.getChildDouble(xml, "corner_width").orElse(0.0);

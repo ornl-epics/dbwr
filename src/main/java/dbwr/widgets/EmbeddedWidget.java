@@ -9,7 +9,6 @@ package dbwr.widgets;
 import static dbwr.WebDisplayRepresentation.logger;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,9 +18,9 @@ import java.util.logging.Level;
 
 import org.w3c.dom.Element;
 
-import dbwr.macros.MacroProvider;
 import dbwr.macros.MacroUtil;
 import dbwr.parser.DisplayParser;
+import dbwr.parser.Resolver;
 import dbwr.parser.XMLUtil;
 
 /** Embedded display widget
@@ -39,7 +38,7 @@ public class EmbeddedWidget extends Widget
 	private final int resize;
 	private String embedded_html;
 
-	public EmbeddedWidget(final MacroProvider parent, final Element xml) throws Exception
+	public EmbeddedWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 		super(parent, xml, "embedded", 300, 200);
 		// classes.add("Debug");
@@ -86,9 +85,9 @@ public class EmbeddedWidget extends Widget
             // TODO Resolve file
             final String resolved = "file:/Users/ky9/Downloads/Display%20Builder/embedded/" + file;
 
-            final InputStream stream = DisplayParser.open(resolved);
+            final Resolver display = new Resolver(resolved);
             final PrintWriter buf_writer = new PrintWriter(buf);
-            embedded_display = new DisplayParser(stream, this, buf_writer, group_name);
+            embedded_display = new DisplayParser(display, this, buf_writer, group_name);
             buf_writer.flush();
             buf_writer.close();
         }
@@ -100,7 +99,7 @@ public class EmbeddedWidget extends Widget
 
         // 0: No resize, scrollbars as needed
         // 1: Resize content
-        // 2: Resize container    TODO Means need to parse the content NOW to resize this.with, height
+        // 2: Resize container
         if (resize == 0)
         {
             // System.out.println("Auto-Scroll " + file + " to fit " + embedded_display.width + " x " + embedded_display.height + " into " + width + " x " + height);
@@ -136,7 +135,10 @@ public class EmbeddedWidget extends Widget
     @Override
     protected void startHTML(final PrintWriter html, final int indent)
     {
+        // Embedded content might resize the container, i.e. this widget.
+        // So need to parse content first..
         embedded_html = parseContent();
+        // .. and then start the HTML for this container, which might use the updated width, height
         super.startHTML(html, indent);
     }
 

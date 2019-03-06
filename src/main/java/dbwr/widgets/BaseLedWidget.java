@@ -10,11 +10,9 @@ import java.io.PrintWriter;
 
 import org.w3c.dom.Element;
 
-import dbwr.macros.MacroProvider;
-
 public class BaseLedWidget extends SvgPVWidget
 {
-	protected BaseLedWidget(final MacroProvider parent, final Element xml, final String type) throws Exception
+	protected BaseLedWidget(final ParentWidget parent, final Element xml, final String type) throws Exception
 	{
 		super(parent, xml, type, 20, 20);
 		classes.add("Led");

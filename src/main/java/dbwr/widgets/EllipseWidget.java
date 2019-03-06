@@ -10,7 +10,6 @@ import java.io.PrintWriter;
 
 import org.w3c.dom.Element;
 
-import dbwr.macros.MacroProvider;
 import dbwr.parser.HTMLUtil;
 import dbwr.parser.XMLUtil;
 
@@ -20,12 +19,12 @@ public class EllipseWidget extends SvgWidget
 	protected final String line_color, background_color;
 	protected final boolean transparent;
 
-	public EllipseWidget(final MacroProvider parent, final Element xml) throws Exception
+	public EllipseWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 	    this(parent, xml, "ellipse");
 	}
 
-	protected EllipseWidget(final MacroProvider parent, final Element xml, final String type) throws Exception
+	protected EllipseWidget(final ParentWidget parent, final Element xml, final String type) throws Exception
 	{
 		super(parent, xml, type);
 		line_width = XMLUtil.getChildInteger(xml, "line_width").orElse(3);

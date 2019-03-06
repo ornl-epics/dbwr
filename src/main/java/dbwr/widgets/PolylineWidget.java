@@ -10,7 +10,6 @@ import java.io.PrintWriter;
 
 import org.w3c.dom.Element;
 
-import dbwr.macros.MacroProvider;
 import dbwr.parser.HTMLUtil;
 import dbwr.parser.XMLUtil;
 
@@ -19,12 +18,12 @@ public class PolylineWidget extends SvgWidget
     protected final int line_width;
 	protected final String line_color, points;
 
-	public PolylineWidget(final MacroProvider parent, final Element xml) throws Exception
+	public PolylineWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 	    this(parent, xml, "polyline");
 	}
 
-	protected PolylineWidget(final MacroProvider parent, final Element xml, final String type) throws Exception
+	protected PolylineWidget(final ParentWidget parent, final Element xml, final String type) throws Exception
 	{
 		super(parent, xml, type);
 		line_width = XMLUtil.getChildInteger(xml, "line_width").orElse(3);

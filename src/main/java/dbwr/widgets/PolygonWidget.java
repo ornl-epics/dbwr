@@ -10,7 +10,6 @@ import java.io.PrintWriter;
 
 import org.w3c.dom.Element;
 
-import dbwr.macros.MacroProvider;
 import dbwr.parser.HTMLUtil;
 import dbwr.parser.XMLUtil;
 
@@ -18,7 +17,7 @@ public class PolygonWidget extends PolylineWidget
 {
 	private final String background_color;
 
-	public PolygonWidget(final MacroProvider parent, final Element xml) throws Exception
+	public PolygonWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 		super(parent, xml, "polygon");
 	    background_color = XMLUtil.getColor(xml, "background_color").orElse("#3232FF");

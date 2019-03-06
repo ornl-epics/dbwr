@@ -9,11 +9,6 @@ class DataBrowserWebRuntime
         this.pvs = new PVs();
     }
     
-    getDisplay()
-    {
-        return this.display;
-    }
-
     loadContent(display, macros)
     {
         this.display = display;

@@ -8,12 +8,11 @@ package dbwr.widgets;
 
 import org.w3c.dom.Element;
 
-import dbwr.macros.MacroProvider;
 import dbwr.parser.XMLUtil;
 
 public class LedWidget extends BaseLedWidget
 {
-	public LedWidget(final MacroProvider parent, final Element xml) throws Exception
+	public LedWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 		super(parent, xml, "led");
 

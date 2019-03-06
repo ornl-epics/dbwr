@@ -10,14 +10,13 @@ import java.io.PrintWriter;
 
 import org.w3c.dom.Element;
 
-import dbwr.macros.MacroProvider;
 import dbwr.parser.HTMLUtil;
 
 public class UnknownWidget extends Widget
 {
 	private final String type;
 
-	public UnknownWidget(final MacroProvider parent, final Element xml, final String type) throws Exception
+	public UnknownWidget(final ParentWidget parent, final Element xml, final String type) throws Exception
 	{
 		super(parent, xml, "unknown");
 		this.type = type;
