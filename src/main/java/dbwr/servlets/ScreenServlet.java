@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dbwr.macros.MacroProvider;
 import dbwr.macros.MacroUtil;
 import dbwr.parser.DisplayParser;
 import dbwr.parser.HTMLUtil;
@@ -40,13 +41,13 @@ public class ScreenServlet extends HttpServlet
 		final String display_name = request.getParameter("display");
 		logger.log(Level.INFO, "screen/display=" + display_name);
 
-		Map<String, String> macros = Collections.emptyMap();
+		Map<String, String> macro_map = Collections.emptyMap();
 		String json_macros = request.getParameter("macros");
 		if (json_macros != null)
 		{
             json_macros = HTMLUtil.unescape(request.getParameter("macros"));
-		    macros = MacroUtil.fromJSON(json_macros);
-            logger.log(Level.INFO, ".. and macros " + macros);
+		    macro_map = MacroUtil.fromJSON(json_macros);
+            logger.log(Level.INFO, ".. and macros " + macro_map);
 		}
 
 		if (display_name == null)
@@ -60,7 +61,7 @@ public class ScreenServlet extends HttpServlet
 		    final InputStream stream = DisplayParser.open(display_name);
 			final ByteArrayOutputStream html_buf = new ByteArrayOutputStream();
 			final PrintWriter html = new PrintWriter(html_buf);
-			new DisplayParser(stream, macros, html);
+			new DisplayParser(stream, MacroProvider.forMap(macro_map), html);
 			html.flush();
 			html.close();
 

@@ -75,24 +75,58 @@ public class DisplayParser implements MacroProvider
 	 *  @param html HTML is appended to this writer
 	 *  @throws Exception on error
 	 */
-	public DisplayParser(final InputStream stream, final Map<String, String> macros, final PrintWriter html) throws Exception
+	public DisplayParser(final InputStream stream, final MacroProvider macros, final PrintWriter html) throws Exception
 	{
-	    // TODO Pass in x, y for embedded display
+	    this(stream, macros, html, null);
+	}
+
+    /** Parse display into HTML
+     *  @param stream Stream for the display
+     *  @param macros Macros
+     *  @param html HTML is appended to this writer
+     *  @param group_name Parse only this group?
+     *  @throws Exception on error
+     */
+	public DisplayParser(final InputStream stream, final MacroProvider macros, final PrintWriter html, final String group_name) throws Exception
+	{
 		final Element root = XMLUtil.openXMLDocument(stream, "display");
 
+		// Fetch macros first to allow use in remaining properties,
+		// combining macros passed in..
 		this.macros = new HashMap<>();
-		this.macros.putAll(macros);
-		// Fetch macros first to allow use in remaining properties
+		for (final String name : macros.getMacroNames())
+		    this.macros.put(name, macros.getMacroValue(name));
+		// .. with those defined in the display
 		this.macros.putAll(MacroUtil.fromXML(root));
 
+		// Read from root, or look for a sub-group?
+		Element top = root;
+		if (group_name != null)
+		{
+		    // System.err.println("Looking for " + group_name + " - " + macros);
+		    for (final Element xml : XMLUtil.getChildElements(top, "widget"))
+		    {
+		        if (! xml.getAttribute("type").equals("group"))
+		            continue;
+
+		        final String name = XMLUtil.getChildString(this, xml, "name").orElse(null);
+		        if (group_name.equals(name))
+		        {
+		            top = xml;
+		            break;
+		        }
+		    }
+		}
+
 		// TODO Replace macros in integer etc. (in XMLUtil)
-		width = XMLUtil.getChildInteger(root, "width").orElse(800);
-		height = XMLUtil.getChildInteger(root, "height").orElse(600);
+		width = XMLUtil.getChildInteger(top, "width").orElse(800);
+		height = XMLUtil.getChildInteger(top, "height").orElse(600);
 
 		final String background = XMLUtil.getColor(root, "background_color").orElse("#FFF");
 
+		// Create HTML for the screen and all its widgets
 		html.println("<div class=\"Screen\" style=\"width: " + width + "px; height: " + height + "px; background-color: " + background + ";\">");
-		for (final Element xml : XMLUtil.getChildElements(root, "widget"))
+		for (final Element xml : XMLUtil.getChildElements(top, "widget"))
 		{
 			final Widget widget = WidgetFactory.createWidget(this, xml);
 			widget.getHTML(html, 1);

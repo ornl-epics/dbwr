@@ -35,23 +35,25 @@ public class EmbeddedWidget extends Widget
 {
 	private final Map<String, String> macros;
 	private String file;
+    private final String group_name;
 	private final int resize;
 	private String embedded_html;
 
 	public EmbeddedWidget(final MacroProvider parent, final Element xml) throws Exception
 	{
 		super(parent, xml, "embedded", 300, 200);
+		// classes.add("Debug");
 
 		// Get macros first in case they're used for the name etc.
 		macros = MacroUtil.fromXML(xml);
-		classes.add("Debug");
 
 		file = XMLUtil.getChildString(this, xml, "file").orElse("");
 		if (file.isEmpty())
 		    file = XMLUtil.getChildString(this, xml, "opi_file").orElse("");
 
-		resize = XMLUtil.getChildInteger(xml, "resize").orElse(0);
+		group_name = XMLUtil.getChildString(this, xml, "group_name").orElse(null);
 
+		resize = XMLUtil.getChildInteger(xml, "resize").orElse(0);
 	}
 
 	@Override
@@ -73,8 +75,7 @@ public class EmbeddedWidget extends Widget
 
     private String parseContent()
     {
-        System.out.println(file + " with " + macros);
-
+        // System.out.println(file + " with " + macros);
         if (file.isEmpty())
             return "";
 
@@ -87,7 +88,7 @@ public class EmbeddedWidget extends Widget
 
             final InputStream stream = DisplayParser.open(resolved);
             final PrintWriter buf_writer = new PrintWriter(buf);
-            embedded_display = new DisplayParser(stream, macros, buf_writer);
+            embedded_display = new DisplayParser(stream, this, buf_writer, group_name);
             buf_writer.flush();
             buf_writer.close();
         }
