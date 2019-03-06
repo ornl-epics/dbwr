@@ -82,9 +82,7 @@ public class EmbeddedWidget extends Widget
         final ByteArrayOutputStream buf = new ByteArrayOutputStream();
         try
         {
-            // TODO Resolve file
-            final String resolved = "file:/Users/ky9/Downloads/Display%20Builder/embedded/" + file;
-
+            final String resolved = Resolver.resolve(this, file);
             final Resolver display = new Resolver(resolved);
             final PrintWriter buf_writer = new PrintWriter(buf);
             embedded_display = new DisplayParser(display, this, buf_writer, group_name);

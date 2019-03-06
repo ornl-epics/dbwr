@@ -71,7 +71,14 @@ public class Resolver
         return stream;
     }
 
-    public static String resolve(ParentWidget parent, String file) throws Exception
+    /** Resolve a file name relative to a parent widget
+     *
+     *  @param parent Parent widget
+     *  @param file File to resolve
+     *  @return Resolved file
+     *  @throws Exception on error
+     */
+    public static String resolve(final ParentWidget parent, final String file) throws Exception
     {
         if (file.startsWith("http"))
             return file;
