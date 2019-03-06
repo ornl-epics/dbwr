@@ -6,8 +6,6 @@
  ******************************************************************************/
 package dbwr.widgets;
 
-import java.io.PrintWriter;
-
 import org.w3c.dom.Element;
 
 import dbwr.macros.MacroProvider;
@@ -25,9 +23,9 @@ public class SvgWidget extends Widget
 	}
 
 	@Override
-	protected void getHTMLElement(final PrintWriter html)
+	protected String getHTMLElement()
 	{
-		html.append("svg");
+		return "svg";
 	}
 }
 

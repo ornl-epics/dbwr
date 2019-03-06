@@ -77,6 +77,7 @@ TODO
       - Sends initial metadata, then updates. Client lib keeps complete data.
       - JSON, except some binary encoding for array values
  * Text formatting (precision, units, enum labels)
+ * Update alarm-sensitive border based on PV
  * Combo (read-only)
  * Bool Button (read-only)
  * Limited Rule support: Color of rect/circle/label

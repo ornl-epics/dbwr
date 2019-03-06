@@ -20,19 +20,43 @@ import dbwr.macros.MacroProvider;
 import dbwr.parser.HTMLUtil;
 import dbwr.parser.XMLUtil;
 
+/** Base for all widgets
+ *  @author Kay Kasemir
+ */
 public class Widget implements MacroProvider
 {
+    /** Parent (widget) that provides macros */
     protected final MacroProvider parent;
+
+    /** Classes to add to the HTML for this widget */
 	protected final Set<String> classes = new HashSet<>();
+
+	/** Attributes to add to the HTML for this widget */
 	protected final Map<String, String> attributes = new LinkedHashMap<>();
+
+	/** Styles (inline) to add to the HTML for this widget */
 	protected final Map<String, String> styles = new LinkedHashMap<>();
+
+	/** Widget position and size */
 	protected final int x, y, width, height;
 
+	/** @param parent Parent (widget) that provides macros
+	 *  @param xml XML for this widget
+	 *  @param type Type to declare in data-type
+	 *  @throws Exception on error
+	 */
 	public Widget(final MacroProvider parent, final Element xml, final String type) throws Exception
 	{
 		this(parent, xml, type, 100, 20);
 	}
 
+    /** @param parent Parent (widget) that provides macros
+     *  @param xml XML for this widget
+     *  @param type Type to declare in data-type
+     *  @param default_width Width ..
+     *  @param default_height .. and height to use when not provided in XML
+     *  @throws Exception on error
+     */
 	public Widget(final MacroProvider parent, final Element xml, final String type, final int default_width, final int default_height) throws Exception
 	{
 	    this.parent = parent;
@@ -94,15 +118,16 @@ public class Widget implements MacroProvider
 		html.append("\"");
 	}
 
-	protected void getHTMLElement(final PrintWriter html)
+	/** @return "div" or "svg" or "..." to use as main element */
+	protected String getHTMLElement()
 	{
-		html.append("div");
+	    return "div";
 	}
 
 	protected void startHTML(final PrintWriter html, final int indent)
 	{
 		HTMLUtil.indent(html, indent);
-		html.append("<"); getHTMLElement(html); html.append(" ");
+		html.append("<").append(getHTMLElement()).append(" ");
 		appendClasses(html);
 		appendAttributes(html);
 		html.append(' ');
@@ -110,15 +135,19 @@ public class Widget implements MacroProvider
 		html.append(">");
 	}
 
+	/** Fill body of the HTML element
+	 *
+	 *  @param html
+	 *  @param indent
+	 */
 	protected void fillHTML(final PrintWriter html, final int indent)
 	{
+	    // Derived class most likely implements this
 	}
 
 	protected void endHTML(final PrintWriter html, final int indent)
 	{
-		html.append("</");
-		getHTMLElement(html);
-		html.println(">");
+		html.append("</").append(getHTMLElement()).append(">").println();
 	}
 
 	public void getHTML(final PrintWriter html, int indent)

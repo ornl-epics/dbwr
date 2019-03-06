@@ -102,7 +102,7 @@ public class EmbeddedWidget extends Widget
         // 2: Resize container    TODO Means need to parse the content NOW to resize this.with, height
         if (resize == 0)
         {
-            System.out.println("Auto-Scroll " + file + " to fit " + embedded_display.width + " x " + embedded_display.height + " into " + width + " x " + height);
+            // System.out.println("Auto-Scroll " + file + " to fit " + embedded_display.width + " x " + embedded_display.height + " into " + width + " x " + height);
             // Enable scrollbars based on self-declared size of container vs. content
             if (embedded_display.width > width  ||
                 embedded_display.height > height)

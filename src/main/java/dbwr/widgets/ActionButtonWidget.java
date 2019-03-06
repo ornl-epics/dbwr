@@ -76,9 +76,9 @@ public class ActionButtonWidget extends Widget
 	}
 
 	@Override
-	protected void getHTMLElement(final PrintWriter html)
+	protected String getHTMLElement()
 	{
-		html.append("button");
+	    return "button";
 	}
 
 	@Override

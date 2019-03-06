@@ -15,6 +15,9 @@ import dbwr.parser.FontInfo;
 import dbwr.parser.HTMLUtil;
 import dbwr.parser.XMLUtil;
 
+/** Label Widget
+ *  @author Kay Kasemir
+ */
 public class LabelWidget extends Widget
 {
 	static final FontInfo DEFAULT_FONT = new FontInfo(14, false);
@@ -36,6 +39,16 @@ public class LabelWidget extends Widget
 	@Override
 	protected void fillHTML(final PrintWriter html, final int indent)
 	{
-		HTMLUtil.escape(html, text);
+	    // Turn '\n' into <br>,
+	    // then escape each line to handle special characters
+	    boolean first = true;
+	    for (final String line : text.split("\n"))
+	    {
+	        if (first)
+	            first = false;
+	        else
+	            html.append("<br>");
+	        HTMLUtil.escape(html, line);
+	    }
 	}
 }
