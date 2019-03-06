@@ -49,6 +49,7 @@ Uses epics2web web socket to show Display Builder screens on the web.
 Mostly Functional
 -----------------
 
+ * Basic Macro support
  * Label
  * Rectangle
  * Ellipse
@@ -61,7 +62,7 @@ Mostly Functional
  * Multi-State LED
  * Action Button to open display or web link
  * Group with group border
- * Basic Macro support
+ * Embedded Displays
 
 
 TODO
@@ -69,7 +70,6 @@ TODO
 
  * index.jsp that shows some of this info, form to enter file and macros
  * view.jsp to show the file
- * Embedded Displays
  * Pass all Macros on to related displays
  * PV Web Socket:
       - Based on VType.PV (CA, PVA, MQTT, Local, Sim PVs)
