@@ -58,6 +58,10 @@ public class ActionButtonWidget extends Widget
     				final Map<String, String> macros = MacroUtil.fromXML(ae);
     				MacroUtil.expand(parent, macros);
 
+    		        // Add parent macros
+    				for (final String name : parent.getMacroNames())
+    		            macros.putIfAbsent(name, parent.getMacroValue(name));
+
     				// TODO Escape file
     				final String resolved = Resolver.resolve(this, file);
     				attributes.put("data-linked-file-" + index, resolved);
