@@ -1,13 +1,21 @@
 
 button.Widget
 {
-    /* Slightly rounded corner would match JFX button,
-     * but adding border radius removes all styling and
-     * leaves a flat gray button
+    /* When touching the button style in any way,
+     * for example by slightly rounding corner would match JFX button,
+     * this removes all of the default styling,
+     * resulting in a very plane flat gray button.
      *
-     * -> Don't modify default button
-    border-radius: 5px;
+     * -> Either don't modify default button,
+     *    or fully update it with gradient etc.
      */
+    border-radius: 4px;
+    background-image: linear-gradient(to bottom right, #ECECEC, #DDD);
+    border-style: outset;
+    border-width: 1.5px;
+    border-color: #CCC;
+    
+    /* Maximize space for text, minimize border */
     padding: 0px;
     margin: 0px; 
     
