@@ -110,9 +110,15 @@ public class MacroUtil
             for (final String name : macros.getMacroNames())
                 result = result.replace("${" + name + "}", macros.getMacroValue(name));
 
-
-        if (recursions <= 0)
-            logger.log(Level.WARNING, "Unresolved macro " + text);
         return result;
+    }
+
+    /** Expand all macros in map with values from parent
+     *  @param parent Parent macros
+     *  @param macros Macros that will be expanded
+     */
+    public static void expand(MacroProvider parent, Map<String, String> macros)
+    {
+        macros.replaceAll((name, value) ->  expand(parent, value));
     }
 }

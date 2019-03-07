@@ -33,6 +33,7 @@ public class GroupWidget extends Widget
 		super(parent, xml, "group", 300, 200);
 		// Get macros first in case they're used for the name etc.
 		macros = MacroUtil.fromXML(xml);
+		MacroUtil.expand(parent, macros);
 
 		name = XMLUtil.getChildString(this, xml, "name").orElse("");
 

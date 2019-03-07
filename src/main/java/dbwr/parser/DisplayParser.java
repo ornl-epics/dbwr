@@ -41,24 +41,25 @@ public class DisplayParser implements ParentWidget
 
     /** Parse display into HTML
      *  @param display Resolved display
-     *  @param macros Macros
+     *  @param parent Macros
      *  @param html HTML is appended to this writer
      *  @param group_name Parse only this group?
      *  @throws Exception on error
      */
-	public DisplayParser(final Resolver display, final MacroProvider macros, final PrintWriter html, final String group_name) throws Exception
+	public DisplayParser(final Resolver display, final MacroProvider parent, final PrintWriter html, final String group_name) throws Exception
 	{
 	    this.display = display.getUrl();
 
 		final Element root = XMLUtil.openXMLDocument(display.getStream(), "display");
 
 		// Fetch macros first to allow use in remaining properties,
-		// combining macros passed in..
-		this.macros = new HashMap<>();
-		for (final String name : macros.getMacroNames())
-		    this.macros.put(name, macros.getMacroValue(name));
-		// .. with those defined in the display
-		this.macros.putAll(MacroUtil.fromXML(root));
+		macros = new HashMap<>();
+		macros.putAll(MacroUtil.fromXML(root));
+		MacroUtil.expand(parent, macros);
+
+		// Combining macros passed in with those defined in the display
+		for (final String name : parent.getMacroNames())
+		    macros.putIfAbsent(name, parent.getMacroValue(name));
 
 		// Read from root, or look for a sub-group?
 		Element top = root;

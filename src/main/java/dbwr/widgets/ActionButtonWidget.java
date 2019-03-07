@@ -56,6 +56,7 @@ public class ActionButtonWidget extends Widget
 
     				// Read macros into map
     				final Map<String, String> macros = MacroUtil.fromXML(ae);
+    				MacroUtil.expand(parent, macros);
 
     				// TODO Escape file
     				final String resolved = Resolver.resolve(this, file);

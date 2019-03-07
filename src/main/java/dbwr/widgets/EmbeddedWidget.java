@@ -45,6 +45,7 @@ public class EmbeddedWidget extends Widget
 
 		// Get macros first in case they're used for the name etc.
 		macros = MacroUtil.fromXML(xml);
+		MacroUtil.expand(parent, macros);
 
 		file = XMLUtil.getChildString(this, xml, "file").orElse("");
 		if (file.isEmpty())
