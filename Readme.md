@@ -35,7 +35,7 @@ Uses epics2web web socket to show Display Builder screens on the web.
 Mostly Functional
 -----------------
 
- * Basic Macro support
+ * Macro support
  * Label
  * Rectangle
  * Ellipse
@@ -54,7 +54,6 @@ Mostly Functional
 TODO
 ----
 
- * Pass all Macros on to related displays
  * PV Web Socket:
       - Based on VType.PV (CA, PVA, MQTT, Local, Sim PVs)
       - ReactiveJ Throttling
