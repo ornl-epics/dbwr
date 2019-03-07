@@ -18,8 +18,9 @@
 <p>Enter a 'file:' or 'http:' URL for a *.bob or *.opi display:<p>
 
 <form id="open_form">
-        Display: <input type="text" name="display" style="width: 80%;"><br>
-        Macros: <input type="text" name="macros" style="width: 80%;">   <input type="button" value="Open">
+    Display: <input type="text" name="display" style="width: 80%;"> 
+    <br>
+    Macros: <input type="text" name="macros" style="width: 80%;">   <input type="button" value="Open">
 </form>
 
 
@@ -38,22 +39,27 @@ http://localhost:8080/dbwr/view.jsp?display=file:/Path/to/Display+Builder/01_mai
 
 <h4>Macros</h4>
 
-<p>Macros are passed as a <code>macros=JSON map</code>, but note that the map needs to be URL encoded, for example using JavaScript
-<code>encodeURIComponent('{"NAME"="Value"}')</code>.
+<p>When manually entering a URL, you can use the syntax
+<code>$(NAME)=Some Value&amp;$(OTHER)=Other Value</code> as in
+<pre class="example_url">
+/view.jsp?display=https://some_host/opi/file.opi&amp;$(S)=06&amp;$(S1)=06
+</pre>
+
+<p>That simplified mechanism, however, is limited when you try to
+pass values which contain '=' or '&amp;'.
+</p>
+
+<p>A more robust mechanism passes macros as a <code>macros=JSON map</code>,
+for example <code>{"S"="06", "S1"="06"}</code>,
+but note that the map needs to be URL encoded, for example using JavaScript
+<code>encodeURIComponent('{"NAME"="Value"}')</code>, resulting in
 </p>
 
 <pre class="example_url">
-/view.jsp?display=https%3A//some_host/opi/file.opi&amp;macros=%7B%22S%22%3A%2206%22%2C%22S1%22%3A%2206%22%7D
+/view.jsp?display=https://some_host/opi/file.opi&amp;macros=%7B%22S%22%3A%2206%22%2C%22S1%22%3A%2206%22%7D
 </pre>
 
-<p>The above example uses <code>{"S"="06", "S1"="06"}</code>.
-</p>
 
-<p>Alternatively, when manually entering a URL, you can use the syntax
-<code>&amp;$(NAME)=Value&amp;$(OTHER)=Other+Value</code> as in
-<pre class="example_url">
-/view.jsp?display=https%3A//some_host/opi/file.opi&amp;$(S)=06&amp;$(S1)=06
-</pre>
 
 </blockquote>
 
@@ -61,8 +67,6 @@ http://localhost:8080/dbwr/view.jsp?display=file:/Path/to/Display+Builder/01_mai
 <script type="text/javascript">
 jQuery(() =>
 {
-    console.log("Hello!");
-    
     let root = window.location.origin + window.location.pathname;
     jQuery(".example_url").each( (index, example) =>
     {
@@ -72,7 +76,7 @@ jQuery(() =>
     });
     
     jQuery("#open_form input[name=display]").val("https://webopi.sns.gov/webopi/opi/Instruments.bob");
-    jQuery("#open_form input[name=macros]").val("$(S)=Value&$(N)=1");
+    jQuery("#open_form input[name=macros]").val("$(S)=Value One&$(N)=1");
     jQuery("#open_form input[type=button]").click(() =>
     {
         let display = jQuery("#open_form input[name=display]").val();
