@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Display Builder Web Runtime</title>
+<link rel="stylesheet" type="text/css" href="css/widgets.css">
+<script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+</head>
+
+<body>
+
+<blockquote>
+<h1>Display Builder Web Runtime</h1>
+
+<h3>Example</h3>
+
+<p>Enter a 'file:' or 'http:' URL for a *.bob or *.opi display:<p>
+
+<form id="open_form">
+        Display: <input type="text" name="display" style="width: 80%;"><br>
+        Macros: <input type="text" name="macros" style="width: 80%;">   <input type="button" value="Open">
+</form>
+
+
+<h4>Client URLs</h4>
+
+<p>Display a file that's in the file system of the Tomcat host:</p>
+<pre>
+http://localhost:8080/dbwr/view.jsp?display=file:/Path/to/Display+Builder/01_main.bob
+</pre>
+
+<p>Serve file that's fetched via http: or https:</p>
+<pre class="example_url">
+/view.jsp?display=https%3A//some_host/opi/file.opi
+</pre>
+
+
+<h4>Macros</h4>
+
+<p>Macros are passed as a <code>macros=JSON map</code>, but note that the map needs to be URL encoded, for example using JavaScript
+<code>encodeURIComponent('{"NAME"="Value"}')</code>.
+</p>
+
+<pre class="example_url">
+/view.jsp?display=https%3A//some_host/opi/file.opi&amp;macros=%7B%22S%22%3A%2206%22%2C%22S1%22%3A%2206%22%7D
+</pre>
+
+<p>The above example uses <code>{"S"="06", "S1"="06"}</code>.
+</p>
+
+<p>Alternatively, when manually entering a URL, you can use the syntax
+<code>&amp;$(NAME)=Value&amp;$(OTHER)=Other+Value</code> as in
+<pre class="example_url">
+/view.jsp?display=https%3A//some_host/opi/file.opi&amp;$(S)=06&amp;$(S1)=06
+</pre>
+
+</blockquote>
+
+
+<script type="text/javascript">
+jQuery(() =>
+{
+    console.log("Hello!");
+    
+    let root = window.location.origin + window.location.pathname;
+    jQuery(".example_url").each( (index, example) =>
+    {
+        let ex = jQuery(example);
+        let url = ex.html();
+        ex.html(root + url);
+    });
+    
+    jQuery("#open_form input[name=display]").val("https://webopi.sns.gov/webopi/opi/Instruments.bob");
+    jQuery("#open_form input[name=macros]").val("$(S)=Value&$(N)=1");
+    jQuery("#open_form input[type=button]").click(() =>
+    {
+        let display = jQuery("#open_form input[name=display]").val();
+        let macros = jQuery("#open_form input[name=macros]").val();
+        
+        let new_link = root + "view.jsp?display=" + display;
+        
+        if (macros)
+        {   // Parse $(NAME)=VALUE&$(NAME)=VALUE into NAME, VALUE
+	        let map = {}, i = 0, items = macros.split("&");
+	        while (i < items.length)
+	        {
+	            let name_value = items[i].split('=');
+	            let name = name_value[0];
+	            // Remove $( .. ) from NAME
+	            name = name.replace("$(", "");
+	            if (name.endsWith(")"))
+	                name = name.substr(0, name.length-1)
+	            map[name] = name_value[1];
+	            i += 1;
+	        }
+	        macros = JSON.stringify(map)
+	        new_link = new_link + "&macros=" + encodeURI(macros);
+        }
+        
+        // if (confirm(new_link))
+        window.location.href = new_link;
+    });
+});
+</script>
+</body>
+
+</html>
