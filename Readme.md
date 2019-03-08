@@ -66,4 +66,5 @@ TODO
  * Limited Rule support: Color of rect/circle/label
  * XYPlot
  * Image
+ * Caching (WeakHashMap, ehcache)? 
   
