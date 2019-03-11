@@ -10,9 +10,6 @@ class PVInfo
     {
         this.pv_name = pv_name;
         
-        // PV Data type, 'DBR_DOUBLE'
-        this.type = null;
-        
         // Most recent value
         this.value = null;
         
@@ -34,7 +31,7 @@ class PVs
     {
         if (this.socket == null  ||  this.socket.readyState === WebSocket.CLOSED)
         {
-            let url = this.protocol + this.host + "/epics2web/monitor?clientName=WDB";
+            let url = this.ws_url;
             console.log("Connecting to " + url);
             this.socket = new WebSocket(url);
             this.socket.onopen = event =>  on_connect();
@@ -49,11 +46,7 @@ class PVs
                 {
                     let data = JSON.parse(event.data);            
                     // console.log("Received " + event.data);
-                    if (data['type'] == 'info')
-                    {
-                        // console.log("PV INFO " + event.data);
-                    }
-                    else if (data['type'] == 'update')
+                    if (data['type'] == 'update')
                     {
                         let pv_name = data['pv'];
                         let value = data['value'];
@@ -105,7 +98,7 @@ class PVs
         if (new_pv)
         {
             let pvs = [ pv_name ];
-            let msg = { type: 'monitor', pvs: pvs };
+            let msg = { type: 'subscribe', pvs: pvs };
             this.socket.send(JSON.stringify(msg));
             // console.log("Subscribed to " + pvs);
             // console.log(info);
@@ -117,10 +110,10 @@ class PVs
 // 'class' variables
 
 // Local connection
-//PVs.prototype.protocol = "ws://";
-//PVs.prototype.host = "omaha2.ornl.gov:8080";
+//PVs.prototype.ws_url = "ws://omaha2.ornl.gov:8080/epics2web/monitor?clientName=WDB";
 
 // Outside address needs wss
-PVs.prototype.protocol = "wss://";
-PVs.prototype.host = "status.sns.ornl.gov";
+//PVs.prototype.ws_url = "wss://status.sns.ornl.gov/epics2web/monitor?clientName=WDB";
+
+PVs.prototype.ws_url = "ws://localhost:8080/pvws/pv";
 

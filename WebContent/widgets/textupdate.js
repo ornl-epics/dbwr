@@ -1,8 +1,11 @@
 DataBrowserWebRuntime.prototype.widget_subscribe_methods["textupdate"] = function(widget, pv_info)
 {
-    // TODO Format...
-    if (isNaN(pv_info.value))
-        widget.html(pv_info.value);
+    if (pv_info.text)
+        widget.html(pv_info.text);
     else
-        widget.html(parseFloat(pv_info.value).toPrecision(4));
+    {
+        // TODO Format...
+        console.log(pv_info);
+        widget.html(pv_info.value);
+    }
 };

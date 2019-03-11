@@ -6,15 +6,42 @@
  ******************************************************************************/
 package dbwr;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 import com.fasterxml.jackson.core.JsonFactory;
 
-public class WebDisplayRepresentation
+@WebListener
+public class WebDisplayRepresentation implements ServletContextListener
 {
     /** Common logger */
 	public static final Logger logger = Logger.getLogger(WebDisplayRepresentation.class.getPackage().getName());
 
 	/** Common JSON factory */
 	public static final JsonFactory json_factory = new JsonFactory();
+
+	@Override
+	public void contextInitialized(final ServletContextEvent ev)
+    {
+        final ServletContext context = ev.getServletContext();
+
+        logger.log(Level.INFO, "===========================================");
+        logger.log(Level.INFO, context.getContextPath() + " started");
+        logger.log(Level.INFO, "===========================================");
+    }
+
+    @Override
+    public void contextDestroyed(final ServletContextEvent ev)
+    {
+        final ServletContext context = ev.getServletContext();
+
+        logger.log(Level.INFO, "===========================================");
+        logger.log(Level.INFO, context.getContextPath() + " shut down");
+        logger.log(Level.INFO, "===========================================");
+    }
 }

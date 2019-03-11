@@ -17,18 +17,19 @@ for (String c : WidgetFactory.css)
 	out.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"widgets/" + c + "\">\n");
 %>
 <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
-</head>
-
-<body>
-<div id="content"></div>
-<div id="info">INFO</div>
-
+<script type="text/javascript" src="../pvws/js/pvws.js"></script> 
 <script type="text/javascript" src="js/pvs.js"></script> 
 <script type="text/javascript" src="js/dbwr.js"></script> 
 <%
 for (String js : WidgetFactory.js)
 	 out.append("<script type=\"text/javascript\" src=\"widgets/" + js + "\"></script>\n");
 %>
+</head>
+
+<body>
+<div id="content"></div>
+<div id="info">INFO</div>
+
 <script type="text/javascript">
 <%
 String display_name = request.getParameter("display");
