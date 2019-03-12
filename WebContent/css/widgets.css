@@ -81,6 +81,20 @@ svg.Widget
 	outline: 3px dashed #F0F;
 }
 
+#content
+{
+}
+
+#disconnect
+{
+    float: right;
+}
+
+#status
+{
+	float: right;
+}
+
 #info
 {
 	font-style: italic;

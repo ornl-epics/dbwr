@@ -1,7 +1,7 @@
-DataBrowserWebRuntime.prototype.widget_subscribe_methods["led"] = function(widget, pv_info)
+DataBrowserWebRuntime.prototype.widget_subscribe_methods["led"] = function(widget, data)
 {
     var color;
-    if (pv_info.value > 0)
+    if (data.value > 0)
         color = widget.attr("data-on-color");
     else
         color = widget.attr("data-off-color");

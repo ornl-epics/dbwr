@@ -1,11 +1,11 @@
-DataBrowserWebRuntime.prototype.widget_subscribe_methods["multi_state_led"] = function(widget, pv_info)
+DataBrowserWebRuntime.prototype.widget_subscribe_methods["multi_state_led"] = function(widget, data)
 {
     var color = widget.attr("data-fallback-color");
     var index = 0;
     var value = widget.attr("data-state-value-" + index);
     while (value)
     {
-        if (pv_info.value == value)
+        if (data.value == value)
         {
             color = widget.attr("data-state-color-" + index);
             break;

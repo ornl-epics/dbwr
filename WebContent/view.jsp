@@ -18,7 +18,6 @@ for (String c : WidgetFactory.css)
 %>
 <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="../pvws/js/pvws.js"></script> 
-<script type="text/javascript" src="js/pvs.js"></script> 
 <script type="text/javascript" src="js/dbwr.js"></script> 
 <%
 for (String js : WidgetFactory.js)
@@ -27,8 +26,13 @@ for (String js : WidgetFactory.js)
 </head>
 
 <body>
+<div>
+<span id="info">INFO</span>
+<img id="status" alt="Status" src="../pvws/img/disconnected.png">
+<input id="disconnect" type="button" value="Disconnect">
+</div>
+
 <div id="content"></div>
-<div id="info">INFO</div>
 
 <script type="text/javascript">
 <%
@@ -59,6 +63,12 @@ if (macro_text == null)
 }
 // Use single quotes when passing macro_text on because the JSON contains double quotes
 %>
+
+// TODO Determine ws PV from window.location
+let dbwr = new DataBrowserWebRuntime("ws://localhost:8080/pvws/pv");
+
+jQuery("#disconnect").click(() => dbwr.pvws.close() );
+
 jQuery(() =>
 {
 	dbwr.loadContent('<%=display_name%>', '<%=macro_text%>');

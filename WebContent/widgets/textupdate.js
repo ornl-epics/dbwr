@@ -1,11 +1,18 @@
-DataBrowserWebRuntime.prototype.widget_subscribe_methods["textupdate"] = function(widget, pv_info)
+
+function format_pv_data_as_text(data)
 {
-    if (pv_info.text)
-        widget.html(pv_info.text);
+    if (data.text)
+        return data.text;
     else
     {
-        // TODO Format...
-        console.log(pv_info);
-        widget.html(pv_info.value);
+        if (data.precision === undefined)
+            return data.value.toString();
+        else
+            return data.value.toFixed(data.precision);
     }
+}
+
+DataBrowserWebRuntime.prototype.widget_subscribe_methods["textupdate"] = function(widget, data)
+{
+    widget.html(format_pv_data_as_text(data));
 };
