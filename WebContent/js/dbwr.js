@@ -168,15 +168,19 @@ class DisplayBuilderWebRuntime
      */
     _handle_widget_pv_update(widget, type, data)
     {
-        // TODO Check if widget is _not_ alarm sensitive
-        widget.removeClass("BorderMinor BorderMajor BorderDisconnected");
-        if (data.severity == "MINOR")
-            widget.addClass("BorderMinor");
-        else if (data.severity == "MAJOR")
-            widget.addClass("BorderMajor");
-        else if (data.severity == "INVALID")
-            widget.addClass("BorderDisconnected");
+        // By default, be alarm sensitive
+        if (widget.attr("data-alarm-border") != "false")
+        {
+            widget.removeClass("BorderMinor BorderMajor BorderDisconnected");
+            if (data.severity == "MINOR")
+                widget.addClass("BorderMinor");
+            else if (data.severity == "MAJOR")
+                widget.addClass("BorderMajor");
+            else if (data.severity == "INVALID")
+                widget.addClass("BorderDisconnected");
+        }
         
+        // Widget's own update method handles the rest
         let method = this.widget_update_methods[type];
         if (method)
             method(widget, data)

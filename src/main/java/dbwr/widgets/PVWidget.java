@@ -19,9 +19,7 @@ public class PVWidget extends Widget
 
 	public PVWidget(final ParentWidget parent, final Element xml, final String type) throws Exception
 	{
-		super(parent, xml, type);
-		pv_name = XMLUtil.getChildString(parent, xml, "pv_name").orElse(null);
-		attributes.put("data-pv", pv_name);
+		this(parent, xml, type, 100, 20);
 	}
 
 	public PVWidget(final ParentWidget parent, final Element xml, final String type, final int default_width, final int default_height) throws Exception
@@ -29,6 +27,13 @@ public class PVWidget extends Widget
 		super(parent, xml, type, default_width, default_height);
 		pv_name = XMLUtil.getChildString(parent, xml, "pv_name").orElse(null);
 		attributes.put("data-pv", pv_name);
+
+        XMLUtil.getChildBoolean(xml, "border_alarm_sensitive")
+               .ifPresent(alarm_border ->
+        {
+            if (! alarm_border)
+                attributes.put("data-alarm-border", "false");
+        });
 	}
 
 	@Override
