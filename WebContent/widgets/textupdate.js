@@ -6,7 +6,9 @@ function format_pv_data_as_text(widget, data)
         text = data.text;
     else if (data.value !== undefined)
     {
-        if (data.precision === undefined)
+        if (data.value == "NaN")
+            text = data.value
+        else if (data.precision === undefined)
             text = data.value.toString();
         else
             text = data.value.toFixed(data.precision);

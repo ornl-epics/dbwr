@@ -105,7 +105,7 @@ public class Widget implements ParentWidget
 			html.append(" ")
 			    .append(entry.getKey())
 			    .append("=\"")
-			    .append(entry.getValue())
+			    .append(HTMLUtil.escape(entry.getValue()))
 			    .append("\"");
 	}
 
