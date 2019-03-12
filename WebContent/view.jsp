@@ -64,8 +64,16 @@ if (macro_text == null)
 // Use single quotes when passing macro_text on because the JSON contains double quotes
 %>
 
-// TODO Determine ws PV from window.location
-let dbwr = new DataBrowserWebRuntime("ws://localhost:8080/pvws/pv");
+// Determine PV Web Socket URL relative to this page
+let wsurl = window.location.pathname;
+wsurl = wsurl.substring(0, wsurl.indexOf("/dbwr"))
+wsurl = window.location.host + wsurl + "/pvws/pv"
+if (window.location.protocol == "https:")
+    wsurl = "wss://" + wsurl
+else
+    wsurl = "ws://" + wsurl
+
+let dbwr = new DataBrowserWebRuntime(wsurl);
 
 jQuery("#disconnect").click(() => dbwr.pvws.close() );
 
