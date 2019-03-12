@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import org.w3c.dom.Element;
 
 import dbwr.parser.FontInfo;
+import dbwr.parser.HTMLUtil;
 import dbwr.parser.XMLUtil;
 
 public class BaseTextWidget extends PVWidget
@@ -22,6 +23,9 @@ public class BaseTextWidget extends PVWidget
 
 		final FontInfo font = XMLUtil.getFont(xml, "font").orElse(LabelWidget.DEFAULT_FONT);
 		font.addToStyles(styles);
+
+		// Set 'line-height' to support vertical alignment of text
+		styles.put("line-height", styles.get("height"));
 
 		if (! XMLUtil.getChildBoolean(xml, "transparent").orElse(false))
 		{
@@ -36,11 +40,15 @@ public class BaseTextWidget extends PVWidget
             else if (align == 2)
                 styles.put("text-align", "right");
         });
+
+		// TODO For now, text is always vertically centered...
 	}
 
     @Override
     protected void fillHTML(final PrintWriter html, final int indent)
     {
-        super.fillHTML(html, indent);
+        html.append("<span>");
+        HTMLUtil.escape(html, "" + pv_name + ">");
+        html.append("</span>");
     }
 }

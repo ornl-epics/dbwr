@@ -24,5 +24,5 @@ function format_pv_data_as_text(widget, data)
 
 DisplayBuilderWebRuntime.prototype.widget_update_methods["textupdate"] = function(widget, data)
 {
-    widget.html(format_pv_data_as_text(widget, data));
+    widget.html("<span>" + format_pv_data_as_text(widget, data) + "</span>");
 };
