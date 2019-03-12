@@ -2,9 +2,9 @@
 function format_pv_data_as_text(widget, data)
 {
     let text;
-    if (data.text)
+    if (data.text !== undefined)
         text = data.text;
-    else
+    else if (data.value !== undefined)
     {
         if (data.precision === undefined)
             text = data.value.toString();
@@ -14,6 +14,8 @@ function format_pv_data_as_text(widget, data)
         if (data.units !== undefined  &&  widget.attr("data-show-units") != "false")
            text = text + " " + data.units;
     }
+    else
+        return "";
     
     return text;
 }

@@ -26,13 +26,15 @@ for (String js : WidgetFactory.js)
 </head>
 
 <body>
-<div>
+
+<div id="content"></div>
+
+<div id="info_panel">
 <span id="info">INFO</span>
 <img id="status" alt="Status" src="../pvws/img/disconnected.png">
 <input id="disconnect" type="button" value="Disconnect">
 </div>
 
-<div id="content"></div>
 
 <script type="text/javascript">
 <%

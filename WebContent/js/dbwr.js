@@ -1,4 +1,14 @@
 
+class Severity
+{
+}
+
+Severity.NONE = "NONE";
+Severity.MINOR = "MINOR";
+Severity.MAJOR = "MAJOR";
+Severity.INVALID = "INVALID";
+Severity.UNDEFINED = "UNDEFINED";
+
 
 // Info for one PV
 class PVInfo
@@ -8,11 +18,11 @@ class PVInfo
         this.pv_name = pv_name;
         
         // Most recent data
-        this.data = null;
+        this.data = { severity: Severity.UNDEFINED };
         
         // Functions to invoke with this info when it changes
         this.callbacks = [];
-    }    
+    }
 }
 
 class DisplayBuilderWebRuntime
@@ -53,7 +63,14 @@ class DisplayBuilderWebRuntime
                 { display: this.display, macros: macros },
                 data =>
                 {
-                    jQuery("#content").html(data);
+                    // Place display's HTML into content
+                    let content = jQuery("#content");
+                    content.html(data);
+                    // Update height to space that's actually required,
+                    // so we can add further HTML for info etc.
+                    // below.
+                    content.height(content.prop("scrollHeight"));
+                    
                     this.log("Connecting PVs");
                     this.pvws.open();
                 });
@@ -72,9 +89,21 @@ class DisplayBuilderWebRuntime
         {
             this.log("Initialize Widgets");
             jQuery(".Widget").each( (index, widget) => dbwr._initWidget(jQuery(widget)));
+            this.info.html("");
         }
         else
         {
+            // Update all widgets
+            let pv_name;
+            for (pv_name in this.pv_infos)
+            {
+                let info = this.pv_infos[pv_name];
+                info.data.severity = Severity.UNDEFINED;
+                let cb;
+                for (cb of info.callbacks)
+                    cb(info.data);
+            }
+            
             // Need to re-subscribe when we reconnect
             this.pv_infos = {}
             this.log("Disconnected");
@@ -99,7 +128,7 @@ class DisplayBuilderWebRuntime
         let pv_name = widget.attr("data-pv");
         if (pv_name)
         {
-            console.log("Subscribe for " + type + " widget with PV " + pv_name);
+            // console.log("Subscribe for " + type + " widget with PV " + pv_name);
             this._subscribe(pv_name, data => this._handle_widget_pv_update(widget, type, data));
         }
     }
@@ -168,17 +197,19 @@ class DisplayBuilderWebRuntime
      */
     _handle_widget_pv_update(widget, type, data)
     {
+        widget.removeClass("BorderMinor BorderMajor BorderDisconnected");
         // By default, be alarm sensitive
         if (widget.attr("data-alarm-border") != "false")
         {
-            widget.removeClass("BorderMinor BorderMajor BorderDisconnected");
-            if (data.severity == "MINOR")
+            if (data.severity == Severity.MINOR)
                 widget.addClass("BorderMinor");
-            else if (data.severity == "MAJOR")
+            else if (data.severity == Severity.MAJOR)
                 widget.addClass("BorderMajor");
-            else if (data.severity == "INVALID")
-                widget.addClass("BorderDisconnected");
+            else if (data.severity == Severity.INVALID)
+                widget.addClass("BorderInvalid");
         }
+        if (data.severity == Severity.UNDEFINED)
+           widget.addClass("BorderDisconnected");
         
         // Widget's own update method handles the rest
         let method = this.widget_update_methods[type];

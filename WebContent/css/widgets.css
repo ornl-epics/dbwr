@@ -76,21 +76,20 @@ svg.Widget
 	 */
 	box-shadow: 0 0 0 2px #FFFA, 0 0 0 3px #F00;
 }
+.BorderInvalid
+{
+    outline: 3px dashed #F0F;
+}
 .BorderDisconnected
 {
-	outline: 3px dashed #F0F;
+	outline: 3px dotted #F0F;
 }
 
 #content
 {
 }
 
-#disconnect
-{
-    float: right;
-}
-
-#status
+#info_panel
 {
 	float: right;
 }
