@@ -25,7 +25,7 @@ function handleActionButtonClick(widget)
     window.location.href = new_link;
 }
 
-DataBrowserWebRuntime.prototype.widget_init_methods['action_button'] = function(widget)
+DisplayBuilderWebRuntime.prototype.widget_init_methods['action_button'] = function(widget)
 {
     widget.click(() => handleActionButtonClick(widget));
 }

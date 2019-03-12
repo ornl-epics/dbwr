@@ -1,4 +1,4 @@
-DataBrowserWebRuntime.prototype.widget_subscribe_methods["multi_state_led"] = function(widget, data)
+DisplayBuilderWebRuntime.prototype.widget_update_methods["multi_state_led"] = function(widget, data)
 {
     var color = widget.attr("data-fallback-color");
     var index = 0;

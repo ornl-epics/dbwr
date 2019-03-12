@@ -15,7 +15,7 @@ class PVInfo
     }    
 }
 
-class DataBrowserWebRuntime
+class DisplayBuilderWebRuntime
 {
     /** Construct data browser web runtime for a PV Web Socket
      *  @param pvws_url PV Web Socket URL
@@ -95,16 +95,20 @@ class DataBrowserWebRuntime
             // console.log("Calling widget init method for " + type)
             method(widget);
         }
-            
-        method = this.widget_subscribe_methods[type];
-        if (method)
+
+        let pv_name = widget.attr("data-pv");
+        if (pv_name)
         {
-            let pv_name = widget.attr("data-pv");
-            // console.log("Calling widget subscribe method for " + type + " with " + pv_name);
-            this._subscribe(pv_name, pv_info => method(widget, pv_info));
+            console.log("Subscribe for " + type + " widget with PV " + pv_name);
+            this._subscribe(pv_name, data => this._handle_widget_pv_update(widget, type, data));
         }
     }
-    
+
+    /** Step 4: Subscribe to PV updates
+     * 
+     *  @param pv_name PV name
+     *  callback callback Will be invoked with PV data
+     */
     _subscribe(pv_name, callback)
     {
         let info = this.pv_infos[pv_name];
@@ -125,6 +129,11 @@ class DataBrowserWebRuntime
         }
     }
     
+    /** Step 5: Message from web socket
+     * 
+     *  Checks for 'update' messages and invokes the registered callbacks for the PV
+     *  @param message Web socket message
+     */
     _handleMessage(message)
     {
         if (message.type == 'update')
@@ -149,15 +158,38 @@ class DataBrowserWebRuntime
             console.log(message);
         }
     }
+
+    /** Step 6: Callback for a PV update
+     * 
+     *  Updates the widget with data from PV
+     *  @param widget Widget to update
+     *  @param type Widget type
+     *  @param data PV data
+     */
+    _handle_widget_pv_update(widget, type, data)
+    {
+        // TODO Check if widget is _not_ alarm sensitive
+        widget.removeClass("BorderMinor BorderMajor BorderDisconnected");
+        if (data.severity == "MINOR")
+            widget.addClass("BorderMinor");
+        else if (data.severity == "MAJOR")
+            widget.addClass("BorderMajor");
+        else if (data.severity == "INVALID")
+            widget.addClass("BorderDisconnected");
+        
+        let method = this.widget_update_methods[type];
+        if (method)
+            method(widget, data)
+    }
 }
 
 // Widgets can register init(widget) methods
 // widget: jQuery object for the <div> or <svg> or ...
-DataBrowserWebRuntime.prototype.widget_init_methods = {};
+DisplayBuilderWebRuntime.prototype.widget_init_methods = {};
 
-// Widgets with "data-pv" can register handle_update(widget, pv_info) methods
+// Widgets with "data-pv" can register handle_update(widget, data) methods
 // widget: jQuery object for the <div> or <svg> or ...
-// pv_info: Latest PV info
-DataBrowserWebRuntime.prototype.widget_subscribe_methods = {};
+// data: Latest PV data
+DisplayBuilderWebRuntime.prototype.widget_update_methods = {};
 
 

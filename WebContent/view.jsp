@@ -73,7 +73,7 @@ if (window.location.protocol == "https:")
 else
     wsurl = "ws://" + wsurl
 
-let dbwr = new DataBrowserWebRuntime(wsurl);
+let dbwr = new DisplayBuilderWebRuntime(wsurl);
 
 jQuery("#disconnect").click(() => dbwr.pvws.close() );
 

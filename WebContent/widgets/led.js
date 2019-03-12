@@ -1,4 +1,4 @@
-DataBrowserWebRuntime.prototype.widget_subscribe_methods["led"] = function(widget, data)
+DisplayBuilderWebRuntime.prototype.widget_update_methods["led"] = function(widget, data)
 {
     var color;
     if (data.value > 0)

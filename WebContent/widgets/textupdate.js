@@ -12,7 +12,7 @@ function format_pv_data_as_text(data)
     }
 }
 
-DataBrowserWebRuntime.prototype.widget_subscribe_methods["textupdate"] = function(widget, data)
+DisplayBuilderWebRuntime.prototype.widget_update_methods["textupdate"] = function(widget, data)
 {
     widget.html(format_pv_data_as_text(data));
 };
