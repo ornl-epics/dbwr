@@ -25,11 +25,16 @@ public class SvgPVWidget extends SvgWidget
 		pv_name = XMLUtil.getChildString(parent, xml, "pv_name").orElse(null);
 		attributes.put("data-pv", pv_name);
 
-        XMLUtil.getChildBoolean(xml, "border_alarm_sensitive")
-               .ifPresent(alarm_border ->
+        XMLUtil.getChildBoolean(xml, "border_alarm_sensitive").ifPresent(alarm_border ->
         {
             if (! alarm_border)
                 attributes.put("data-alarm-border", "false");
+        });
+
+        XMLUtil.getChildBoolean(xml, "show_units").ifPresent(units ->
+        {
+            if (! units)
+                attributes.put("data-show-units", "false");
         });
     }
 }

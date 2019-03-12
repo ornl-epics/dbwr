@@ -30,8 +30,6 @@ Assuming Tomcat on `localhost:8080`, open
 Development Status
 ==================
 
-Uses epics2web web socket to show Display Builder screens on the web.
-
 Mostly Functional
 -----------------
 
@@ -49,18 +47,19 @@ Mostly Functional
  * Action Button to open display or web link
  * Group with group border
  * Embedded Displays
-
+ * PV Web Socket:
+      - Based on VType.PV (CA, Local, Sim PVs)
+      - ReactiveJ Throttling
+      - Sends initial metadata, then updates. Client lib keeps complete data.
+      - JSON
+ * Text formatting (precision, units, enum labels)
+ * Update alarm-sensitive border based on PV
 
 TODO
 ----
-
  * PV Web Socket:
-      - Based on VType.PV (CA, PVA, MQTT, Local, Sim PVs)
-      - ReactiveJ Throttling
-      - Sends initial metadata, then updates. Client lib keeps complete data.
-      - JSON, except some binary encoding for array values
- * Text formatting (precision, units, enum labels)
- * Update alarm-sensitive border based on PV
+      - PVA, MQTT
+      - Binary encoding for array values
  * Combo (read-only)
  * Bool Button (read-only)
  * Limited Rule support: Color of rect/circle/label
