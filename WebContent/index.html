@@ -18,11 +18,30 @@
 <p>Enter a 'file:' or 'http:' URL for a *.bob or *.opi display:<p>
 
 <form id="open_form">
-    Display: <input type="text" name="display" style="width: 80%;"> 
-    <br>
-    Macros: <input type="text" name="macros" style="width: 80%;">   <input type="button" value="Open">
+    <table>
+    <tr>
+      <td>Display:</td>
+      <td><input type="text" name="display" style="width: 100%;"></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>     
+        <select name="options">
+        <option>https://raw.githubusercontent.com/shroffk/phoebus/master/app/display/model/src/main/resources/examples/01_main.bob</option>
+        <option>https://webopi.sns.gov/webopi/opi/Instruments.bob</option>
+        <option>file://some/local/display.bob</option>
+        </select>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Macros:</td>
+      <td><input type="text" name="macros" style="width: 100%;"></td>
+      <td><input type="button" value="Open"></td>
+    </tr>
+    </table>
 </form>
-
 
 <h4>Client URLs</h4>
 
@@ -75,7 +94,9 @@ jQuery(() =>
         ex.html(root + url);
     });
     
-    jQuery("#open_form input[name=display]").val("https://webopi.sns.gov/webopi/opi/Instruments.bob");
+    let options = jQuery("#open_form select");
+    options.change(() => jQuery("#open_form input[name=display]").val(options.val()));
+    
     jQuery("#open_form input[name=macros]").val("$(S)=Value One&$(N)=1");
     jQuery("#open_form input[type=button]").click(() =>
     {
