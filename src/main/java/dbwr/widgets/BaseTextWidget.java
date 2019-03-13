@@ -21,6 +21,27 @@ public class BaseTextWidget extends PVWidget
 		super(parent, xml, type);
 		classes.add("TextField");
 
+		switch (XMLUtil.getChildInteger(xml, "format").orElse(0))
+		{
+		case 1:
+		    attributes.put("data-format", "decimal");
+		    break;
+        case 2:
+        case 3: // really engineering
+            attributes.put("data-format", "exponential");
+            break;
+        case 4:
+            attributes.put("data-format", "hex");
+            break;
+        case 6:
+            attributes.put("data-format", "string");
+            break;
+        case 10:
+            attributes.put("data-format", "binary");
+            break;
+        default:
+		}
+
 		final FontInfo font = XMLUtil.getFont(xml, "font").orElse(LabelWidget.DEFAULT_FONT);
 		font.addToStyles(styles);
 
