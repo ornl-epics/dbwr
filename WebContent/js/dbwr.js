@@ -197,7 +197,7 @@ class DisplayBuilderWebRuntime
      */
     _handle_widget_pv_update(widget, type, data)
     {
-        widget.removeClass("BorderMinor BorderMajor BorderDisconnected");
+        widget.removeClass("BorderMinor BorderMajor BorderInvalid BorderDisconnected");
         // By default, be alarm sensitive
         if (widget.attr("data-alarm-border") != "false")
         {
