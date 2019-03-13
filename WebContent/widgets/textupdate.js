@@ -1,4 +1,31 @@
 
+
+/** Format number in engineering notation
+ *  @param number Number
+ *  @param precision Precision or undefined
+ *  @returns Number with exponent that's a multiple of 3
+ */
+function format_engineering(number, precision)
+{
+    let e = Math.round(Math.log10(number));
+    
+    e = Math.floor(e/3) * 3;
+    
+    let m = number * Math.pow(10, -e);
+    
+    let text;
+    if (precision === undefined)
+        text = m.toString();
+    else
+        text = m.toFixed(precision);
+    
+    text = text + "E" + e;
+    
+    return text;
+}
+
+
+
 function format_pv_data_as_text(widget, data)
 {
     let text;
@@ -18,10 +45,12 @@ function format_pv_data_as_text(widget, data)
             if (widget.attr("data-format") == "exponential")
             {
                 if (data.precision === undefined)
-                    text = data.value.toExponential();
+                    text = data.value.toExponential().replace('e', 'E');
                 else
-                    text = data.value.toExponential(data.precision);
+                    text = data.value.toExponential(data.precision).replace('e', 'E');
             }
+            else if (widget.attr("data-format") == "engineering")
+                text = format_engineering(data.value, data.precision);
             else if (widget.attr("data-format") == "hex")
             {
                 text = (data.value | 0).toString(16);

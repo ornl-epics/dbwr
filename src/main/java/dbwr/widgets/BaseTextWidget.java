@@ -27,8 +27,10 @@ public class BaseTextWidget extends PVWidget
 		    attributes.put("data-format", "decimal");
 		    break;
         case 2:
-        case 3: // really engineering
             attributes.put("data-format", "exponential");
+            break;
+        case 3:
+            attributes.put("data-format", "engineering");
             break;
         case 4:
             attributes.put("data-format", "hex");
