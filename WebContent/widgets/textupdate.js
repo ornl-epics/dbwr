@@ -7,11 +7,22 @@
  */
 function format_engineering(number, precision)
 {
+    if (number == 0)
+    {
+        if (precision === undefined)
+            return number.toString() + "E0";
+        else
+            return number.toFixed(precision) + "E0";
+        return number.toFi
+        
+    }
+    let neg = number < 0;
+    number = Math.abs(number);
     let e = Math.round(Math.log10(number));
     
     e = Math.floor(e/3) * 3;
     
-    let m = number * Math.pow(10, -e);
+    let m = (e == 0) ? number : number * Math.pow(10, -e);
     
     let text;
     if (precision === undefined)
@@ -20,6 +31,8 @@ function format_engineering(number, precision)
         text = m.toFixed(precision);
     
     text = text + "E" + e;
+    if (neg)
+        return "-" + text;
     
     return text;
 }
