@@ -17,6 +17,29 @@ for (String c : WidgetFactory.css)
 	out.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"widgets/" + c + "\">\n");
 %>
 <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="js/flot/jquery.canvaswrapper.js"></script>
+<script type="text/javascript" src="js/flot/jquery.colorhelpers.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.saturated.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.browser.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.drawSeries.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.errorbars.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.uiConstants.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.logaxis.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.symbol.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.flatdata.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.navigate.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.fillbetween.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.stack.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.touchNavigate.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.hover.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.touch.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.time.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.axislabels.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.selection.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.composeImages.js"></script>
+<script type="text/javascript" src="js/flot/jquery.flot.legend.js"></script>
+<script type="text/javascript" src="../pvws/js/base64.js"></script>
 <script type="text/javascript" src="../pvws/js/pvws.js"></script> 
 <script type="text/javascript" src="js/dbwr.js"></script> 
 <%
