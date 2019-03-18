@@ -40,6 +40,9 @@ public class XYPlotWidget extends Widget
             // Use points instead of lines?
             if (XMLUtil.getChildInteger(trace, "point_type").orElse(0) != 0)
                 attributes.put("data-pointsize" + i, XMLUtil.getChildInteger(trace, "point_size").orElse(10).toString());
+            else
+                attributes.put("data-linewidth" + i, XMLUtil.getChildInteger(trace, "line_width").orElse(1).toString());
+
             ++i;
 		}
 	}

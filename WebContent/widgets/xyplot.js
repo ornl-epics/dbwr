@@ -5,9 +5,10 @@ class XYTrace
     /** @param pvx Name of 'X' PV
      *  @param pvy Name of 'Y' PV
      *  @param color Color of the trace
+     *  @param linewidth Line width
      *  @param pointsize Use points instead of lines?
      */
-    constructor(pvx, pvy, color, pointsize)
+    constructor(pvx, pvy, color, linewidth, pointsize)
     {
         this.pvx = pvx;
         this.pvy = pvy;
@@ -28,7 +29,7 @@ class XYTrace
         if (pointsize)
             this.plotobj.points = { show: true, fill: true, radius: pointsize/2 };
         else
-            this.plotobj.lines = { lineWidth: 3 };
+            this.plotobj.lines = { lineWidth: linewidth };
     }
     
     /** @param pv Name of PV, might be X, Y or unknown PV
@@ -79,8 +80,9 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["xyplot"] = widget =>
             dbwr.subscribe(widget, "xyplot", xpv);
         
         let color = widget.data("color" + i);
+        let linewidth = widget.data("linewidth" + i);
         let pointsize = widget.data("pointsize" + i);
-        traces.push(new XYTrace(xpv, ypv, color, pointsize));
+        traces.push(new XYTrace(xpv, ypv, color, linewidth, pointsize));
         
         ++i;
         xpv = widget.data("pvx" + i);
