@@ -59,6 +59,7 @@ public class WidgetFactory
         BOY_TYPES.put("org.csstudio.opibuilder.widgets.polygon", "polygon");
         BOY_TYPES.put("org.csstudio.opibuilder.widgets.arc", "arc");
         BOY_TYPES.put("org.csstudio.opibuilder.widgets.linkingContainer", "embedded");
+        BOY_TYPES.put("org.csstudio.opibuilder.widgets.intensityGraph", "image");
 //      BOY_TYPES.put("", "");
 //      BOY_TYPES.put("", "");
 //      BOY_TYPES.put("", "");
