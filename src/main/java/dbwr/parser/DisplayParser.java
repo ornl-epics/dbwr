@@ -80,6 +80,7 @@ public class DisplayParser implements ParentWidget
 		    }
 		}
 
+		final String name = XMLUtil.getChildString(this, top, "name").orElse("Display");
 		// TODO Replace macros in integer etc. (in XMLUtil)
 		width = XMLUtil.getChildInteger(top, "width").orElse(800);
 		height = XMLUtil.getChildInteger(top, "height").orElse(600);
@@ -87,7 +88,7 @@ public class DisplayParser implements ParentWidget
 		final String background = XMLUtil.getColor(root, "background_color").orElse("#FFF");
 
 		// Create HTML for the screen and all its widgets
-		html.println("<div class=\"Screen\" style=\"width: " + width + "px; height: " + height + "px; background-color: " + background + ";\">");
+		html.println("<div class=\"Screen\" data-name=\"" + HTMLUtil.escape(name) + "\" style=\"width: " + width + "px; height: " + height + "px; background-color: " + background + ";\">");
 		for (final Element xml : XMLUtil.getChildElements(top, "widget"))
 		{
 			final Widget widget = WidgetFactory.createWidget(this, xml);

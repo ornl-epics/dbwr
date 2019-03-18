@@ -71,6 +71,10 @@ class DisplayBuilderWebRuntime
                     // below.
                     content.height(content.prop("scrollHeight"));
                     
+                    let name = content.children().data("name");
+                    if (name !== undefined)
+                        document.title = name;
+                    
                     this.log("Connecting PVs");
                     this.pvws.open();
                 });
