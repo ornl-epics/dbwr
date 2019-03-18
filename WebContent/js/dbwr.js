@@ -57,7 +57,7 @@ class DisplayBuilderWebRuntime
     loadContent(display, macros)
     {
         this.display = display;
-        this.log("Loading " + display + " with " + macros);
+        this.log("Loading '" + display + "' with " + macros);
         
         jQuery.get("screen",
                 { display: this.display, macros: macros },
@@ -127,10 +127,24 @@ class DisplayBuilderWebRuntime
 
         let pv_name = widget.attr("data-pv");
         if (pv_name)
-        {
-            // console.log("Subscribe for " + type + " widget with PV " + pv_name);
-            this._subscribe(pv_name, data => this._handle_widget_pv_update(widget, type, data));
-        }
+            this.subscribe(widget, type, pv_name);
+    }
+    
+    /** Subscribe to a PV and register for value updates
+     * 
+     *  This is called automatically for widgets with a 'data-pv' attribute.
+     *  When value udates are received from the PV,
+     *  `widget_update_methods[type]` will be invoked,
+     *  i.e. the widget should register such an update handler.
+     *  
+     *  @param widget jQuery widget object
+     *  @param type Widget type, used to obtain the widget update method
+     *  @param pv_name PV name to which to subscribe
+     */
+    subscribe(widget, type, pv_name)
+    {
+        // console.log("Subscribe for " + type + " widget to PV " + pv_name);
+        this._subscribe(pv_name, data => this._handle_widget_pv_update(widget, type, data));
     }
 
     /** Step 4: Subscribe to PV updates
@@ -219,10 +233,18 @@ class DisplayBuilderWebRuntime
 }
 
 // Widgets can register init(widget) methods
+// to initialize UI event handlers
+// or to perform custom PV subscriptions.
+//
 // widget: jQuery object for the <div> or <svg> or ...
 DisplayBuilderWebRuntime.prototype.widget_init_methods = {};
 
-// Widgets with "data-pv" can register handle_update(widget, data) methods
+// Widgets can register handle_update(widget, data) methods.
+//
+// Widgets with "data-pv" are automatically subscribed to that PV
+// and should register in this list to handle PV value updates.
+// Widgets might subscribe to additional PVs via the widget_init_methods.
+//
 // widget: jQuery object for the <div> or <svg> or ...
 // data: Latest PV data
 DisplayBuilderWebRuntime.prototype.widget_update_methods = {};

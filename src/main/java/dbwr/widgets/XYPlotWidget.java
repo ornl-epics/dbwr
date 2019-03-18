@@ -10,6 +10,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.w3c.dom.Element;
 
+import dbwr.parser.XMLUtil;
+
 public class XYPlotWidget extends Widget
 {
     private static final AtomicInteger id = new AtomicInteger();
@@ -21,8 +23,20 @@ public class XYPlotWidget extends Widget
 		// Flot lib needs an ID to place plot
 		attributes.put("id", "plot" + id.incrementAndGet());
 
-		// TODO get primary value PV
-		final String pv_name = "sim://sinewave";
-		attributes.put("data-pv", pv_name);
+		final Element traces = XMLUtil.getChildElement(xml, "traces");
+		if (traces == null)
+		    return;
+
+		// Place PV names into data-pvx0, pvy0, pvx1, pvy1, ...
+		int i=0;
+		for (final Element trace : XMLUtil.getChildElements(traces, "trace"))
+		{
+		    final String x_pv = XMLUtil.getChildString(parent, trace, "x_pv").orElse("");
+		    final String y_pv = XMLUtil.getChildString(parent, trace, "y_pv").orElse("");
+            XMLUtil.getColor(trace, "color");
+            attributes.put("data-pvx" + i, x_pv);
+            attributes.put("data-pvy" + i, y_pv);
+            ++i;
+		}
 	}
 }

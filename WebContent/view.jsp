@@ -64,8 +64,7 @@ for (String js : WidgetFactory.js)
 String display_name = request.getParameter("display");
 // TODO Default to a built-in getClass().getResource("/Demo.bob");
 if (display_name == null)
-	display_name = "https://webopi.sns.gov/webopi/opi/Instruments.bob";
-
+	display_name = "";
 // Macros are usually passed as "&macros=JSON map"
 String macro_text = request.getParameter("macros");
 if (macro_text == null)
