@@ -33,9 +33,13 @@ public class XYPlotWidget extends Widget
 		{
 		    final String x_pv = XMLUtil.getChildString(parent, trace, "x_pv").orElse("");
 		    final String y_pv = XMLUtil.getChildString(parent, trace, "y_pv").orElse("");
-            XMLUtil.getColor(trace, "color");
             attributes.put("data-pvx" + i, x_pv);
             attributes.put("data-pvy" + i, y_pv);
+            attributes.put("data-color" + i, XMLUtil.getColor(trace, "color").orElse(Integer.toString(0)));
+
+            // Use points instead of lines?
+            if (XMLUtil.getChildInteger(trace, "point_type").orElse(0) != 0)
+                attributes.put("data-pointsize" + i, XMLUtil.getChildInteger(trace, "point_size").orElse(10).toString());
             ++i;
 		}
 	}

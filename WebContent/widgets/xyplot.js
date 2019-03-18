@@ -4,8 +4,10 @@ class XYTrace
 {
     /** @param pvx Name of 'X' PV
      *  @param pvy Name of 'Y' PV
+     *  @param color Color of the trace
+     *  @param pointsize Use points instead of lines?
      */
-    constructor(pvx, pvy)
+    constructor(pvx, pvy, color, pointsize)
     {
         this.pvx = pvx;
         this.pvy = pvy;
@@ -14,8 +16,19 @@ class XYTrace
         this.x = [];
         this.y = [];
         
-        // Plot data: [ [ x0, y0 ], [ x1, y1 ], ..., [ xn, yn ] ]
-        this.plot = [];
+        // Flot plot object with
+        // data: [ [ x0, y0 ], [ x1, y1 ], ..., [ xn, yn ] ]
+        this.plotobj = 
+        {
+            color: color,   
+            clickable: true,
+            hoverable: true,
+            data: []
+        };
+        if (pointsize)
+            this.plotobj.points = { show: true, fill: true, radius: pointsize/2 };
+        else
+            this.plotobj.lines = { lineWidth: 3 };
     }
     
     /** @param pv Name of PV, might be X, Y or unknown PV
@@ -31,10 +44,25 @@ class XYTrace
             return;
         
         // Recompute plot data
-        let i, N = Math.min(this.x.length, this.y.length);
-        this.plot = [];
-        for (i=0; i<N; ++i)
-            this.plot.push( [ this.x[i], this.y[i] ] );        
+        this.plotobj.data = [];
+        if (this.x.length > 0  &&  this.y.length > 0)
+        {
+            let i, N = Math.min(this.x.length, this.y.length);
+            for (i=0; i<N; ++i)
+                this.plotobj.data.push( [ this.x[i], this.y[i] ] );        
+        }
+        else if (this.y.length > 0)
+        {
+            let i, N = this.y.length;
+            for (i=0; i<N; ++i)
+                this.plotobj.data.push( [ i, this.y[i] ] );        
+        }
+        else
+        {
+            let i, N = this.x.length;
+            for (i=0; i<N; ++i)
+                this.plotobj.data.push( [ this.x[i], i ] );        
+        }
     }
 }    
 
@@ -49,7 +77,10 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["xyplot"] = widget =>
             dbwr.subscribe(widget, "xyplot", ypv);
         if (xpv)
             dbwr.subscribe(widget, "xyplot", xpv);
-        traces.push(new XYTrace(xpv, ypv));
+        
+        let color = widget.data("color" + i);
+        let pointsize = widget.data("pointsize" + i);
+        traces.push(new XYTrace(xpv, ypv, color, pointsize));
         
         ++i;
         xpv = widget.data("pvx" + i);
@@ -68,7 +99,7 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["xyplot"] = function(wi
     for (trace of traces)
     {
         trace.update(data.pv, data.value);
-        plots.push( trace.plot );
+        plots.push( trace.plotobj );
     }
     
     jQuery.plot("#" + id, plots);
