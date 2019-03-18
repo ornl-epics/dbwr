@@ -71,7 +71,7 @@ public class BaseTextWidget extends PVWidget
     protected void fillHTML(final PrintWriter html, final int indent)
     {
         html.append("<span>");
-        HTMLUtil.escape(html, "" + pv_name + ">");
+        HTMLUtil.escape(html, "<" + pv_name + ">");
         html.append("</span>");
     }
 }
