@@ -103,6 +103,8 @@ public class WidgetFactory
 		String type = xml.getAttribute("type");
 		if (type.isEmpty())
 			type = BOY_TYPES.get(xml.getAttribute("typeId"));
+		if (type == null)
+            type = xml.getAttribute("typeId");
 
 		final Class<Widget> clazz = widget_classes.get(type);
 		if (clazz == null)

@@ -26,6 +26,6 @@ public class UnknownWidget extends Widget
 	@Override
 	protected void fillHTML(final PrintWriter html, final int indent)
 	{
-		HTMLUtil.escape(html, "<" + type + ">");
+		HTMLUtil.escape(html, "{" + type + "}");
 	}
 }
