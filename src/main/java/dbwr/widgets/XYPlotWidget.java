@@ -25,7 +25,24 @@ public class XYPlotWidget extends Widget
 
 		final Element traces = XMLUtil.getChildElement(xml, "traces");
 		if (traces == null)
+		{
+		    // Check for legacy trace_0_x_pv, trace_0_y_pv
+		    int i=0;
+		    while (true)
+		    {
+		        final String x_pv = XMLUtil.getChildString(parent, xml, "trace_" + i + "_x_pv").orElse("");
+                final String y_pv = XMLUtil.getChildString(parent, xml, "trace_" + i + "_y_pv").orElse("");
+    		    if (y_pv.isEmpty()  &&  x_pv.isEmpty())
+    		        break;
+                attributes.put("data-pvx" + i, x_pv);
+                attributes.put("data-pvy" + i, y_pv);
+                attributes.put("data-color" + i, XMLUtil.getColor(xml, "trace_" + i + "_trace_color").orElse(Integer.toString(0)));
+
+                ++i;
+		    }
 		    return;
+		}
+
 
 		// Place PV names into data-pvx0, pvy0, pvx1, pvy1, ...
 		int i=0;

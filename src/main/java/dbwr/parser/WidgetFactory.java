@@ -62,6 +62,7 @@ public class WidgetFactory
         BOY_TYPES.put("org.csstudio.opibuilder.widgets.intensityGraph", "image");
         BOY_TYPES.put("org.csstudio.opibuilder.widgets.progressbar", "progressbar");
         BOY_TYPES.put("org.csstudio.opibuilder.widgets.checkbox", "checkbox");
+        BOY_TYPES.put("org.csstudio.opibuilder.widgets.xyGraph", "xyplot");
 //      BOY_TYPES.put("", "");
 //      BOY_TYPES.put("", "");
 //      BOY_TYPES.put("", "");
