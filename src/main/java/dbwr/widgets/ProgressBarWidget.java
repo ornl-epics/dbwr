@@ -10,20 +10,19 @@ import org.w3c.dom.Element;
 
 import dbwr.parser.XMLUtil;
 
-public class ImageWidget extends PVWidget
+public class ProgressBarWidget extends PVWidget
 {
-    public ImageWidget(final ParentWidget parent, final Element xml) throws Exception
+    public ProgressBarWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
-		super(parent, xml, "image", 400, 300);
+		super(parent, xml, "progressbar", 400, 300);
 
-        attributes.put("data-width", XMLUtil.getChildString(parent, xml, "data_width").orElse("100"));
-		attributes.put("data-min", XMLUtil.getChildString(parent, xml, "minimum").orElse("0"));
-        attributes.put("data-max", XMLUtil.getChildString(parent, xml, "maximum").orElse("255"));
+		attributes.put("min", XMLUtil.getChildString(parent, xml, "minimum").orElse("0"));
+        attributes.put("max", XMLUtil.getChildString(parent, xml, "maximum").orElse("255"));
 	}
 
     @Override
     protected String getHTMLElement()
     {
-        return "canvas";
+        return "meter";
     }
 }
