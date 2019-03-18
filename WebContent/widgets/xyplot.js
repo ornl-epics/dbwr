@@ -7,8 +7,9 @@ class XYTrace
      *  @param color Color of the trace
      *  @param linewidth Line width
      *  @param pointsize Use points instead of lines?
+     *  @param bars Use bars instead of lines, points?
      */
-    constructor(pvx, pvy, color, linewidth, pointsize)
+    constructor(pvx, pvy, color, linewidth, pointsize, bars)
     {
         this.pvx = pvx;
         this.pvy = pvy;
@@ -26,7 +27,9 @@ class XYTrace
             hoverable: true,
             data: []
         };
-        if (pointsize)
+        if (bars)
+            this.plotobj.bars = { show: true };
+        else if (pointsize)
             this.plotobj.points = { show: true, fill: true, radius: pointsize/2 };
         else
             this.plotobj.lines = { lineWidth: linewidth };
@@ -82,7 +85,8 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["xyplot"] = widget =>
         let color = widget.data("color" + i);
         let linewidth = widget.data("linewidth" + i);
         let pointsize = widget.data("pointsize" + i);
-        traces.push(new XYTrace(xpv, ypv, color, linewidth, pointsize));
+        let bars = widget.data("bars" + i);
+        traces.push(new XYTrace(xpv, ypv, color, linewidth, pointsize, bars));
         
         ++i;
         xpv = widget.data("pvx" + i);

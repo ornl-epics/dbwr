@@ -37,12 +37,17 @@ public class XYPlotWidget extends Widget
             attributes.put("data-pvy" + i, y_pv);
             attributes.put("data-color" + i, XMLUtil.getColor(trace, "color").orElse(Integer.toString(0)));
 
-            // Use points instead of lines?
-            if (XMLUtil.getChildInteger(trace, "point_type").orElse(0) != 0)
-                attributes.put("data-pointsize" + i, XMLUtil.getChildInteger(trace, "point_size").orElse(10).toString());
+            // Use bars instead of lines?
+            if (XMLUtil.getChildInteger(trace, "trace_type").orElse(1) == 5)
+                attributes.put("data-bars" + i, "true");
             else
-                attributes.put("data-linewidth" + i, XMLUtil.getChildInteger(trace, "line_width").orElse(1).toString());
-
+            {
+                // Use points instead of lines?
+                if (XMLUtil.getChildInteger(trace, "point_type").orElse(0) != 0)
+                    attributes.put("data-pointsize" + i, XMLUtil.getChildInteger(trace, "point_size").orElse(10).toString());
+                else
+                    attributes.put("data-linewidth" + i, XMLUtil.getChildInteger(trace, "line_width").orElse(1).toString());
+            }
             ++i;
 		}
 	}
