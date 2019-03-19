@@ -27,6 +27,8 @@ public class PVWidget extends Widget
 		super(parent, xml, type, default_width, default_height);
 		pv_name = XMLUtil.getChildString(parent, xml, "pv_name").orElse(null);
 		attributes.put("data-pv", pv_name);
+		// Show PV name as tool-tip
+        attributes.put("title", pv_name);
 
         XMLUtil.getChildBoolean(xml, "border_alarm_sensitive").ifPresent(alarm_border ->
         {
