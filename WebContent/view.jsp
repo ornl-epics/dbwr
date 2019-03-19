@@ -17,6 +17,8 @@ for (String c : WidgetFactory.css)
 	out.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"widgets/" + c + "\">\n");
 %>
 <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="js/lib/jquery.event.drag.js"></script>
+<script type="text/javascript" src="js/lib/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="js/flot/jquery.canvaswrapper.js"></script>
 <script type="text/javascript" src="js/flot/jquery.colorhelpers.js"></script>
 <script type="text/javascript" src="js/flot/jquery.flot.js"></script>

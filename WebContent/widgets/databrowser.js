@@ -74,9 +74,35 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["databrowser"] = functi
             mode: "time",
             timeBase: "milliseconds",
             timezone: "browser"
+        },
+        zoom:
+        {
+            interactive: true
+        },
+        pan:
+        {
+            interactive: true
         }
     }
     
-    jQuery.plot("#" + id, plots, options);
+    let placeholder = jQuery("#" + id);
+    
+    jQuery.plot(placeholder, plots, options);
+    
+    placeholder.bind("plotpan", function (event, plot) {
+        var axes = plot.getAxes();
+        $(".message").html("Panning to x: "  + axes.xaxis.min.toFixed(2)
+        + " &ndash; " + axes.xaxis.max.toFixed(2)
+        + " and y: " + axes.yaxis.min.toFixed(2)
+        + " &ndash; " + axes.yaxis.max.toFixed(2));
+    });
+
+    placeholder.bind("plotzoom", function (event, plot) {
+            var axes = plot.getAxes();
+            $(".message").html("Zooming to x: "  + axes.xaxis.min.toFixed(2)
+            + " &ndash; " + axes.xaxis.max.toFixed(2)
+            + " and y: " + axes.yaxis.min.toFixed(2)
+            + " &ndash; " + axes.yaxis.max.toFixed(2));
+    });
 
 }
