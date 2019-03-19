@@ -59,6 +59,7 @@ class DisplayBuilderWebRuntime
         this.display = display;
         this.log("Loading '" + display + "' with " + macros);
         
+        // TODO Handle error by displaying some error text "Cannot load ..."
         jQuery.get("screen",
                 { display: this.display, macros: macros },
                 data =>
@@ -66,6 +67,12 @@ class DisplayBuilderWebRuntime
                     // Place display's HTML into content
                     let content = jQuery("#content");
                     content.html(data);
+                    
+                    if (jQuery("#content>#error").length > 0)
+                    {
+                        this.log("Cannot load display");
+                        return;
+                    }
                     // Update height to space that's actually required,
                     // so we can add further HTML for info etc.
                     // below.
@@ -77,6 +84,11 @@ class DisplayBuilderWebRuntime
                     
                     this.log("Connecting PVs");
                     this.pvws.open();
+                })
+                .fail( (xhr, status, error) =>
+                {
+                    console.log("Error:");
+                    console.log(xhr);
                 });
     }
 

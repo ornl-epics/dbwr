@@ -28,6 +28,8 @@ import dbwr.parser.HTMLUtil;
 import dbwr.parser.Resolver;
 
 /** Servlet that fetches HTML for a display
+ *
+ *  <p>On error, returns a 'pre' with id 'error'
  *  @author Kay Kasemir
  */
 @WebServlet("/screen")
@@ -72,7 +74,12 @@ public class ScreenServlet extends HttpServlet
 		catch (final Exception ex)
 		{
 			logger.log(Level.WARNING, "Cannot read " + display_name, ex);
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
+
+			response.setContentType("text/html");
+            final PrintWriter writer = response.getWriter();
+            writer.append("<pre id=\"error\">\n");
+            writer.append(ex.toString());
+            writer.append("\n</pre>\n");
 		}
 	}
 }
