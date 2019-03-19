@@ -19,6 +19,7 @@ public class RectangleWidget extends EllipseWidget
     static
     {
         WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.Rectangle", "rectangle");
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.RoundedRectangle", "rectangle");
     }
 
     private final double rx, ry;
