@@ -8,8 +8,16 @@ package dbwr.widgets;
 
 import org.w3c.dom.Element;
 
+import dbwr.parser.WidgetFactory;
+
 public class TextEntryWidget extends BaseTextWidget
 {
+    static
+    {
+        WidgetFactory.addJavaScript("textentry.js");
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.TextInput", "textentry");
+    }
+
 	public TextEntryWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 		super(parent, xml, "textentry", "#7FF");

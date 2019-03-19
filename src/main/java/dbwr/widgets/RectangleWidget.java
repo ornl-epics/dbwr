@@ -11,10 +11,16 @@ import java.io.PrintWriter;
 import org.w3c.dom.Element;
 
 import dbwr.parser.HTMLUtil;
+import dbwr.parser.WidgetFactory;
 import dbwr.parser.XMLUtil;
 
 public class RectangleWidget extends EllipseWidget
 {
+    static
+    {
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.Rectangle", "rectangle");
+    }
+
     private final double rx, ry;
 
 	public RectangleWidget(final ParentWidget parent, final Element xml) throws Exception

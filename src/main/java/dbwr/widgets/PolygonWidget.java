@@ -11,10 +11,16 @@ import java.io.PrintWriter;
 import org.w3c.dom.Element;
 
 import dbwr.parser.HTMLUtil;
+import dbwr.parser.WidgetFactory;
 import dbwr.parser.XMLUtil;
 
 public class PolygonWidget extends PolylineWidget
 {
+    static
+    {
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.polygon", "polygon");
+    }
+
 	private final String background_color;
 
 	public PolygonWidget(final ParentWidget parent, final Element xml) throws Exception

@@ -21,6 +21,7 @@ import org.w3c.dom.Element;
 import dbwr.macros.MacroUtil;
 import dbwr.parser.DisplayParser;
 import dbwr.parser.Resolver;
+import dbwr.parser.WidgetFactory;
 import dbwr.parser.XMLUtil;
 
 /** Embedded display widget
@@ -32,6 +33,11 @@ import dbwr.parser.XMLUtil;
  */
 public class EmbeddedWidget extends Widget
 {
+    static
+    {
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.linkingContainer", "embedded");
+    }
+
 	private final Map<String, String> macros;
 	private String file;
     private final String group_name;

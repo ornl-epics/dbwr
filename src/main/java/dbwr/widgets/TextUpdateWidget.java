@@ -8,9 +8,18 @@ package dbwr.widgets;
 
 import org.w3c.dom.Element;
 
+import dbwr.parser.WidgetFactory;
+
 public class TextUpdateWidget extends BaseTextWidget
 {
-	public TextUpdateWidget(final ParentWidget parent, final Element xml) throws Exception
+    static
+    {
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.TextUpdate", "textupdate");
+        WidgetFactory.addJavaScript("textupdate.js");
+        WidgetFactory.addCSS("textupdate.css");
+    }
+
+    public TextUpdateWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 		super(parent, xml, "textupdate", "#F0F0F0");
 	}

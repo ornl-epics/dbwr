@@ -46,41 +46,15 @@ public class WidgetFactory
 
 	static
 	{
-		BOY_TYPES.put("org.csstudio.opibuilder.widgets.Label", "label");
-		BOY_TYPES.put("org.csstudio.opibuilder.widgets.groupingContainer", "group");
-		BOY_TYPES.put("org.csstudio.opibuilder.widgets.TextUpdate", "textupdate");
-		BOY_TYPES.put("org.csstudio.opibuilder.widgets.LED", "led");
-		BOY_TYPES.put("org.csstudio.opibuilder.widgets.ActionButton", "action_button");
-		BOY_TYPES.put("org.csstudio.opibuilder.widgets.MenuButton", "action_button");
-		BOY_TYPES.put("org.csstudio.opibuilder.widgets.TextInput", "textentry");
-		BOY_TYPES.put("org.csstudio.opibuilder.widgets.Rectangle", "rectangle");
-		BOY_TYPES.put("org.csstudio.opibuilder.widgets.Ellipse", "ellipse");
-		BOY_TYPES.put("org.csstudio.opibuilder.widgets.polyline", "polyline");
-        BOY_TYPES.put("org.csstudio.opibuilder.widgets.polygon", "polygon");
-        BOY_TYPES.put("org.csstudio.opibuilder.widgets.arc", "arc");
-        BOY_TYPES.put("org.csstudio.opibuilder.widgets.linkingContainer", "embedded");
-        BOY_TYPES.put("org.csstudio.opibuilder.widgets.intensityGraph", "image");
-        BOY_TYPES.put("org.csstudio.opibuilder.widgets.progressbar", "progressbar");
-        BOY_TYPES.put("org.csstudio.opibuilder.widgets.checkbox", "checkbox");
-        BOY_TYPES.put("org.csstudio.opibuilder.widgets.xyGraph", "xyplot");
-//      BOY_TYPES.put("", "");
-//      BOY_TYPES.put("", "");
-//      BOY_TYPES.put("", "");
-
-
+	    // Load *Widget classes from /widget.properties
 		try
 		{
 			final Properties wp = new Properties();
 			wp.load(WidgetFactory.class.getResourceAsStream("/widget.properties"));
 			for (final Object type : wp.keySet())
 			{
-				final String[] info = wp.getProperty(type.toString()).split("\\s*,\\s*");
-				final String clazz = info[0];
-				widget_classes.put(type.toString(), (Class<Widget>)Class.forName(clazz));
-				if (info.length > 1  &&  !info[1].isEmpty())
-					js.add(info[1]);
-				if (info.length > 2  &&  !info[2].isEmpty())
-					css.add(info[2]);
+			    final String clazz = wp.getProperty(type.toString());
+			    widget_classes.put(type.toString(), (Class<Widget>)Class.forName(clazz));
 			}
 		}
 		catch (final Exception ex)
@@ -90,9 +64,27 @@ public class WidgetFactory
 
 		for (final Map.Entry<String, Class<Widget>> entry : widget_classes.entrySet())
 			logger.log(Level.CONFIG, entry.getKey() + " - " + entry.getValue());
-		logger.log(Level.CONFIG, "\n\nJavaScript: " + js);
-		logger.log(Level.CONFIG, "CSS: " + css);
 	}
+
+    /** @param script JavaScript file to add */
+    public static void addJavaScript(final String script)
+    {
+        js.add(script);
+    }
+
+    /** @param stylesheet CSS file to add */
+    public static void addCSS(final String stylesheet)
+    {
+        css.add(stylesheet);
+    }
+
+    /** @param legacy 'BOY' widget type
+     *  @param type Current widget type
+     */
+    public static void registerLegacy(final String legacy, final String type)
+    {
+        BOY_TYPES.put(legacy, type);
+    }
 
 	/** @param parent Parent widget
 	 *  @param xml XML for this widget

@@ -11,10 +11,17 @@ import java.io.PrintWriter;
 import org.w3c.dom.Element;
 
 import dbwr.parser.HTMLUtil;
+import dbwr.parser.WidgetFactory;
 import dbwr.parser.XMLUtil;
 
 public class CheckboxWidget extends PVWidget
 {
+    static
+    {
+        WidgetFactory.addJavaScript("checkbox.js");
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.checkbox", "checkbox");
+    }
+
     private final String label;
 
     public CheckboxWidget(final ParentWidget parent, final Element xml) throws Exception

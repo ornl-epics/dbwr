@@ -10,9 +10,16 @@ import java.io.PrintWriter;
 
 import org.w3c.dom.Element;
 
+import dbwr.parser.WidgetFactory;
+
 public class BaseLedWidget extends SvgPVWidget
 {
-	protected BaseLedWidget(final ParentWidget parent, final Element xml, final String type) throws Exception
+    static
+    {
+        WidgetFactory.addCSS("led.css");
+    }
+
+    protected BaseLedWidget(final ParentWidget parent, final Element xml, final String type) throws Exception
 	{
 		super(parent, xml, type, 20, 20);
 		classes.add("Led");

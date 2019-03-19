@@ -8,11 +8,17 @@ package dbwr.widgets;
 
 import org.w3c.dom.Element;
 
+import dbwr.parser.WidgetFactory;
 import dbwr.parser.XMLUtil;
 
 public class MultiStateLedWidget extends BaseLedWidget
 {
-	public MultiStateLedWidget(final ParentWidget parent, final Element xml) throws Exception
+    static
+    {
+        WidgetFactory.addJavaScript("multistateled.js");
+    }
+
+    public MultiStateLedWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 		super(parent, xml, "multi_state_led");
 

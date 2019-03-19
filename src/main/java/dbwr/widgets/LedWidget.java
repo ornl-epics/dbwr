@@ -8,11 +8,18 @@ package dbwr.widgets;
 
 import org.w3c.dom.Element;
 
+import dbwr.parser.WidgetFactory;
 import dbwr.parser.XMLUtil;
 
 public class LedWidget extends BaseLedWidget
 {
-	public LedWidget(final ParentWidget parent, final Element xml) throws Exception
+    static
+    {
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.LED", "led");
+        WidgetFactory.addJavaScript("led.js");
+    }
+
+    public LedWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 		super(parent, xml, "led");
 

@@ -12,6 +12,7 @@ import org.w3c.dom.Element;
 
 import dbwr.parser.FontInfo;
 import dbwr.parser.HTMLUtil;
+import dbwr.parser.WidgetFactory;
 import dbwr.parser.XMLUtil;
 
 /** Label Widget
@@ -19,7 +20,12 @@ import dbwr.parser.XMLUtil;
  */
 public class LabelWidget extends Widget
 {
-	static final FontInfo DEFAULT_FONT = new FontInfo(14, false);
+    static
+    {
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.Label", "label");
+    }
+
+    static final FontInfo DEFAULT_FONT = new FontInfo(14, false);
 	private final String text;
 
 	public LabelWidget(final ParentWidget parent, final Element xml) throws Exception

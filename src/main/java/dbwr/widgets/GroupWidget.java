@@ -22,6 +22,12 @@ import dbwr.parser.XMLUtil;
 
 public class GroupWidget extends Widget
 {
+    static
+    {
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.groupingContainer", "group");
+        WidgetFactory.addCSS("group.css");
+    }
+
 	private final String name;
 	private final int style;
 	private final FontInfo font;

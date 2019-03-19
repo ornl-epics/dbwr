@@ -15,10 +15,19 @@ import dbwr.macros.MacroUtil;
 import dbwr.parser.FontInfo;
 import dbwr.parser.HTMLUtil;
 import dbwr.parser.Resolver;
+import dbwr.parser.WidgetFactory;
 import dbwr.parser.XMLUtil;
 
 public class ActionButtonWidget extends Widget
 {
+    static
+    {
+        WidgetFactory.addJavaScript("actionbutton.js");
+        WidgetFactory.addCSS("actionbutton.css");
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.ActionButton", "action_button");
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.MenuButton", "action_button");
+    }
+
 	private String text;
 
 	public ActionButtonWidget(final ParentWidget parent, final Element xml) throws Exception

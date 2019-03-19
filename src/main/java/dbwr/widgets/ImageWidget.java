@@ -8,10 +8,17 @@ package dbwr.widgets;
 
 import org.w3c.dom.Element;
 
+import dbwr.parser.WidgetFactory;
 import dbwr.parser.XMLUtil;
 
 public class ImageWidget extends PVWidget
 {
+    static
+    {
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.intensityGraph", "image");
+        WidgetFactory.addJavaScript("image.js");
+    }
+
     public ImageWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 		super(parent, xml, "image", 400, 300);

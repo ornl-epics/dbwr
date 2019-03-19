@@ -11,10 +11,16 @@ import java.io.PrintWriter;
 import org.w3c.dom.Element;
 
 import dbwr.parser.HTMLUtil;
+import dbwr.parser.WidgetFactory;
 import dbwr.parser.XMLUtil;
 
 public class ArcWidget extends SvgWidget
 {
+    static
+    {
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.arc", "arc");
+    }
+
     protected final double arc_start, arc_size;
 	protected final int line_width;
 	protected final String line_color, background_color;

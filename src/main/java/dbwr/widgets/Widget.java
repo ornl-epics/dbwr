@@ -25,6 +25,17 @@ import dbwr.parser.XMLUtil;
  */
 public class Widget implements ParentWidget
 {
+    // Widget classes can use static initializer
+    // to register javascript, CSS and legacy types
+    // with the WidgetFactory
+    //
+    // static
+    // {
+    //     WidgetFactory.addJavaScript("this_widget.js");
+    //     WidgetFactory.addCSS("this_widget.css");
+    //     WidgetFactory.registerLegacy("some.old.type.Widget", "this_widget");
+    // }
+
     /** Parent widget */
     protected final ParentWidget parent;
 

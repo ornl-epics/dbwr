@@ -10,10 +10,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.w3c.dom.Element;
 
+import dbwr.parser.WidgetFactory;
 import dbwr.parser.XMLUtil;
 
 public class XYPlotWidget extends Widget
 {
+    static
+    {
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.xyGraph", "xyplot");
+        WidgetFactory.addJavaScript("xyplot.js");
+    }
+
     private static final AtomicInteger id = new AtomicInteger();
 
     public XYPlotWidget(final ParentWidget parent, final Element xml) throws Exception
