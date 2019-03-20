@@ -19,40 +19,39 @@ let _db_plot_options =
     legend:
     {
         show: true,
+        position: "nw"
     }    
 };
 
-
-
-
-
 // Information for one trace:
-// PV name, plot data
+// PV, label, plot data
 //
 // The last sample, plotobj.data[N], is used for scrolling.
 // It carries the same value as plotobj.data[N-1] with a time stamp of 'now'.
 // Calls to scroll() update its time stamp.
 // When a new value is received from the PV, that scroll sample is removed,
 // the actual data is added, and another scroll sample is added back in.
-// At the very start, 'null' is added as a scroll sample:
+// At the very start, 'null' is added as a scroll sample.
 // Flot handles null by creating a gap in the line.
 // In update(), there is now a scroll sample that can be removed/replaced,
 // no need to handle 'no samples' differently from 'have some samples'.
 class DBTrace
 {
     /** @param pv Name of PV
+     *  @param label Label to use
      *  @param color Color of the trace
      *  @param linewidth Line width
      */
-    constructor(pv, color, linewidth)
+    constructor(pv, label, color, linewidth)
     {
         this.pv = pv;
         
         // Flot plot object with
-        // data: [ [ x0, y0 ], [ x1, y1 ], ..., [ xn, yn ] ]
+        // data: [ [ x0, y0 ], [ x1, y1 ], ..., [ xn, yn ] ],
+        // starting with null for the 'scroll sample'
         this.plotobj = 
         {
-            label: pv,
+            label: label,
             color: color,   
             clickable: true,
             hoverable: true,
@@ -98,28 +97,15 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["databrowser"] = widget =
         
         let color = widget.data("color" + i);
         let linewidth = widget.data("linewidth" + i);
-        traces.push(new DBTrace(pv, color, linewidth));
+        let label = widget.data("label" + i);
+        if (label == undefined)
+            label = pv;
+        traces.push(new DBTrace(pv, label, color, linewidth));
         
         ++i;
         pv = widget.data("pv" + i);
     }
     widget.data("traces", traces);
-
-    widget.bind("plotpan", function (event, plot) {
-        var axes = plot.getAxes();
-        $(".message").html("Panning to x: "  + axes.xaxis.min.toFixed(2)
-        + " &ndash; " + axes.xaxis.max.toFixed(2)
-        + " and y: " + axes.yaxis.min.toFixed(2)
-        + " &ndash; " + axes.yaxis.max.toFixed(2));
-    });
-
-    widget.bind("plotzoom", function (event, plot) {
-            var axes = plot.getAxes();
-            $(".message").html("Zooming to x: "  + axes.xaxis.min.toFixed(2)
-            + " &ndash; " + axes.xaxis.max.toFixed(2)
-            + " and y: " + axes.yaxis.min.toFixed(2)
-            + " &ndash; " + axes.yaxis.max.toFixed(2));
-    });
     
     __scroll(widget, traces);
 };

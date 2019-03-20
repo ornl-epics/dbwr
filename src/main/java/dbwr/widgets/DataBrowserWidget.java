@@ -59,7 +59,12 @@ public class DataBrowserWidget extends Widget
                 final String pv_name = XMLUtil.getChildString(parent, pv, "name").orElse(null);
                 if (pv_name == null)
                     continue;
+
                 attributes.put("data-pv" + i, pv_name);
+
+                final String label = XMLUtil.getChildString(parent, pv, "display_name").orElse(null);
+                if (label != null)
+                    attributes.put("data-label" + i, label);
                 attributes.put("data-linewidth" + i, XMLUtil.getChildInteger(pv, "linewidth").orElse(1).toString());
                 attributes.put("data-color" + i, getColor(pv, "color").orElse(Integer.toString(i)));
                 ++i;
