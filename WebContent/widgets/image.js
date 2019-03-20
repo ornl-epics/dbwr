@@ -268,17 +268,20 @@ let _img_buf = document.createElement('canvas');
 
 DisplayBuilderWebRuntime.prototype.widget_update_methods["image"] = function(widget, data)
 {
+    // Chrome's Performance monitor shows that most of the time for handling an image
+    // update is spent in here. .. as expected.
+    // Creat the image in Worker thread?
+    // Would have to postMessage() the data.value into the worker and
+    // then get the image back out via addEventListener().
+    // Do those data copies defeat the purpose?
+    // but https://developer.mozilla.org/en-US/docs/Web/API/Transferable
+    // might help to avoid copies.
+    // Or try http://keithwhor.github.io/multithread.js to get started.
+    
     let canvas = widget.get(0);
     // Data width, height, range
     let wid = widget.data("width"), min = widget.data("min"), max = widget.data("max");
     let hei = Math.floor(data.value.length / wid);
-    
-    // Auto-scale the value range
-    let len = data.value.length;
-    max = -Infinity;
-    while (len--)
-      if (data.value[len] > max)
-          max = data.value[len];
     
     // Screen width, height
     let scr_wid = canvas.width, scr_hei = canvas.height;
@@ -299,6 +302,10 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["image"] = function(wid
         gc.fillText('No data', 10, 30);
         return;
     }
+    
+    // Auto-scale the value range
+    // (only possible if there is data, hei > 0
+    max = data.value.reduce( (a, b) => Math.max(a, b) );
     
     // Draw data into the off-screen image buffer canvas
     _img_buf.width = wid;
