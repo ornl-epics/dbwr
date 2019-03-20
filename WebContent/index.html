@@ -95,6 +95,10 @@ jQuery(() =>
         ex.html(root + url);
     });
     
+    // Populate input with the first option
+    jQuery("#open_form input[name=display]").val( jQuery("#open_form select option")[0].value );
+
+    // Update input when another option is selected
     let options = jQuery("#open_form select");
     options.change(() => jQuery("#open_form input[name=display]").val(options.val()));
     
