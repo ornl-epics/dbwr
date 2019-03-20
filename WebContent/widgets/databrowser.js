@@ -15,8 +15,16 @@ let _db_plot_options =
     pan:
     {
         interactive: true
-    }
+    },
+    legend:
+    {
+        show: true,
+    }    
 };
+
+
+
+
 
 // Information for one trace:
 // PV name, plot data
@@ -44,6 +52,7 @@ class DBTrace
         // data: [ [ x0, y0 ], [ x1, y1 ], ..., [ xn, yn ] ]
         this.plotobj = 
         {
+            label: pv,
             color: color,   
             clickable: true,
             hoverable: true,
@@ -142,6 +151,5 @@ function __replot(widget, traces)
     let trace, plots = [];
     for (trace of traces)
         plots.push( trace.plotobj );
-    
     jQuery.plot(widget, plots, _db_plot_options);    
 }

@@ -25,6 +25,7 @@ public class DataBrowserWidget extends Widget
     {
         WidgetFactory.registerLegacy("org.csstudio.trends.databrowser.opiwidget", "databrowser");
         WidgetFactory.addJavaScript("databrowser.js");
+        WidgetFactory.addCSS("databrowser.css");
     }
 
     private static final AtomicInteger id = new AtomicInteger();
