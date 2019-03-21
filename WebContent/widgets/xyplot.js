@@ -4,12 +4,13 @@ class XYTrace
 {
     /** @param pvx Name of 'X' PV
      *  @param pvy Name of 'Y' PV
+     *  @param label Trace label
      *  @param color Color of the trace
      *  @param linewidth Line width
      *  @param pointsize Use points instead of lines?
      *  @param bars Use bars instead of lines, points?
      */
-    constructor(pvx, pvy, color, linewidth, pointsize, bars)
+    constructor(pvx, pvy, label, color, linewidth, pointsize, bars)
     {
         this.pvx = pvx;
         this.pvy = pvy;
@@ -22,6 +23,7 @@ class XYTrace
         // data: [ [ x0, y0 ], [ x1, y1 ], ..., [ xn, yn ] ]
         this.plotobj = 
         {
+            label: label,
             color: color,   
             clickable: true,
             hoverable: true,
@@ -74,6 +76,22 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["xyplot"] = widget =>
 {
     let i=0, xpv = widget.data("pvx" + i), ypv = widget.data("pvy" + i);
     let traces = [];
+    let options =
+    {
+        zoom:
+        {
+            interactive: true
+        },
+        pan:
+        {
+            interactive: true
+        },
+        legend:
+        {
+            show: false,
+            position: "nw"
+        }    
+    };
     while (xpv  ||  ypv)
     {
         // console.log("Should connect to X/Y " + i + ": " + xpv + ", " + ypv);
@@ -81,18 +99,21 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["xyplot"] = widget =>
             dbwr.subscribe(widget, "xyplot", ypv);
         if (xpv)
             dbwr.subscribe(widget, "xyplot", xpv);
-        
+        let name = widget.data("name" + i);
+        if (name !== undefined)
+            options.legend.show = true; 
         let color = widget.data("color" + i);
         let linewidth = widget.data("linewidth" + i);
         let pointsize = widget.data("pointsize" + i);
         let bars = widget.data("bars" + i);
-        traces.push(new XYTrace(xpv, ypv, color, linewidth, pointsize, bars));
+        traces.push(new XYTrace(xpv, ypv, name, color, linewidth, pointsize, bars));
         
         ++i;
         xpv = widget.data("pvx" + i);
         ypv = widget.data("pvy" + i);
     }
     widget.data("traces", traces);
+    widget.data("options", options);
 };
 
 DisplayBuilderWebRuntime.prototype.widget_update_methods["xyplot"] = function(widget, data)
@@ -101,12 +122,13 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["xyplot"] = function(wi
     // console.log("XYPlot " + id + " update: " + data.pv);
     // console.log("XYPlot update for " + data.value);
     
-    let trace, traces = widget.data("traces"), plots = [];
+    
+    let trace, traces = widget.data("traces"), options = widget.data("options"), plots = [];
     for (trace of traces)
     {
         trace.update(data.pv, data.value);
         plots.push( trace.plotobj );
     }
     
-    jQuery.plot("#" + id, plots);
+    jQuery.plot("#" + id, plots, options);
 }

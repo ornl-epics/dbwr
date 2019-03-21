@@ -41,15 +41,17 @@ public class XYPlotWidget extends Widget
                 final String y_pv = XMLUtil.getChildString(parent, xml, "trace_" + i + "_y_pv").orElse("");
     		    if (y_pv.isEmpty()  &&  x_pv.isEmpty())
     		        break;
-                attributes.put("data-pvx" + i, x_pv);
+
+    		    attributes.put("data-pvx" + i, x_pv);
                 attributes.put("data-pvy" + i, y_pv);
                 attributes.put("data-color" + i, XMLUtil.getColor(xml, "trace_" + i + "_trace_color").orElse(Integer.toString(0)));
-
+                final String name = XMLUtil.getChildString(parent, xml, "trace_" + i + "_name").orElse("");
+                if (!name.isEmpty())
+                    attributes.put("data-name" + i, name);
                 ++i;
 		    }
 		    return;
 		}
-
 
 		// Place PV names into data-pvx0, pvy0, pvx1, pvy1, ...
 		int i=0;
@@ -60,6 +62,9 @@ public class XYPlotWidget extends Widget
             attributes.put("data-pvx" + i, x_pv);
             attributes.put("data-pvy" + i, y_pv);
             attributes.put("data-color" + i, XMLUtil.getColor(trace, "color").orElse(Integer.toString(0)));
+            final String name = XMLUtil.getChildString(parent, trace, "name").orElse("");
+            if (!name.isEmpty())
+                attributes.put("data-name" + i, name);
 
             // Use bars instead of lines?
             if (XMLUtil.getChildInteger(trace, "trace_type").orElse(1) == 5)
