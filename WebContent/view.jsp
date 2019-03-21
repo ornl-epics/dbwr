@@ -16,7 +16,9 @@
 for (String c : WidgetFactory.css)
 	out.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"widgets/" + c + "\">\n");
 %>
-<script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../pvws/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../pvws/js/base64.js"></script>
+<script type="text/javascript" src="../pvws/js/pvws.js"></script> 
 <script type="text/javascript" src="js/lib/jquery.event.drag.js"></script>
 <script type="text/javascript" src="js/lib/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="js/flot/jquery.canvaswrapper.js"></script>
@@ -41,8 +43,6 @@ for (String c : WidgetFactory.css)
 <script type="text/javascript" src="js/flot/jquery.flot.selection.js"></script>
 <script type="text/javascript" src="js/flot/jquery.flot.composeImages.js"></script>
 <script type="text/javascript" src="js/flot/jquery.flot.legend.js"></script>
-<script type="text/javascript" src="../pvws/js/base64.js"></script>
-<script type="text/javascript" src="../pvws/js/pvws.js"></script> 
 <script type="text/javascript" src="js/dbwr.js"></script> 
 <%
 for (String js : WidgetFactory.js)
