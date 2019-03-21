@@ -26,7 +26,9 @@
 
 body
 {
-	font-family: 'LiberationSans', sans-serif;
+    font-family: 'LiberationSans', sans-serif;
+    margin-left: 3ex;
+    margin-right: 3ex;
 }
 
 pre
