@@ -1,17 +1,17 @@
 DisplayBuilderWebRuntime.prototype.widget_update_methods["multi_state_led"] = function(widget, data)
 {
-    let color = widget.attr("data-fallback-color");
+    let color = widget.data("fallback-color");
     let index = 0;
-    let value = widget.attr("data-state-value-" + index);
-    while (value)
+    let value = widget.data("state-value-" + index);
+    while (value !== undefined)
     {
         if (data.value == value)
         {
-            color = widget.attr("data-state-color-" + index);
+            color = widget.data("state-color-" + index);
             break;
         }
         ++index;
-        value = widget.attr("data-state-value-" + index);
+        value = widget.data("state-value-" + index);
     }
     widget.find("ellipse").attr("fill", color);
 }
