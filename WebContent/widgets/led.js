@@ -5,5 +5,5 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["led"] = function(widge
         color = widget.data("on-color");
     else
         color = widget.data("off-color");
-    widget.find("ellipse").attr("fill", color);
+    widget.children().attr("fill", color);
 }
