@@ -36,9 +36,42 @@ public class LabelWidget extends Widget
 		final FontInfo font = XMLUtil.getFont(xml, "font").orElse(DEFAULT_FONT);
 		font.addToStyles(styles);
 
-		final int align = XMLUtil.getChildInteger(xml, "horizontal_alignment").orElse(0);
+		int w = width, h = height;
+		final int rotate = XMLUtil.getChildInteger(xml, "rotation_step").orElse(0);
+        if (rotate > 0)
+        {
+            if (rotate == 1  ||  rotate == 3)
+            {
+                // Rotate around upper left corner
+                styles.put("transform-origin", "0% 0% 0");
+                w = height;
+                h = width;
+                if (rotate == 1)
+                    styles.put("top", Integer.toString(y+w)+"px");
+                else if (rotate == 3)
+                    styles.put("left", Integer.toString(x+h)+"px");
+
+                styles.put("width", Integer.toString(w)+"px");
+                styles.put("height", Integer.toString(h)+"px");
+            }
+            styles.put("transform", "rotate(-" + (90*rotate) + "deg)");
+        }
+
+		if (! XMLUtil.getChildBoolean(xml, "transparent").orElse(true))
+		    styles.put("background-color", XMLUtil.getColor(xml, "background_color").orElse("#FFF"));
+
+		int align = XMLUtil.getChildInteger(xml, "horizontal_alignment").orElse(0);
 		if (align == 1)
 		    styles.put("text-align", "center");
+		else if (align == 2)
+            styles.put("text-align", "right");
+
+		align = XMLUtil.getChildInteger(xml, "vertical_alignment").orElse(0);
+		if (align == 1)
+		    styles.put("line-height",  Integer.toString(h) + "px");
+		else if (align == 2)
+            styles.put("line-height", Integer.toString(2 * h - font.getSize()) + "px");
+
 	}
 
 	@Override
