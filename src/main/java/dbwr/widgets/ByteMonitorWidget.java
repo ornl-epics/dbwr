@@ -36,8 +36,11 @@ public class ByteMonitorWidget extends SvgPVWidget
 		attributes.put("data-off-color", XMLUtil.getColor(xml, "off_color").orElse("#3C643C"));
 		attributes.put("data-on-color", XMLUtil.getColor(xml, "on_color").orElse("#3CFF3C"));
 
-		final boolean reverse = XMLUtil.getChildBoolean(xml, "bitReverse").orElse(false);
-		if (reverse)
+		final int start = XMLUtil.getChildInteger(xml, "startBit").orElse(0);
+		if (start > 0)
+            attributes.put("data-start", Integer.toString(start));
+
+		if (XMLUtil.getChildBoolean(xml, "bitReverse").orElse(false))
 	        attributes.put("data-reverse", "true");
 	}
 
