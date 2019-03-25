@@ -1,8 +1,8 @@
 DisplayBuilderWebRuntime.prototype.widget_update_methods["multi_state_led"] = function(widget, data)
 {
-    var color = widget.attr("data-fallback-color");
-    var index = 0;
-    var value = widget.attr("data-state-value-" + index);
+    let color = widget.attr("data-fallback-color");
+    let index = 0;
+    let value = widget.attr("data-state-value-" + index);
     while (value)
     {
         if (data.value == value)

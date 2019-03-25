@@ -30,7 +30,7 @@ public class MultiStateLedWidget extends BaseLedWidget
     	    {
     	        final int value = XMLUtil.getChildInteger(state, "value").orElse(index);
     	        final String color = XMLUtil.getColor(state, "color").orElse("#000");
-                attributes.put("data-state-value-" + index, Integer.toBinaryString(value));
+                attributes.put("data-state-value-" + index, Integer.toString(value));
                 attributes.put("data-state-color-" + index, color);
                 ++index;
     	    }
