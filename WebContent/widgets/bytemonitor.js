@@ -11,7 +11,7 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["byte_monitor"] = funct
     
     console.log("Reverse: " + reverse + ", start: " + start);
 
-    let leds = widget.find("ellipse");
+    let leds = widget.children();
     for (let i=0; i<leds.length; ++i)
     {
         let led = leds.get(i);

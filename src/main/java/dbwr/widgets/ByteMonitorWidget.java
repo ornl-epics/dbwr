@@ -23,6 +23,7 @@ public class ByteMonitorWidget extends SvgPVWidget
 
     private final int bits;
     private final boolean horizontal;
+    private final boolean square;
 
     public ByteMonitorWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
@@ -32,6 +33,8 @@ public class ByteMonitorWidget extends SvgPVWidget
 
 		bits = XMLUtil.getChildInteger(xml, "numBits").orElse(8);
 		horizontal = XMLUtil.getChildBoolean(xml, "horizontal").orElse(true);
+		square = XMLUtil.getChildBoolean(xml, "square")
+		                .orElse(XMLUtil.getChildBoolean(xml, "square_led").orElse(false));
 
 		attributes.put("data-off-color", XMLUtil.getColor(xml, "off_color").orElse("#3C643C"));
 		attributes.put("data-on-color", XMLUtil.getColor(xml, "on_color").orElse("#3CFF3C"));
@@ -47,17 +50,35 @@ public class ByteMonitorWidget extends SvgPVWidget
     @Override
     protected void fillHTML(final PrintWriter html, final int indent)
     {
-        if (horizontal)
+        if (square)
         {
-            final int size = width/bits, rx = size/2, ry = height/2;
-            for (int i=0; i<bits; ++i)
-                html.append("<ellipse cx=\"" + (i*size + rx) + "\" cy=\"" +  ry + "\" rx=\"" + rx + "\" ry=\"" + ry + "\" fill=\"grey\"></ellipse>");
+            if (horizontal)
+            {
+                final int size = width/bits;
+                for (int i=0; i<bits; ++i)
+                    html.append("<rect x=\"" + (i*size) + "\" y=\"" +  0 + "\" width=\"" + size + "\" height=\"" + height + "\" fill=\"grey\"></rect>");
+            }
+            else
+            {
+                final int size = height/bits;
+                for (int i=0; i<bits; ++i)
+                    html.append("<rect x=\"" + 0 + "\" y=\"" + (i*size) + "\" width=\"" + width + "\" height=\"" + size + "\" fill=\"grey\"></rect>");
+            }
         }
         else
         {
-            final int size = height/bits, rx = width/2, ry = size/2;
-            for (int i=0; i<bits; ++i)
-                html.append("<ellipse cx=\"" + rx + "\" cy=\"" + (i*size + ry) + "\" rx=\"" + rx + "\" ry=\"" + ry + "\" fill=\"grey\"></ellipse>");
+            if (horizontal)
+            {
+                final int size = width/bits, rx = size/2, ry = height/2;
+                for (int i=0; i<bits; ++i)
+                    html.append("<ellipse cx=\"" + (i*size + rx) + "\" cy=\"" +  ry + "\" rx=\"" + rx + "\" ry=\"" + ry + "\" fill=\"grey\"></ellipse>");
+            }
+            else
+            {
+                final int size = height/bits, rx = width/2, ry = size/2;
+                for (int i=0; i<bits; ++i)
+                    html.append("<ellipse cx=\"" + rx + "\" cy=\"" + (i*size + ry) + "\" rx=\"" + rx + "\" ry=\"" + ry + "\" fill=\"grey\"></ellipse>");
+            }
         }
     }
 }
