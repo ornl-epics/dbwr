@@ -27,5 +27,6 @@ public class LedWidget extends BaseLedWidget
 	    final String off_color = XMLUtil.getColor(xml, "off_color").orElse("#3C643C");
 	    attributes.put("data-on-color", on_color);
 	    attributes.put("data-off-color", off_color);
+        attributes.put("data-bit", Integer.toString(XMLUtil.getChildInteger(xml, "bit").orElse(-1)));
 	}
 }
