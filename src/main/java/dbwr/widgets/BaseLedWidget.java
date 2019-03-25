@@ -35,7 +35,7 @@ public class BaseLedWidget extends SvgPVWidget
 	protected void fillHTML(final PrintWriter html, final int indent)
 	{
 	    if (square)
-            html.append("<rect x=\"" + 0 + "\" y=\"" +  0 + "\" width=\"" + width + "\" height=\"" + height + "\" fill=\"grey\"></rect>");
+            html.append("<rect width=\"" + width + "\" height=\"" + height + "\" fill=\"grey\"></rect>");
 	    else
 	    {
     		final int rx = width/2, ry = height/2;
