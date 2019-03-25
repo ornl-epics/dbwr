@@ -60,6 +60,8 @@ public class LabelWidget extends Widget
 		if (! XMLUtil.getChildBoolean(xml, "transparent").orElse(true))
 		    styles.put("background-color", XMLUtil.getColor(xml, "background_color").orElse("#FFF"));
 
+        styles.put("color", XMLUtil.getColor(xml, "foreground_color").orElse("#000"));
+
 		int align = XMLUtil.getChildInteger(xml, "horizontal_alignment").orElse(0);
 		if (align == 1)
 		    styles.put("text-align", "center");
