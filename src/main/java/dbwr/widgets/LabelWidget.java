@@ -70,7 +70,10 @@ public class LabelWidget extends Widget
 
 		align = XMLUtil.getChildInteger(xml, "vertical_alignment").orElse(0);
 		if (align == 1)
-		    styles.put("line-height",  Integer.toString(h) + "px");
+		{
+		    final int lines = text.split("\n").length;
+		    styles.put("line-height",  Integer.toString(h / lines) + "px");
+		}
 		else if (align == 2)
             styles.put("line-height", Integer.toString(2 * h - font.getSize()) + "px");
 
