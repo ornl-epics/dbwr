@@ -160,6 +160,8 @@ class DisplayBuilderWebRuntime
     subscribe(widget, type, pv_name)
     {
         // console.log("Subscribe for " + type + " widget to PV " + pv_name);
+        // Until we get an update from the PV, consider widget disconnected
+        widget.addClass("BorderDisconnected");
         this._subscribe(pv_name, data => this._handle_widget_pv_update(widget, type, data));
     }
 
