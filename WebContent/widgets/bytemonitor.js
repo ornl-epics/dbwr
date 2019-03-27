@@ -9,16 +9,16 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["byte_monitor"] = funct
         start = 0;
     let value = data.value;
     
-    console.log("Reverse: " + reverse + ", start: " + start);
+    // console.log("Reverse: " + reverse + ", start: " + start);
 
-    let leds = widget.children();
+    let leds = widget.find("ellipse,rect");
     for (let i=0; i<leds.length; ++i)
     {
         let led = leds.get(i);
         let mask = reverse
                  ? 1 << (start + i)
                  : 1 << (leds.length - 1 + start - i);
-        console.log("Mask: " + mask);
+        // console.log("Mask: " + mask);
         if (value & mask)
             led.setAttribute("fill", on);
         else

@@ -13,5 +13,5 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["multi_state_led"] = fu
         ++index;
         value = widget.data("state-value-" + index);
     }
-    widget.children().attr("fill", color);
+    widget.find("ellipse,rect").attr("fill", color);
 }

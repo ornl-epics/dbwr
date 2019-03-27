@@ -6,8 +6,11 @@
  ******************************************************************************/
 package dbwr.widgets;
 
+import java.io.PrintWriter;
+
 import org.w3c.dom.Element;
 
+import dbwr.parser.HTMLUtil;
 import dbwr.parser.XMLUtil;
 
 public class SvgPVWidget extends SvgWidget
@@ -36,6 +39,15 @@ public class SvgPVWidget extends SvgWidget
             if (! units)
                 attributes.put("data-show-units", "false");
         });
+    }
+
+	@Override
+    protected void startHTML(final PrintWriter html, final int indent)
+	{
+	    super.startHTML(html, indent);
+	    // Show PV name as tool-tip
+	    HTMLUtil.indent(html, indent);
+        html.append("<title>").append(HTMLUtil.escape(pv_name)).append("</title>");
     }
 }
 
