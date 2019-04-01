@@ -9,6 +9,7 @@ package dbwr.widgets;
 import java.net.URL;
 
 import dbwr.macros.MacroProvider;
+import dbwr.rules.RuleSupport;
 
 /** Base for all widgets
  *  @author Kay Kasemir
@@ -16,5 +17,7 @@ import dbwr.macros.MacroProvider;
 public interface ParentWidget extends MacroProvider
 {
     public URL getDisplay();
+
+    public RuleSupport getRuleSupport();
 }
 

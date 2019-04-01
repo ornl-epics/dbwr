@@ -20,6 +20,7 @@ import org.w3c.dom.Element;
 
 import dbwr.parser.HTMLUtil;
 import dbwr.parser.XMLUtil;
+import dbwr.rules.RuleSupport;
 
 /** Base for all widgets
  *  @author Kay Kasemir
@@ -98,6 +99,12 @@ public class Widget implements ParentWidget
     public URL getDisplay()
 	{
         return parent.getDisplay();
+    }
+
+    @Override
+    public RuleSupport getRuleSupport()
+    {
+        return parent.getRuleSupport();
     }
 
     @Override

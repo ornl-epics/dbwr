@@ -16,6 +16,7 @@ import org.w3c.dom.Element;
 
 import dbwr.macros.MacroProvider;
 import dbwr.macros.MacroUtil;
+import dbwr.rules.RuleSupport;
 import dbwr.widgets.ParentWidget;
 import dbwr.widgets.Widget;
 
@@ -25,6 +26,7 @@ import dbwr.widgets.Widget;
 public class DisplayParser implements ParentWidget
 {
     private final URL display;
+    private final RuleSupport rules = new RuleSupport();
 	public final int width, height;
 	/* TODO private */ final Map<String, String> macros;
 
@@ -95,12 +97,21 @@ public class DisplayParser implements ParentWidget
 			widget.getHTML(html, 1);
 		}
 		html.println("</div>");
+
+		// Create scripts for rules
+		rules.addScripts(html);
 	}
 
     @Override
     public URL getDisplay()
     {
         return display;
+    }
+
+    @Override
+    public RuleSupport getRuleSupport()
+    {
+        return rules;
     }
 
     @Override
