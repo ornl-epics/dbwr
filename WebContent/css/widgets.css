@@ -74,9 +74,9 @@ svg.Widget
 	/* Inner line */
 	outline: 1px solid #F00;
 	/* Gap between lines, outer line.
-	 * Gap has to have a color. Using somewhat-transparent white.
+	 * Gap has to have a color. Using white.
 	 */
-	box-shadow: 0 0 0 2px #FFFA, 0 0 0 3px #F00;
+	box-shadow: 0 0 0 2px #FFF, 0 0 0 3px #F00;
 }
 .BorderInvalid
 {
