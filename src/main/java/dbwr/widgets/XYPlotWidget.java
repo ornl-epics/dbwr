@@ -6,8 +6,6 @@
  ******************************************************************************/
 package dbwr.widgets;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import org.w3c.dom.Element;
 
 import dbwr.parser.WidgetFactory;
@@ -21,14 +19,9 @@ public class XYPlotWidget extends Widget
         WidgetFactory.addJavaScript("xyplot.js");
     }
 
-    private static final AtomicInteger id = new AtomicInteger();
-
     public XYPlotWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 		super(parent, xml, "xyplot", 400, 300);
-
-		// Flot lib needs an ID to place plot
-		attributes.put("id", "plot" + id.incrementAndGet());
 
 		final Element traces = XMLUtil.getChildElement(xml, "traces");
 		if (traces == null)

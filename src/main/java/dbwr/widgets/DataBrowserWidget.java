@@ -10,7 +10,6 @@ import static dbwr.WebDisplayRepresentation.logger;
 
 import java.net.URL;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
 import org.w3c.dom.Element;
@@ -28,14 +27,9 @@ public class DataBrowserWidget extends Widget
         WidgetFactory.addCSS("databrowser.css");
     }
 
-    private static final AtomicInteger id = new AtomicInteger();
-
 	public DataBrowserWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 	    super(parent, xml, "databrowser", 400, 300);
-
-	    // Flot lib needs an ID to place plot
-        attributes.put("id", "db" + id.incrementAndGet());
 
         // Get *.plt file, falling back to legacy property
         String file = XMLUtil.getChildString(parent, xml, "file").orElse(null);

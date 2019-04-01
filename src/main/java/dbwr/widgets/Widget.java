@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.w3c.dom.Element;
@@ -35,6 +36,12 @@ public class Widget implements ParentWidget
     //     WidgetFactory.addCSS("this_widget.css");
     //     WidgetFactory.registerLegacy("some.old.type.Widget", "this_widget");
     // }
+
+    /** Generator for unique widget ID */
+    private static final AtomicInteger IDs = new AtomicInteger();
+
+    /** Unique widget ID (used as "w" + number) */
+    protected final int id = IDs.incrementAndGet();
 
     /** Parent widget */
     protected final ParentWidget parent;
@@ -77,6 +84,8 @@ public class Widget implements ParentWidget
 		height = XMLUtil.getChildInteger(xml, "height").orElse(default_height);
 
 		classes.add("Widget");
+
+		attributes.put("id", "w" + id);
 		attributes.put("data-type", type);
 
 		styles.put("top", Integer.toString(y)+"px");
