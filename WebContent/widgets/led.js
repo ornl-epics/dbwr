@@ -1,3 +1,9 @@
+
+function set_svg_background_color(widget, color)
+{
+    widget.find("ellipse,rect").attr("fill", color);
+}
+
 DisplayBuilderWebRuntime.prototype.widget_update_methods["led"] = function(widget, data)
 {
     let bit = widget.data("bit");
@@ -17,5 +23,6 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["led"] = function(widge
         else
             color = widget.data("off-color");
     }
-    widget.find("ellipse,rect").attr("fill", color);
+    
+    set_svg_background_color(widget, color);
 }

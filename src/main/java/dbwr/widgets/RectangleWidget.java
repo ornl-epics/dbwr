@@ -30,7 +30,9 @@ public class RectangleWidget extends EllipseWidget
 		rx = XMLUtil.getChildDouble(xml, "corner_width").orElse(0.0);
         ry = XMLUtil.getChildDouble(xml, "corner_height").orElse(0.0);
 
-        getRuleSupport().handleColorRule(parent, xml, this, "background_color", background_color);
+        getRuleSupport().handleColorRule(parent, xml, this,
+                                         "background_color", background_color,
+                                         "set_svg_background_color");
 	}
 
 	@Override

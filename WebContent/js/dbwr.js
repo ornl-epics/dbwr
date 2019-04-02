@@ -303,51 +303,54 @@ DisplayBuilderWebRuntime.prototype.widget_rules = {};
 
 class WidgetRule
 {
-    constructor(property, pvs)
+    /** @param wid Widget ID, "w123"
+     *  @param property Widget property that the rule sets
+     *  @oaram pvs Array of PVs
+     */
+    constructor(wid, property, pvs)
     {
+        this.widget = jQuery("#" + wid);
         this.property = property;
         this.pvs = pvs;
+        // value['NameOfPV'] is updated to latest numeric value
         this.value = {};
+        
+        // console.log("Register for " + wid + ":");
+        // console.log(this);
+        let rules = DisplayBuilderWebRuntime.prototype.widget_rules[wid];
+        if (rules === undefined)
+            DisplayBuilderWebRuntime.prototype.widget_rules[wid] = [ this ];
+        else
+            rules.push(this);
     }
     
+    /** Subscribe to PVs */
     init()
     {
         // console.log("Starting rule for PVs " + this.pvs);
         for (let pv of this.pvs)
-            dbwr._subscribe(pv, data => { this.value[pv] = data.value; this.trigger(pv); });
+            dbwr._subscribe(pv, data => { this.value[pv] = data.value; this._trigger(pv); });
     }
     
-    trigger(pv)
+    _trigger(pv)
     {
         console.log("Rule was triggered by " + pv);
-    }
-}
-
-WidgetRule.prototype.widget_rules = {};
-
-WidgetRule.prototype.register = function(wid)
-{
-    // console.log("Register for " + wid + ":");
-    // console.log(this);
-    let rules = DisplayBuilderWebRuntime.prototype.widget_rules[wid];
-    if (rules === undefined)
-        DisplayBuilderWebRuntime.prototype.widget_rules[wid] = [ this ];
-    else
-        rules.push(this);
-}
-
-class ColorRule extends WidgetRule
-{
-    trigger(pv)
-    {
-        console.log("COLOR Rule was triggered by " + pv);
-        let color = this.eval();
-        // TODO Inform widget of new color for controlled property
-        console.log(this.property + " = " + color);
+        let value = this.eval();
+        console.log("Result: " + value);
+        this.update(this.widget, value);
     }
     
     eval()
     {
-        return '#000';
+        // Override should use this.value[..] and rule expressions to determine value
+        console.error("WidgetRule.eval() needs to be overridden");
+        return undefined;
+    }
+    
+    update(widget, value)
+    {
+        // Override should use value to update widget's property
+        console.error("WidgetRule.update() needs to be overridden")
     }
 }
+

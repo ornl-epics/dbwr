@@ -49,7 +49,9 @@ public class RuleSupport
     private final AtomicInteger id = new AtomicInteger();
     private final StringBuilder scripts = new StringBuilder();
 
-    public void handleColorRule(final MacroProvider macros, final Element xml, final Widget widget, final String property, final String default_color) throws Exception
+    public void handleColorRule(final MacroProvider macros, final Element xml,
+                                final Widget widget, final String property, final String default_color,
+                                final String update_code) throws Exception
     {
         final Element rules = XMLUtil.getChildElement(xml, "rules");
         if (rules == null)
@@ -81,7 +83,7 @@ public class RuleSupport
             final String rule = "rule" + id.incrementAndGet();
             scripts.append("// Rule for color of "  + property + "\n");
             scripts.append("let " + rule +
-                           " = new ColorRule('" + property + "', [" +
+                           " = new WidgetRule('" + widget.getWID() + "', '" + property + "', [" +
                            pvs.stream().map(pv -> "'" + pv + "'").collect(Collectors.joining(",")) +
                            "]);\n");
             scripts.append(rule + ".eval = function()\n");
@@ -96,9 +98,7 @@ public class RuleSupport
             scripts.append("  return '" + default_color + "';\n");
 
             scripts.append("}\n");
-
-            scripts.append(rule + ".register('" + widget.getWID() + "');\n");
-
+            scripts.append(rule + ".update = " + update_code + "\n");
         }
     }
 
