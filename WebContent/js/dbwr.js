@@ -1,4 +1,4 @@
-
+/** Constants for severity levels */
 class Severity
 {
 }
@@ -10,7 +10,7 @@ Severity.INVALID = "INVALID";
 Severity.UNDEFINED = "UNDEFINED";
 
 
-// Info for one PV
+/** Info for one PV */
 class PVInfo
 {
     constructor(pv_name)
@@ -25,6 +25,13 @@ class PVInfo
     }
 }
 
+
+/** Each page has one DisplayBuilderWebRuntime
+ *  that handles the web socket,
+ *  loads content,
+ *  subscribes PVs,
+ *  dispatches received PV updates to callbacks.
+ */
 class DisplayBuilderWebRuntime
 {
     /** Construct data browser web runtime for a PV Web Socket
@@ -59,7 +66,6 @@ class DisplayBuilderWebRuntime
         this.display = display;
         this.log("Loading '" + display + "' with " + macros);
         
-        // TODO Handle error by displaying some error text "Cannot load ..."
         jQuery.get("screen",
                 { display: this.display, macros: macros },
                 data =>
@@ -133,7 +139,8 @@ class DisplayBuilderWebRuntime
     _initWidget(widget)
     {
         let type = widget.attr("data-type");
-        
+
+        // Call registered init method for widget type
         let method = this.widget_init_methods[type];
         if (method)
         {
@@ -141,9 +148,20 @@ class DisplayBuilderWebRuntime
             method(widget);
         }
 
+        // Handle 'data-pv'
         let pv_name = widget.attr("data-pv");
         if (pv_name)
             this.subscribe(widget, type, pv_name);
+        
+        // Init rules of this widget
+        let wid = widget.attr("id");
+        let rules = this.widget_rules[wid];
+        if (rules)
+            for (let rule of rules)
+            {
+                // console.log("Init rule for " + wid);
+                rule.init();
+            }
     }
     
     /** Subscribe to a PV and register for value updates
@@ -250,21 +268,86 @@ class DisplayBuilderWebRuntime
     }
 }
 
-// Widgets can register init(widget) methods
+// Widget types can register init(widget) methods
 // to initialize UI event handlers
-// or to perform custom PV subscriptions.
+// or to perform custom PV subscriptions:
+//
+// DisplayBuilderWebRuntime.prototype.widget_init_methods["xyz"] = function(widget)
+// {
+//     # Initialize an 'xyz' type widget
+// }
 //
 // widget: jQuery object for the <div> or <svg> or ...
 DisplayBuilderWebRuntime.prototype.widget_init_methods = {};
 
-// Widgets can register handle_update(widget, data) methods.
+
+// Widget types can register handle_update(widget, data) methods.
+//
+// DisplayBuilderWebRuntime.prototype.widget_update_methods["xyz"] = function(widget, data)
+// {
+//     # Widget of type 'xyz' received new data for its PV
+// }
 //
 // Widgets with "data-pv" are automatically subscribed to that PV
-// and should register in this list to handle PV value updates.
+// and should register to handle PV value updates.
 // Widgets might subscribe to additional PVs via the widget_init_methods.
 //
 // widget: jQuery object for the <div> or <svg> or ...
 // data: Latest PV data
 DisplayBuilderWebRuntime.prototype.widget_update_methods = {};
 
+// Rules register here widget ID.
+DisplayBuilderWebRuntime.prototype.widget_rules = {};
 
+
+
+class WidgetRule
+{
+    constructor(property, pvs)
+    {
+        this.property = property;
+        this.pvs = pvs;
+        this.value = {};
+    }
+    
+    init()
+    {
+        // console.log("Starting rule for PVs " + this.pvs);
+        for (let pv of this.pvs)
+            dbwr._subscribe(pv, data => { this.value[pv] = data.value; this.trigger(pv); });
+    }
+    
+    trigger(pv)
+    {
+        console.log("Rule was triggered by " + pv);
+    }
+}
+
+WidgetRule.prototype.widget_rules = {};
+
+WidgetRule.prototype.register = function(wid)
+{
+    // console.log("Register for " + wid + ":");
+    // console.log(this);
+    let rules = DisplayBuilderWebRuntime.prototype.widget_rules[wid];
+    if (rules === undefined)
+        DisplayBuilderWebRuntime.prototype.widget_rules[wid] = [ this ];
+    else
+        rules.push(this);
+}
+
+class ColorRule extends WidgetRule
+{
+    trigger(pv)
+    {
+        console.log("COLOR Rule was triggered by " + pv);
+        let color = this.eval();
+        // TODO Inform widget of new color for controlled property
+        console.log(this.property + " = " + color);
+    }
+    
+    eval()
+    {
+        return '#000';
+    }
+}

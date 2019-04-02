@@ -9,6 +9,8 @@ package dbwr.rules;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.w3c.dom.Element;
 
@@ -38,12 +40,16 @@ import dbwr.widgets.Widget;
  *
  *  TODO Rules need to be started _AFTER_ connecting to web socket,
  *  then they subscribe to PVs etc.
+ *  '&lt;script>' tags execute right away.
+ *  TODO They contain code like
+ *  new_rules.append(new Rule(....));
  */
 public class RuleSupport
 {
+    private final AtomicInteger id = new AtomicInteger();
     private final StringBuilder scripts = new StringBuilder();
 
-    public void handleColorRule(final MacroProvider macros, final Element xml, final Widget widget, final String property, final String default_color)
+    public void handleColorRule(final MacroProvider macros, final Element xml, final Widget widget, final String property, final String default_color) throws Exception
     {
         final Element rules = XMLUtil.getChildElement(xml, "rules");
         if (rules == null)
@@ -54,7 +60,7 @@ public class RuleSupport
             if (! property.equals(re.getAttribute("prop_id")))
                 continue;
 
-            // Collect PVs
+            // Collect PVs,..
             final List<String> pvs = new ArrayList<>();
             for (final Element e : XMLUtil.getChildElements(re, "pv_name"))
                 pvs.add(MacroUtil.expand(macros, XMLUtil.getString(e)));
@@ -62,18 +68,44 @@ public class RuleSupport
             for (final Element e : XMLUtil.getChildElements(re, "pv"))
                 pvs.add(MacroUtil.expand(macros, XMLUtil.getString(e)));
 
-            scripts.append("console.log('RULE FOR COLOR " + property + " based on " + pvs + "');");
+            // Expressions, values
+            final List<String> expr = new ArrayList<>();
+            final List<String> colors = new ArrayList<>();
+            for (final Element e : XMLUtil.getChildElements(re, "exp"))
+            {
+                // TODO Check/convert expression
+                expr.add(e.getAttribute("bool_exp"));
+                colors.add(XMLUtil.getColor(e, "value").orElseThrow(() -> new Exception("Missing color")));
+            }
+
+            final String rule = "rule" + id.incrementAndGet();
+            scripts.append("// Rule for color of "  + property + "\n");
+            scripts.append("let " + rule +
+                           " = new ColorRule('" + property + "', [" +
+                           pvs.stream().map(pv -> "'" + pv + "'").collect(Collectors.joining(",")) +
+                           "]);\n");
+            scripts.append(rule + ".eval = function()\n");
+            scripts.append("{\n");
+            int N = pvs.size();
+            for (int i=0; i<N; ++i)
+                scripts.append("  let pv" + i + " = this.value['" + pvs.get(i) + "'];\n");
+
+            N = expr.size();
+            for (int i=0; i<N; ++i)
+                scripts.append("  if (" + expr.get(i) + ") return '" + colors.get(i) + "';\n");
+            scripts.append("  return '" + default_color + "';\n");
+
+            scripts.append("}\n");
+
+            scripts.append(rule + ".register('" + widget.getWID() + "');\n");
+
         }
     }
 
     public void addScripts(PrintWriter html)
     {
         html.println("<script>");
-
-        html.println("jQuery(() =>");
-        html.println("{");
         html.println(scripts.toString());
-        html.println("});");
         html.println("</script>");
     }
 }

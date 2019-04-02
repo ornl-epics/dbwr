@@ -86,13 +86,19 @@ public class Widget implements ParentWidget
 
 		classes.add("Widget");
 
-		attributes.put("id", "w" + id);
+		attributes.put("id", getWID());
 		attributes.put("data-type", type);
 
 		styles.put("top", Integer.toString(y)+"px");
 		styles.put("left", Integer.toString(x)+"px");
 		styles.put("width", Integer.toString(width)+"px");
 		styles.put("height", Integer.toString(height)+"px");
+	}
+
+	/** @return Widget ID, "w" followed by unique number */
+	public final String getWID()
+	{
+	    return "w" + id;
 	}
 
 	@Override
