@@ -27,6 +27,9 @@ public class PolygonWidget extends PolylineWidget
 	{
 		super(parent, xml, "polygon");
 	    background_color = XMLUtil.getColor(xml, "background_color").orElse("#3232FF");
+        getRuleSupport().handleColorRule(parent, xml, this,
+                                         "background_color", background_color,
+                                         "set_svg_background_color");
 	}
 
 	@Override
