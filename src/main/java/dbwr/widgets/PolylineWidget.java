@@ -33,7 +33,8 @@ public class PolylineWidget extends SvgWidget
 	{
 		super(parent, xml, type);
 		line_width = XMLUtil.getChildInteger(xml, "line_width").orElse(3);
-		line_color = XMLUtil.getColor(xml, "line_color").orElse("#00F");
+		line_color = XMLUtil.getColor(xml, "line_color")
+		                    .orElse(XMLUtil.getColor(xml, "background_color").orElse("#00F"));
 
 		adjustXMLPoints(xml);
 
