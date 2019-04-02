@@ -39,7 +39,12 @@ public class EllipseWidget extends SvgWidget
 		if (transparent)
 		    background_color = "transparent";
 		else
+		{
 		    background_color = XMLUtil.getColor(xml, "background_color").orElse("#1E90FF");
+            getRuleSupport().handleColorRule(parent, xml, this,
+                                             "background_color", background_color,
+                                             "set_svg_background_color");
+		}
 	}
 
 	@Override

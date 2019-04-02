@@ -21,8 +21,7 @@ import dbwr.widgets.Widget;
 
 /** Rule support
  *
- *  Assume this in a Rectangle widget:
- *
+ *  Example from a Rectangle widget:
  *  <pre>
  *  &lt;rule name="Color" prop_id="background_color" out_exp="false">
  *    &lt;exp bool_exp="pv0&gt;2">
@@ -34,15 +33,9 @@ import dbwr.widgets.Widget;
  *  &lt;/rule>
  *  </pre>
  *
- *  Rectangle widget creates RuleSupport with handler for color "background_color".
+ *  Rectangle widget invokes RuleSupport to handle rules for "background_color".
  *  RuleSupport then finds the rule and creates JavaScript that's added to
  *  a '&lt;script>' tag at the end of the display HTML.
- *
- *  TODO Rules need to be started _AFTER_ connecting to web socket,
- *  then they subscribe to PVs etc.
- *  '&lt;script>' tags execute right away.
- *  TODO They contain code like
- *  new_rules.append(new Rule(....));
  */
 public class RuleSupport
 {
@@ -80,6 +73,16 @@ public class RuleSupport
                 colors.add(XMLUtil.getColor(e, "value").orElseThrow(() -> new Exception("Missing color")));
             }
 
+            // Created <script>:
+            // // Rule for color of background_color
+            // let rule1 = new WidgetRule('w9180', 'background_color', ['sim://ramp']);
+            // rule1.eval = function()
+            // {
+            //   let pv0 = this.value['sim://ramp'];
+            //   if (pv0>2) return '#00FF00';
+            //   return '#1E90FF';
+            // }
+            // rule1.update = set_svg_background_color
             final String rule = "rule" + id.incrementAndGet();
             scripts.append("// Rule for color of "  + property + "\n");
             scripts.append("let " + rule +
