@@ -18,11 +18,12 @@ public class PolylineWidget extends SvgWidget
 {
     static
     {
+        WidgetFactory.addJavaScript("polyline.js");
         WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.polyline", "polyline");
     }
 
     protected final int line_width;
-	protected final String line_color, points;
+	protected String line_color, points;
 
 	public PolylineWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
@@ -33,8 +34,17 @@ public class PolylineWidget extends SvgWidget
 	{
 		super(parent, xml, type);
 		line_width = XMLUtil.getChildInteger(xml, "line_width").orElse(3);
-		line_color = XMLUtil.getColor(xml, "line_color")
-		                    .orElse(XMLUtil.getColor(xml, "background_color").orElse("#00F"));
+
+		String color_prop = "background_color";
+		line_color = XMLUtil.getColor(xml, color_prop).orElse(null);
+		if (line_color == null)
+		{
+		    color_prop = "line_color";
+		    line_color = XMLUtil.getColor(xml, color_prop).orElse("#00F");
+		}
+        getRuleSupport().handleColorRule(parent, xml, this,
+                                         color_prop, line_color,
+                                         "set_poly_line_color");
 
 		adjustXMLPoints(xml);
 
