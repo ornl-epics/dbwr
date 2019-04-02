@@ -91,6 +91,11 @@ function format_pv_data_as_text(widget, data)
     return text;
 }
 
+function set_text_background_color(widget, color)
+{
+    widget.css("background-color", color);
+}
+
 function update_text_widget(widget, data)
 {
     // Use newlines to start new line via <br>

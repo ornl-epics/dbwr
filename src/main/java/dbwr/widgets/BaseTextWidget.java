@@ -52,8 +52,12 @@ public class BaseTextWidget extends PVWidget
 
 		if (! XMLUtil.getChildBoolean(xml, "transparent").orElse(false))
 		{
-			final String background = XMLUtil.getColor(xml, "background_color").orElse(default_background);
-			styles.put("background-color", background);
+			final String background_color = XMLUtil.getColor(xml, "background_color").orElse(default_background);
+			styles.put("background-color", background_color);
+
+			getRuleSupport().handleColorRule(parent, xml, this,
+                                             "background_color", background_color,
+                                             "set_text_background_color");
 		}
 
 		XMLUtil.getChildInteger(xml, "horizontal_alignment").ifPresent(align ->
