@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.w3c.dom.Element;
@@ -42,10 +43,18 @@ public class RuleSupport
     private final AtomicInteger id = new AtomicInteger();
     private final StringBuilder scripts = new StringBuilder();
 
+    @FunctionalInterface
+    private interface ValueParser
+    {
+        String parse(MacroProvider macros, Element exp) throws Exception;
+    }
 
-    public void handleNumericRule(final MacroProvider macros, final Element xml,
-                                  final Widget widget, final String property, final double default_value,
-                                  final String update_code) throws Exception
+    private void handleRule(final MacroProvider macros, final Element xml,
+                            final Widget widget, final String property,
+                            final ValueParser value_parser,
+                            final String default_value,
+                            final Function<String, String> value_format,
+                            final String update_code) throws Exception
     {
         final Element rules = XMLUtil.getChildElement(xml, "rules");
         if (rules == null)
@@ -71,7 +80,7 @@ public class RuleSupport
             {
                 // TODO Check/convert expression
                 expr.add(MacroUtil.expand(macros, e.getAttribute("bool_exp")));
-                values.add(XMLUtil.getChildString(macros, e, "value").orElseThrow(() -> new Exception("Missing value")));
+                values.add(value_parser.parse(macros, e));
             }
 
             // Created <script>:
@@ -91,18 +100,30 @@ public class RuleSupport
                            "]);\n");
             scripts.append(rule + ".eval = function()\n");
             scripts.append("{\n");
+
             int N = pvs.size();
             for (int i=0; i<N; ++i)
                 scripts.append("  let pv" + i + " = this.value['" + pvs.get(i) + "'];\n");
 
             N = expr.size();
             for (int i=0; i<N; ++i)
-                scripts.append("  if (" + expr.get(i) + ") return " + values.get(i) + ";\n");
-            scripts.append("  return " + default_value + ";\n");
+                scripts.append("  if (" + expr.get(i) + ") return " + value_format.apply(values.get(i)) + ";\n");
+            scripts.append("  return " + value_format.apply(default_value) + ";\n");
 
             scripts.append("}\n");
             scripts.append(rule + ".update = " + update_code + "\n");
         }
+    }
+
+
+    public void handleNumericRule(final MacroProvider macros, final Element xml,
+            final Widget widget, final String property, final double default_value,
+            final String update_code) throws Exception
+    {
+        handleRule(macros, xml, widget, property,
+                   (mac, exp) -> XMLUtil.getChildString(mac, exp, "value").orElseThrow(() -> new Exception("Missing value")),
+                   Double.toString(default_value),
+                   text -> text, update_code);
     }
 
 
@@ -110,130 +131,20 @@ public class RuleSupport
                                 final Widget widget, final String property, final String default_color,
                                 final String update_code) throws Exception
     {
-        final Element rules = XMLUtil.getChildElement(xml, "rules");
-        if (rules == null)
-            return;
-
-        for (final Element re : XMLUtil.getChildElements(rules, "rule"))
-        {
-            if (! property.equals(re.getAttribute("prop_id")))
-                continue;
-
-            // Collect PVs,..
-            final List<String> pvs = new ArrayList<>();
-            for (final Element e : XMLUtil.getChildElements(re, "pv_name"))
-                pvs.add(MacroUtil.expand(macros, XMLUtil.getString(e)));
-            // Legacy PV names
-            for (final Element e : XMLUtil.getChildElements(re, "pv"))
-                pvs.add(MacroUtil.expand(macros, XMLUtil.getString(e)));
-
-            // Expressions, values
-            final List<String> expr = new ArrayList<>();
-            final List<String> colors = new ArrayList<>();
-            for (final Element e : XMLUtil.getChildElements(re, "exp"))
-            {
-                // TODO Check/convert expression
-                expr.add(e.getAttribute("bool_exp"));
-                colors.add(XMLUtil.getColor(e, "value").orElseThrow(() -> new Exception("Missing color")));
-            }
-
-            // Created <script>:
-            // // Rule for color of background_color
-            // let rule1 = new WidgetRule('w9180', 'background_color', ['sim://ramp']);
-            // rule1.eval = function()
-            // {
-            //   let pv0 = this.value['sim://ramp'];
-            //   if (pv0>2) return '#00FF00';
-            //   return '#1E90FF';
-            // }
-            // rule1.update = set_svg_background_color
-            final String rule = "rule" + id.incrementAndGet();
-            scripts.append("// Rule for color of "  + property + "\n");
-            scripts.append("let " + rule +
-                           " = new WidgetRule('" + widget.getWID() + "', '" + property + "', [" +
-                           pvs.stream().map(pv -> "'" + pv + "'").collect(Collectors.joining(",")) +
-                           "]);\n");
-            scripts.append(rule + ".eval = function()\n");
-            scripts.append("{\n");
-            int N = pvs.size();
-            for (int i=0; i<N; ++i)
-                scripts.append("  let pv" + i + " = this.value['" + pvs.get(i) + "'];\n");
-
-            N = expr.size();
-            for (int i=0; i<N; ++i)
-                scripts.append("  if (" + expr.get(i) + ") return '" + colors.get(i) + "';\n");
-            scripts.append("  return '" + default_color + "';\n");
-
-            scripts.append("}\n");
-            scripts.append(rule + ".update = " + update_code + "\n");
-        }
+        handleRule(macros, xml, widget, property,
+                   (mac, exp) -> XMLUtil.getColor(exp, "value").orElseThrow(() -> new Exception("Missing color")),
+                   default_color,
+                   color_text -> "'" + color_text + "'", update_code);
     }
 
     public void handleVisibilityRule(final MacroProvider macros, final Element xml,
                                      final Widget widget, final boolean default_visibility) throws Exception
     {
-        final String property = "visible";
-        final String update_code = "set_visibility";
-
-        final Element rules = XMLUtil.getChildElement(xml, "rules");
-        if (rules == null)
-            return;
-
-        for (final Element re : XMLUtil.getChildElements(rules, "rule"))
-        {
-            if (! property.equals(re.getAttribute("prop_id")))
-                continue;
-
-            // Collect PVs,..
-            final List<String> pvs = new ArrayList<>();
-            for (final Element e : XMLUtil.getChildElements(re, "pv_name"))
-                pvs.add(MacroUtil.expand(macros, XMLUtil.getString(e)));
-            // Legacy PV names
-            for (final Element e : XMLUtil.getChildElements(re, "pv"))
-                pvs.add(MacroUtil.expand(macros, XMLUtil.getString(e)));
-
-            // Expressions, values
-            final List<String> expr = new ArrayList<>();
-            final List<Boolean> values = new ArrayList<>();
-            for (final Element e : XMLUtil.getChildElements(re, "exp"))
-            {
-                // TODO Check/convert expression
-                expr.add(e.getAttribute("bool_exp"));
-                values.add(XMLUtil.getChildBoolean(e, "value").orElseThrow(() -> new Exception("Missing true/false value")));
-            }
-
-            // Created <script>:
-            // // Rule for visible
-            // let rule1 = new WidgetRule('w9180', 'visible', ['sim://ramp']);
-            // rule1.eval = function()
-            // {
-            //   let pv0 = this.value['sim://ramp'];
-            //   if (pv0>2) return true;
-            //   return false;
-            // }
-            // rule1.update = set_svg_background_color
-            final String rule = "rule" + id.incrementAndGet();
-            scripts.append("// Rule for "  + property + "\n");
-            scripts.append("let " + rule +
-                           " = new WidgetRule('" + widget.getWID() + "', '" + property + "', [" +
-                           pvs.stream().map(pv -> "'" + pv + "'").collect(Collectors.joining(",")) +
-                           "]);\n");
-            scripts.append(rule + ".eval = function()\n");
-            scripts.append("{\n");
-            int N = pvs.size();
-            for (int i=0; i<N; ++i)
-                scripts.append("  let pv" + i + " = this.value['" + pvs.get(i) + "'];\n");
-
-            N = expr.size();
-            for (int i=0; i<N; ++i)
-                scripts.append("  if (" + expr.get(i) + ") return " + values.get(i) + ";\n");
-            scripts.append("  return " + default_visibility + ";\n");
-
-            scripts.append("}\n");
-            scripts.append(rule + ".update = " + update_code + "\n");
-        }
+        handleRule(macros, xml, widget, "visible",
+                (mac, exp) -> Boolean.toString(XMLUtil.getChildBoolean(exp, "value").orElseThrow(() -> new Exception("Missing true/false value"))),
+                Boolean.toString(default_visibility),
+                truefalse -> truefalse, "set_visibility");
     }
-
 
     public void addScripts(final PrintWriter html)
     {
