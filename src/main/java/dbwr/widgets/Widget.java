@@ -101,6 +101,8 @@ public class Widget implements ParentWidget
         if (! visible)
             styles.put("display", "none");
         getRuleSupport().handleVisibilityRule(parent, xml, this, visible);
+
+        getRuleSupport().handleNumericRule(parent, xml, this, "x", x, "set_x_pos");
 	}
 
 	/** @return Widget ID, "w" followed by unique number */

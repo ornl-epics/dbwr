@@ -356,6 +356,11 @@ class WidgetRule
 
 
 // Methods used for WidgetRule.update
+function set_x_pos(widget, value)
+{
+    widget.css("left", value + "px");        
+}
+
 function set_text_background_color(widget, color)
 {
     widget.css("background-color", color);
