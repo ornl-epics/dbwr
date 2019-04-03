@@ -37,7 +37,9 @@ public class RectangleWidget extends EllipseWidget
         HTMLUtil.indent(html, indent+2);
         // Move the line width 'inside'
         final int inset = line_width / 2;
-        html.print("<rect x=\"" + inset + "\" y=\"" + inset + "\" width=\"" + (width-line_width) + "\" height=\"" + (height-line_width) + "\"");
+        final int w = Math.max(0, width-line_width);
+        final int h = Math.max(0, height-line_width);
+        html.print("<rect x=\"" + inset + "\" y=\"" + inset + "\" width=\"" + w + "\" height=\"" + h + "\"");
         if (rx > 0.0)
             html.print(" rx=\"" + rx + "\"");
         if (ry > 0.0)
