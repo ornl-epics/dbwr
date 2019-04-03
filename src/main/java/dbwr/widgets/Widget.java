@@ -59,6 +59,9 @@ public class Widget implements ParentWidget
 	/** Widget position and size */
 	protected final int x, y, width, height;
 
+	/** Is widget visible? */
+	protected final boolean visible;
+
 	/** @param parent Parent widget
 	 *  @param xml XML for this widget
 	 *  @param type Type to declare in data-type
@@ -93,6 +96,11 @@ public class Widget implements ParentWidget
 		styles.put("left", Integer.toString(x)+"px");
 		styles.put("width", Integer.toString(width)+"px");
 		styles.put("height", Integer.toString(height)+"px");
+
+        visible = XMLUtil.getChildBoolean(xml, "visible").orElse(true);
+        if (! visible)
+            styles.put("display", "none");
+        getRuleSupport().handleVisibilityRule(parent, xml, this, visible);
 	}
 
 	/** @return Widget ID, "w" followed by unique number */

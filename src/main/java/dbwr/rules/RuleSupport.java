@@ -179,14 +179,11 @@ public class RuleSupport
 
             scripts.append("}\n");
             scripts.append(rule + ".update = " + update_code + "\n");
-
-            System.out.println("ADDED VISIBLE RULE:");
-            System.out.println(scripts.toString());
         }
     }
 
 
-    public void addScripts(PrintWriter html)
+    public void addScripts(final PrintWriter html)
     {
         html.println("<script>");
         html.println(scripts.toString());
