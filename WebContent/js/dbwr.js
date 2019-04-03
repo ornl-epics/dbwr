@@ -309,6 +309,7 @@ class WidgetRule
      */
     constructor(wid, property, pvs)
     {
+        this.wid = wid;
         this.widget = jQuery("#" + wid);
         this.property = property;
         this.pvs = pvs;
@@ -334,9 +335,8 @@ class WidgetRule
     
     _trigger(pv)
     {
-        console.log("Rule was triggered by " + pv);
         let value = this.eval();
-        console.log("Result: " + value);
+        console.log("Rule for " + this.wid + "." + this.property + " triggered by " + pv + ": " + value);
         this.update(this.widget, value);
     }
     
@@ -354,3 +354,20 @@ class WidgetRule
     }
 }
 
+
+// Methods used for WidgetRule.update
+function set_text_background_color(widget, color)
+{
+    widget.css("background-color", color);
+}
+
+function set_svg_background_color(widget, color)
+{
+    widget.find("ellipse,rect,path,polygon").attr("fill", color);
+}
+
+function set_visibility(widget, visible)
+{
+    widget.css("display", visible ? "block" : "none");        
+}
+// End of common WidgetRule.update methods

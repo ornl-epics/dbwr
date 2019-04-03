@@ -105,6 +105,87 @@ public class RuleSupport
         }
     }
 
+    /*
+<rules>
+    <rule name="Rule" prop_id="visible" out_exp="false">
+        <exp bool_exp="pv0==1">
+            <value>true</value>
+        </exp>
+        <exp bool_exp="pv0==0">
+            <value>false</value>
+        </exp>
+        <pv trig="true">BL9:Vac:RV01:OverrideInstalled</pv>
+    </rule>
+</rules>     */
+    public void handleVisibilityRule(final MacroProvider macros, final Element xml,
+                                     final Widget widget, final boolean default_visibility) throws Exception
+    {
+        final String property = "visible";
+        final String update_code = "set_visibility";
+
+        final Element rules = XMLUtil.getChildElement(xml, "rules");
+        if (rules == null)
+            return;
+
+        for (final Element re : XMLUtil.getChildElements(rules, "rule"))
+        {
+            if (! property.equals(re.getAttribute("prop_id")))
+                continue;
+
+            // Collect PVs,..
+            final List<String> pvs = new ArrayList<>();
+            for (final Element e : XMLUtil.getChildElements(re, "pv_name"))
+                pvs.add(MacroUtil.expand(macros, XMLUtil.getString(e)));
+            // Legacy PV names
+            for (final Element e : XMLUtil.getChildElements(re, "pv"))
+                pvs.add(MacroUtil.expand(macros, XMLUtil.getString(e)));
+
+            // Expressions, values
+            final List<String> expr = new ArrayList<>();
+            final List<Boolean> values = new ArrayList<>();
+            for (final Element e : XMLUtil.getChildElements(re, "exp"))
+            {
+                // TODO Check/convert expression
+                expr.add(e.getAttribute("bool_exp"));
+                values.add(XMLUtil.getChildBoolean(e, "value").orElseThrow(() -> new Exception("Missing true/false value")));
+            }
+
+            // Created <script>:
+            // // Rule for visible
+            // let rule1 = new WidgetRule('w9180', 'visible', ['sim://ramp']);
+            // rule1.eval = function()
+            // {
+            //   let pv0 = this.value['sim://ramp'];
+            //   if (pv0>2) return true;
+            //   return false;
+            // }
+            // rule1.update = set_svg_background_color
+            final String rule = "rule" + id.incrementAndGet();
+            scripts.append("// Rule for "  + property + "\n");
+            scripts.append("let " + rule +
+                           " = new WidgetRule('" + widget.getWID() + "', '" + property + "', [" +
+                           pvs.stream().map(pv -> "'" + pv + "'").collect(Collectors.joining(",")) +
+                           "]);\n");
+            scripts.append(rule + ".eval = function()\n");
+            scripts.append("{\n");
+            int N = pvs.size();
+            for (int i=0; i<N; ++i)
+                scripts.append("  let pv" + i + " = this.value['" + pvs.get(i) + "'];\n");
+
+            N = expr.size();
+            for (int i=0; i<N; ++i)
+                scripts.append("  if (" + expr.get(i) + ") return " + values.get(i) + ";\n");
+            scripts.append("  return " + default_visibility + ";\n");
+
+            scripts.append("}\n");
+            scripts.append(rule + ".update = " + update_code + "\n");
+
+            System.out.println("ADDED VISIBLE RULE:");
+            System.out.println(scripts.toString());
+        }
+    }
+
+
     public void addScripts(PrintWriter html)
     {
         html.println("<script>");

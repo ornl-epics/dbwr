@@ -77,6 +77,11 @@ public class LabelWidget extends Widget
 		else if (align == 2)
             styles.put("line-height", Integer.toString(2 * h - font.getSize()) + "px");
 
+	    // TODO Move to top-level Widget
+		final boolean visible = XMLUtil.getChildBoolean(xml, "visible").orElse(true);
+        getRuleSupport().handleVisibilityRule(parent, xml, this, visible);
+        if (! visible)
+            styles.put("display", "none");
 	}
 
 	@Override
