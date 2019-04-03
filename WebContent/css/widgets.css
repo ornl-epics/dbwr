@@ -100,3 +100,24 @@ svg.Widget
 {
 	font-style: italic;
 }
+
+#info table
+{
+    border: none;
+    width: 100%;
+}
+
+#info table tr
+{
+    text-align: left;
+}
+
+#info table tr:nth-child(even)
+{
+    background: #EEE;
+}
+
+#info table td
+{
+  vertical-align: top;
+}

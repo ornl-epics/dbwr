@@ -79,8 +79,57 @@ view.jsp?display=https://some_host/opi/file.opi&amp;macros=%7B%22S%22%3A%2206%22
 </pre>
 
 
+<h4>Cache</h4>
+
+<p>Page requests are cached, and this URL returns cache info:</p>
+<pre class="example_url">
+cache
+</pre>
+
+<input type="button" value="Cache Info" onclick="query_cache()">
+
+<div id="info"></div>
 
 <script type="text/javascript">
+function query_cache()
+{
+    let info = jQuery("#info");
+    info.html("Fetching cache info...");
+    
+    jQuery.ajax(
+    {
+        url: "cache",
+        method: "GET",
+        dataType: "json",
+        success: data =>
+        {
+            // Clear
+            info.html("");
+            
+            // Build table: Header
+            let table = jQuery("<table>");
+            table.append($("<tr>").append($("<th>").text("Display"))
+                                  .append($("<th>").text("Macros"))
+                                  .append($("<th>").text("Size"))
+                                  .append($("<th>").text("Calls"))
+                                  .append($("<th>").text("Millisec")) );
+            // .. Rows
+            for (let display of data.displays)
+            {
+                table.append($("<tr>").append($("<td>").text(display.display))
+                                      .append($("<td>").text(JSON.stringify(display.macros)))
+                                      .append($("<td>").text(display.size))
+                                      .append($("<td>").text(display.calls))
+                                      .append($("<td>").text(display.ms)) );
+            }
+            info.append(table);
+            // Scroll to 'bottom' to show table
+            window.scrollTo(0, 100000);
+        },
+        error: (xhr, status, error) => info.html("No Info: " + status),        
+    });
+}
+
 jQuery(() =>
 {
     let root = window.location.origin + window.location.pathname;
