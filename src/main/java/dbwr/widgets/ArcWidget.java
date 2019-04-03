@@ -38,7 +38,12 @@ public class ArcWidget extends SvgWidget
 		arc_size = XMLUtil.getChildDouble(xml, "total_angle").orElse(90.0);
 		line_width = XMLUtil.getChildInteger(xml, "line_width").orElse(3);
 		line_color = XMLUtil.getColor(xml, "line_color").orElse("#00F");
-		transparent = XMLUtil.getChildBoolean(xml, "transparent").orElse(false);
+		// Check legacy 'fill' option
+		final Boolean fill = XMLUtil.getChildBoolean(xml, "fill").orElse(null);
+		if (fill != null)
+		    transparent = ! fill;
+		else
+		    transparent = XMLUtil.getChildBoolean(xml, "transparent").orElse(false);
 		if (transparent)
 		    background_color = "transparent";
 		else
