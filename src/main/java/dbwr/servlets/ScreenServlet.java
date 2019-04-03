@@ -37,6 +37,28 @@ public class ScreenServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 
+	private CachedDisplay createHtml(final DisplayKey key) throws Error
+	{
+	    try
+	    {
+    	    final long start = System.currentTimeMillis();
+            final Resolver display = new Resolver(key.getDisplay());
+            final ByteArrayOutputStream html_buf = new ByteArrayOutputStream();
+            final PrintWriter html_writer = new PrintWriter(html_buf);
+            new DisplayParser(display, MacroProvider.forMap(key.getMacros()), html_writer);
+            html_writer.flush();
+            html_writer.close();
+            final long ms = System.currentTimeMillis() - start;
+            final CachedDisplay cached = new CachedDisplay(key, html_buf.toString(), ms);
+            logger.log(Level.INFO, cached.toString());
+            return cached;
+	    }
+	    catch (final Exception ex)
+	    {
+	        throw new Error("Cannot create " + key, ex);
+	    }
+	}
+
 	@Override
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException
 	{
@@ -58,18 +80,13 @@ public class ScreenServlet extends HttpServlet
 			return;
 		}
 
+		final DisplayKey key = new DisplayKey(display_name, macro_map);
 		try
 		{
-		    final Resolver display = new Resolver(display_name);
-			final ByteArrayOutputStream html_buf = new ByteArrayOutputStream();
-			final PrintWriter html = new PrintWriter(html_buf);
-			new DisplayParser(display, MacroProvider.forMap(macro_map), html);
-			html.flush();
-			html.close();
-
+		    final CachedDisplay cached = DisplayCache.getOrCreate(key, this::createHtml);
 			response.setContentType("text/html");
 			final PrintWriter writer = response.getWriter();
-			writer.append(html_buf.toString());
+			writer.append(cached.getHTML());
 		}
 		catch (final Exception ex)
 		{
