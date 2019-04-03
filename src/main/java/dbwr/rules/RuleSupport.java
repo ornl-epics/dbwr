@@ -78,8 +78,8 @@ public class RuleSupport
             final List<String> values = new ArrayList<>();
             for (final Element e : XMLUtil.getChildElements(re, "exp"))
             {
-                // TODO Check/convert expression
-                expr.add(MacroUtil.expand(macros, e.getAttribute("bool_exp")));
+                // TODO Better expression check/convert
+                expr.add(convertExp(MacroUtil.expand(macros, e.getAttribute("bool_exp"))));
                 values.add(value_parser.parse(macros, e));
             }
 
@@ -115,6 +115,15 @@ public class RuleSupport
         }
     }
 
+    /** @param exp Jython expression from rule
+     *  @return JavaScript expression
+     */
+    private String convertExp(final String exp)
+    {
+        return exp.replace("and", " && ")
+                  .replace("or", " || ")
+                  .replace("not", " ! ");
+    }
 
     public void handleNumericRule(final MacroProvider macros, final Element xml,
             final Widget widget, final String property, final double default_value,
@@ -125,7 +134,6 @@ public class RuleSupport
                    Double.toString(default_value),
                    text -> text, update_code);
     }
-
 
     public void handleColorRule(final MacroProvider macros, final Element xml,
                                 final Widget widget, final String property, final String default_color,

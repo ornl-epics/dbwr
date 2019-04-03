@@ -35,13 +35,15 @@ public class PolylineWidget extends SvgWidget
 		super(parent, xml, type);
 		line_width = XMLUtil.getChildInteger(xml, "line_width").orElse(3);
 
+		// Check for legacy bg. color
 		String color_prop = "background_color";
 		line_color = XMLUtil.getColor(xml, color_prop).orElse(null);
 		if (line_color == null)
-		{
+		{   // Use current line_color
 		    color_prop = "line_color";
 		    line_color = XMLUtil.getColor(xml, color_prop).orElse("#00F");
 		}
+		// Rule based on used color property
         getRuleSupport().handleColorRule(parent, xml, this,
                                          color_prop, line_color,
                                          "set_poly_line_color");

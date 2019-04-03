@@ -25,6 +25,12 @@
     <x>80</x>
     <y>50</y>
   </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update</name>
+    <pv_name>sim://sine</pv_name>
+    <x>200</x>
+    <y>50</y>
+  </widget>
   <widget type="label" version="2.0.0">
     <name>Label_1</name>
     <text>Color:</text>
@@ -46,8 +52,41 @@
             </color>
           </value>
         </exp>
+        <exp bool_exp="pv1&gt;0 and pv0 != 7">
+          <value>
+            <color name="MAJOR" red="255" green="0" blue="0">
+            </color>
+          </value>
+        </exp>
         <pv_name>sim://ramp</pv_name>
+        <pv_name>sim://sine</pv_name>
       </rule>
     </rules>
+  </widget>
+  <widget type="rectangle" version="2.0.0">
+    <name>Rectangle_1</name>
+    <x>120</x>
+    <y>170</y>
+    <width>130</width>
+    <height>60</height>
+    <rules>
+      <rule name="Color" prop_id="visible" out_exp="false">
+        <exp bool_exp="pv0&gt;2">
+          <value>false</value>
+        </exp>
+        <exp bool_exp="pv1&gt;0 and pv0 != 7">
+          <value>false</value>
+        </exp>
+        <pv_name>sim://ramp</pv_name>
+        <pv_name>sim://sine</pv_name>
+      </rule>
+    </rules>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_2</name>
+    <text>Visibility:</text>
+    <x>30</x>
+    <y>180</y>
+    <width>70</width>
   </widget>
 </display>
