@@ -9,7 +9,7 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["group"] = function(widge
     while (p)
     {
         let c = p.css("background-color");
-        if (c)
+        if (c  &&  c != "rgba(0, 0, 0, 0)"  && c != "transparent")
         {
             label.css("background-color", c);
             return;
