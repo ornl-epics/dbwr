@@ -87,10 +87,19 @@ cache
 </pre>
 
 <input type="button" value="Cache Info" onclick="query_cache()">
+<input type="button" value="Clear Cache" onclick="clear_cache()">
+
+<p></p>
 
 <div id="info"></div>
 
 <script type="text/javascript">
+
+function format_date(date)
+{
+    return date.toLocaleString("en-US", { hour12: false });
+}
+
 function query_cache()
 {
     let info = jQuery("#info");
@@ -103,25 +112,41 @@ function query_cache()
         dataType: "json",
         success: data =>
         {
-            // Clear
-            info.html("");
-            
+            if (! data  ||  !data.displays  || data.displays.length <= 0)
+            {
+                info.html("Cache is empty");
+                return;
+            }
             // Build table: Header
-            let table = jQuery("<table>");
-            table.append($("<tr>").append($("<th>").text("Display"))
-                                  .append($("<th>").text("Macros"))
-                                  .append($("<th>").text("Size"))
-                                  .append($("<th>").text("Calls"))
-                                  .append($("<th>").text("Millisec")) );
+            info.html("");
+            let table = jQuery("<table>").css("table-layout", "fixed")
+                                         .css("word-wrap", "break-word");
+            table.append($("<tr>").append($("<th>").css("width", "45%").text("Display"))
+                                  .append($("<th>").css("width", "20%").text("Macros"))
+                                  .append($("<th>").css("width", "10%").text("Timestamp"))
+                                  .append($("<th>").css("width", "10%").text("Size"))
+                                  .append($("<th>").css("width", "5%").text("Calls"))
+                                  .append($("<th>").css("width", "10%").text("Time")) );
             // .. Rows
+            let size = 0, calls = 0, ms = 0;
             for (let display of data.displays)
             {
+                size += display.size;
+                calls += display.calls;
+                ms += display.ms;
                 table.append($("<tr>").append($("<td>").text(display.display))
                                       .append($("<td>").text(JSON.stringify(display.macros)))
-                                      .append($("<td>").text(display.size))
-                                      .append($("<td>").text(display.calls))
-                                      .append($("<td>").text(display.ms)) );
+                                      .append($("<td>").text(format_date(new Date(display.stamp))))
+                                      .append($("<td>").css("text-align", "right").text( (display.size / 1024.0).toFixed(1) + " kB" ))
+                                      .append($("<td>").css("text-align", "right").text(display.calls))
+                                      .append($("<td>").css("text-align", "right").text( (display.ms / 1000.0).toFixed(3) + " ms")) );
             }
+            table.append($("<tr>").append($("<td>"))
+   			                      .append($("<td>"))
+				                  .append($("<td>").html("<b>Total:</b>"))
+				                  .append($("<td>").css("text-align", "right").text( (size / 1024.0).toFixed(1) + " kB" ))
+				                  .append($("<td>").css("text-align", "right").text(calls))
+				                  .append($("<td>").css("text-align", "right").text( (ms / 1000.0).toFixed(3) + " ms")) );
             info.append(table);
             // Scroll to 'bottom' to show table
             window.scrollTo(0, 100000);
@@ -129,6 +154,26 @@ function query_cache()
         error: (xhr, status, error) => info.html("No Info: " + status),        
     });
 }
+
+function clear_cache()
+{
+    let info = jQuery("#info");
+    info.html("Clearing cache ..");
+    
+    jQuery.ajax(
+    {
+        url: "cache",
+        method: "DELETE",
+        success: data =>
+        {
+            // Clear
+            info.html("Cache cleared");
+            query_cache();
+        },
+        error: (xhr, status, error) => info.html("Cache Clear Error: " + status),        
+    });
+}
+
 
 jQuery(() =>
 {

@@ -6,6 +6,7 @@
  ******************************************************************************/
 package dbwr.servlets;
 
+import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -17,12 +18,14 @@ public class CachedDisplay
 	private final DisplayKey key;
 	private final String html;
 	private final AtomicInteger calls = new AtomicInteger();
+	private final Instant stamp;
 	private final long ms;
 
 	CachedDisplay(final DisplayKey key, final String html, final long ms)
 	{
         this.key = key;
         this.html = html;
+        this.stamp = Instant.now();
         this.ms = ms;
     }
 
@@ -39,6 +42,11 @@ public class CachedDisplay
     public Map<String, String> getMacros()
     {
         return key.getMacros();
+    }
+
+    public Instant getTimestamp()
+    {
+        return stamp;
     }
 
     public int getCalls()

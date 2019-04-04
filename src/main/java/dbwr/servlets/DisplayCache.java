@@ -44,4 +44,9 @@ public class DisplayCache
 	{
 	    return cache.values();
 	}
+
+    public static void clear()
+    {
+        cache.clear();
+    }
 }

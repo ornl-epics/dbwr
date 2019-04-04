@@ -52,6 +52,7 @@ public class CacheServlet extends HttpServlet
                 g.writeStringField(entry.getKey(), entry.getValue());
             g.writeEndObject();
 
+            g.writeNumberField("stamp", cached.getTimestamp().toEpochMilli());
             g.writeNumberField("calls", cached.getCalls());
             g.writeNumberField("size", cached.getHTML().length());
             g.writeNumberField("ms", cached.getMillisec());
@@ -65,5 +66,11 @@ public class CacheServlet extends HttpServlet
         response.setContentType("application/json");
         final PrintWriter writer = response.getWriter();
         writer.append(buf.toString());
+	}
+
+	@Override
+	protected void doDelete(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException
+	{
+	    DisplayCache.clear();
 	}
 }
