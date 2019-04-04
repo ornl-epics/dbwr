@@ -52,6 +52,7 @@ public class CacheServlet extends HttpServlet
                 g.writeStringField(entry.getKey(), entry.getValue());
             g.writeEndObject();
 
+            g.writeNumberField("created", cached.getCreated().toEpochMilli());
             g.writeNumberField("stamp", cached.getTimestamp().toEpochMilli());
             g.writeNumberField("calls", cached.getCalls());
             g.writeNumberField("size", cached.getHTML().length());

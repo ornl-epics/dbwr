@@ -18,19 +18,21 @@ public class CachedDisplay
 	private final DisplayKey key;
 	private final String html;
 	private final AtomicInteger calls = new AtomicInteger();
-	private final Instant stamp;
+	private final Instant created;
+    private volatile Instant stamp;
 	private final long ms;
 
 	CachedDisplay(final DisplayKey key, final String html, final long ms)
 	{
         this.key = key;
         this.html = html;
-        this.stamp = Instant.now();
+        this.created = stamp = Instant.now();
         this.ms = ms;
     }
 
 	void registerCall()
 	{
+	    stamp = Instant.now();
 	    calls.incrementAndGet();
 	}
 
@@ -42,6 +44,11 @@ public class CachedDisplay
     public Map<String, String> getMacros()
     {
         return key.getMacros();
+    }
+
+    public Instant getCreated()
+    {
+        return created;
     }
 
     public Instant getTimestamp()
