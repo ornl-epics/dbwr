@@ -20,13 +20,13 @@
     <table>
     <tr>
       <td>Display:</td>
-      <td><input type="text" name="display" style="width: 100%;"></td>
+      <td><input type="text" name="display" style="width: 95%;"></td>
       <td></td>
     </tr>
     <tr>
       <td></td>
       <td>     
-        <select name="options">
+        <select name="options" style="width: 95%;">
         <option>https://raw.githubusercontent.com/shroffk/phoebus/master/app/display/model/src/main/resources/examples/01_main.bob</option>
         <option>https://webopi.sns.gov/webopi/opi/Instruments.bob</option>
         <option>file:/some/local/display.bob</option>
@@ -37,7 +37,7 @@
     </tr>
     <tr>
       <td>Macros:</td>
-      <td><input type="text" name="macros" style="width: 100%;"></td>
+      <td><input type="text" name="macros" style="width: 95%;"></td>
       <td><input type="button" value="Open"></td>
     </tr>
     </table>
@@ -180,6 +180,7 @@ function clear_cache()
 
 jQuery(() =>
 {
+    // Add actual http://.. location to the example URLs
     let root = window.location.origin + window.location.pathname;
     jQuery(".example_url").each( (index, example) =>
     {
@@ -187,6 +188,8 @@ jQuery(() =>
         let url = ex.html();
         ex.html(root + url);
     });
+    
+    // TODO Populate selector with site-specific entries
     
     // Populate input with the first option
     jQuery("#open_form input[name=display]").val( jQuery("#open_form select option")[0].value );
