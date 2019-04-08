@@ -1,3 +1,5 @@
+<%@page trimDirectiveWhitespaces="true" %>
+<%@page import="dbwr.WebDisplayRepresentation"%>
 <!DOCTYPE html>
 <html>
 
@@ -27,10 +29,9 @@
       <td></td>
       <td>     
         <select name="options" style="width: 95%;">
-        <option>https://raw.githubusercontent.com/shroffk/phoebus/master/app/display/model/src/main/resources/examples/01_main.bob</option>
-        <option>https://webopi.sns.gov/webopi/opi/Instruments.bob</option>
-        <option>file:/some/local/display.bob</option>
-        <option>https://ics-srv-web2.sns.ornl.gov/ade/css/Share/SNS_CCR_Screens/Site/main.opi</option>
+		<% for (String dsp : WebDisplayRepresentation.display_options)
+		        out.println("<option>" + dsp + "</option>");
+		%>
         </select>
       </td>
       <td></td>
@@ -188,8 +189,6 @@ jQuery(() =>
         let url = ex.html();
         ex.html(root + url);
     });
-    
-    // TODO Populate selector with site-specific entries
     
     // Populate input with the first option
     jQuery("#open_form input[name=display]").val( jQuery("#open_form select option")[0].value );

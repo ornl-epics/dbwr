@@ -14,6 +14,13 @@ Building
 Running under Tomcat
 --------------------
 
+First, install the PV Web Socket, which must be available
+on the same Tomcat instance.
+
+Set the following environment variables, for example in $CATALINA_HOME/bin/setenv.sh:
+
+ * `DBWR1`, `DBWR2`, ...: URLs of displays to suggest on the start page.
+
 Place `dbwr.war` in `$CATALINA_HOME/webapps`
 
 
@@ -30,10 +37,8 @@ Assuming Tomcat on `localhost:8080`, open
 Development Status
 ==================
 
-Mostly Functional
------------------
+The following widget types and features have been implemented with basic functionality:
 
- * Macro support
  * Label
  * Rectangle
  * Ellipse
@@ -42,15 +47,16 @@ Mostly Functional
  * Polygon
  * Text Update
  * Text Input
+ * Text formatting (precision, units, enum labels)
  * LED
  * Multi-State LED
  * Action Button to open display or web link
+ * Combo
  * Group with group border
  * Embedded Displays
- * Text formatting (precision, units, enum labels)
- * Update alarm-sensitive border based on PV
- * Combo
- * Limited Rule support: Color of rect/circle/label, visibility
  * XYPlot
  * Image
+ * Macro support
+ * Alarm-sensitive border based on PV
+ * Limited Rule support: Color of rect/circle/label, visibility
  * Caching
