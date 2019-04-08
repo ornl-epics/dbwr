@@ -19,6 +19,7 @@ public class ComboWidget extends PVWidget
 {
     static
     {
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.combo", "combo");
         WidgetFactory.addJavaScript("combo.js");
         WidgetFactory.addCSS("combo.css");
     }
