@@ -36,7 +36,7 @@ public class TabsWidget extends Widget
 	{
 		super(parent, xml, "tabs");
 
-		classes.add("Debug");
+		// classes.add("Debug");
 
 		active = XMLUtil.getChildInteger(xml, "active_tab").orElse(0);
 		// Locate labels and content of tabs

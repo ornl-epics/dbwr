@@ -10,9 +10,7 @@
     list-style: none;
     float: left;
     
-    /* -1px bottom margin means it overlaps the TabBody,
-     * appears to 'open' its border.
-     * Left margin 5px results in a gap at the very left,
+    /* Left margin 5px results in a gap at the very left,
      * negative margin on the right lessens that for tab-to-tab gap.
      */
     margin: 0 -3px -1px 5px;
@@ -24,7 +22,7 @@
     
     cursor: pointer;
 
-    background: #DDD;
+    background: linear-gradient(#FFF, #AAA);
 }
 
 .Widget > ul > li.ActiveTab
@@ -36,7 +34,7 @@
 .TabBody
 {
 	position: relative;
-    border-top: 1px solid #c5c5c5;
+    border: 1px solid #c5c5c5;
     display: none;
 }
 
