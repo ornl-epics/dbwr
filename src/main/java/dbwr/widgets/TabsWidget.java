@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.w3c.dom.Element;
 
+import dbwr.parser.FontInfo;
 import dbwr.parser.HTMLUtil;
 import dbwr.parser.WidgetFactory;
 import dbwr.parser.XMLUtil;
@@ -38,7 +39,11 @@ public class TabsWidget extends Widget
 
 		// classes.add("Debug");
 
+		final FontInfo font = XMLUtil.getFont(xml, "font").orElse(LabelWidget.DEFAULT_FONT);
+		font.addToStyles(styles);
+
 		active = XMLUtil.getChildInteger(xml, "active_tab").orElse(0);
+
 		// Locate labels and content of tabs
 		final Element tbs = XMLUtil.getChildElement(xml, "tabs");
 		if (tbs != null)
@@ -60,8 +65,7 @@ public class TabsWidget extends Widget
 		    }
 		}
 		else
-		{   // Fallback to legacy XML
-	        // Look for "tab_0_title", "tab_1_title" etc.
+		{   // Look for legacy *.opi "tab_0_title", "tab_1_title" etc.
 		    int i=0;
 		    String label = XMLUtil.getChildString(parent, xml, "tab_" + i + "_title").orElse(null);
 		    while (label != null)
