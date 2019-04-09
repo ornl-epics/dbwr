@@ -28,7 +28,14 @@
 .Widget > ul > li.ActiveTab
 {
     background: #FFF;
-   
+    
+    /* Because of -1px bottom margin,
+     * Tab overlaps TabBody,
+     * so this white bottom border should overdraw the TabBody border
+     * for Tab to appear merged with body.
+     * .. but TabBody border always appears on top ..
+     */
+    border-bottom: 1px solid white;
 }
 
 .TabBody
