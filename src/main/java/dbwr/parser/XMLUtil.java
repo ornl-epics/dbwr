@@ -321,6 +321,9 @@ public class XMLUtil
 			logger.log(Level.WARNING, "Color element <" + name +"> is missing <color>");
 			return Optional.empty();
 		}
+		// Ignore legacy *.opi when it just contains <color name="ABC"/>
+		if (col_xml.getAttribute("red").isEmpty())
+		    return Optional.empty();
 		// <color name="OK" red="0" green="255" blue="0"></color>
 		final int red = Integer.parseInt(col_xml.getAttribute("red"));
 		final int green = Integer.parseInt(col_xml.getAttribute("green"));
