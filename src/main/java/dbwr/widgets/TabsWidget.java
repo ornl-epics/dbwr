@@ -25,7 +25,7 @@ public class TabsWidget extends Widget
     {
         WidgetFactory.addCSS("tabs.css");
         WidgetFactory.addJavaScript("tabs.js");
-        // WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.Label", "label");
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.tab", "tabs");
     }
 
     private final int active;
@@ -58,6 +58,26 @@ public class TabsWidget extends Widget
 
 		        ++i;
 		    }
+		}
+		else
+		{   // Fallback to legacy XML
+	        // Look for "tab_0_title", "tab_1_title" etc.
+		    int i=0;
+		    String label = XMLUtil.getChildString(parent, xml, "tab_" + i + "_title").orElse(null);
+		    while (label != null)
+		    {
+		        labels.add(label);
+		        ++i;
+		        label = XMLUtil.getChildString(parent, xml, "tab_" + i + "_title").orElse(null);
+		    }
+		    // Each tab's content was in a group <widget>'s children
+            for (final Element bodies : XMLUtil.getChildElements(xml, "widget"))
+            {
+                final List<Widget> tab = new ArrayList<>();
+                for (final Element widget_xml : XMLUtil.getChildElements(bodies, "widget"))
+                    tab.add(WidgetFactory.createWidget(this, widget_xml));
+                tabs.add(tab);
+            }
 		}
 	}
 

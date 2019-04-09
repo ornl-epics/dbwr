@@ -22,12 +22,14 @@
     
     cursor: pointer;
 
-    background: linear-gradient(#FFF, #AAA);
+    /* Darken */
+    background: linear-gradient(#FFF0, #AAAF);
 }
 
 .Widget > ul > li.ActiveTab
 {
-    background: #FFF;
+	/* Brighten (in case it's not on top of white */
+    background: linear-gradient(#FFF0, #FFF8);
     
     /* Because of -1px bottom margin,
      * Tab overlaps TabBody,
