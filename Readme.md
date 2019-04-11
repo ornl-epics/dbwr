@@ -14,7 +14,7 @@ Building
 Running under Tomcat
 --------------------
 
-First, install the PV Web Socket, which must be available
+First, install the [PV Web Socket](https://github.com/kasemir/pvws), which must be available
 on the same Tomcat instance.
 
 Set the following environment variables, for example in $CATALINA_HOME/bin/setenv.sh:
