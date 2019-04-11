@@ -142,7 +142,7 @@ function query_cache()
                                       .append($("<td>").text(format_date(new Date(display.stamp))))
                                       .append($("<td>").css("text-align", "right").text( (display.size / 1024.0).toFixed(1) + " kB" ))
                                       .append($("<td>").css("text-align", "right").text(display.calls))
-                                      .append($("<td>").css("text-align", "right").text( (display.ms / 1000.0).toFixed(3) + " ms")) );
+                                      .append($("<td>").css("text-align", "right").text( (display.ms / 1000.0).toFixed(3) + " s")) );
             }
             table.append($("<tr>").append($("<td>"))
    			                      .append($("<td>"))
@@ -150,7 +150,7 @@ function query_cache()
 				                  .append($("<td>").html("<b>Total:</b>"))
 				                  .append($("<td>").css("text-align", "right").text( (size / 1024.0).toFixed(1) + " kB" ))
 				                  .append($("<td>").css("text-align", "right").text(calls))
-				                  .append($("<td>").css("text-align", "right").text( (ms / 1000.0).toFixed(3) + " ms")) );
+				                  .append($("<td>").css("text-align", "right").text( (ms / 1000.0).toFixed(3) + " s")) );
             info.append(table);
             // Scroll to 'bottom' to show table
             window.scrollTo(0, 100000);
