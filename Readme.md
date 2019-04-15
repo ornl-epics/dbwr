@@ -60,3 +60,32 @@ The following widget types and features have been implemented with basic functio
  * Alarm-sensitive border based on PV
  * Limited Rule support: Color of rect/circle/label, visibility
  * Caching
+
+ 
+Widget Implementation
+=====================
+
+Each widget needs to derive from `dbwr.widgets.Widget` and register in `widget.properties`.
+The widget constructor parses the display file XML for the widget.
+
+Static Widget
+-------------
+
+A static widget implemets `Widget.fillHTML()` to create the static HTML content.
+
+Dynamic Widget
+--------------
+
+A dynamic widget registers Javascript in a static initializer that calls `WidgetFactory.addJavaScript()`.
+That Javascript can then register init or update methods via
+`DisplayBuilderWebRuntime.prototype.widget_init_methods` and
+`DisplayBuilderWebRuntime.prototype.widget_update_methods`.
+
+PV Widgets
+----------
+
+Any widget with a `data-pv` attribute in its widget HTML will automatically
+subscribe to that PV. It should register a java script method in
+`DisplayBuilderWebRuntime.prototype.widget_update_methods` to handle the received PV updates.
+
+PVs with multiple PVs can subscribe to additional PVs in their `widget_init_methods`.
