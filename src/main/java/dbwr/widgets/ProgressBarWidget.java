@@ -21,10 +21,13 @@ public class ProgressBarWidget extends PVWidget
 
     public ProgressBarWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
-		super(parent, xml, "progressbar", 400, 300);
+		super(parent, xml, "progressbar");
 
 		attributes.put("min", XMLUtil.getChildString(parent, xml, "minimum").orElse("0"));
         attributes.put("max", XMLUtil.getChildString(parent, xml, "maximum").orElse("255"));
+
+        if (XMLUtil.getChildBoolean(xml, "limits_from_pv").orElse(true))
+            attributes.put("data-limits-from-pv", "true");
 	}
 
     @Override
