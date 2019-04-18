@@ -94,34 +94,54 @@ public class GroupWidget extends Widget
 	{
 		html.println();
 
-		if (style == 0)
-		{
-			final int inset = (font.getSize()+1)/2;
-			final int dinset = 2*inset;
+		int hinset = (font.getSize()+1)/2;
+		int vinset = hinset;
+		if (style == 2)
+		    hinset = vinset = 0;
+		else if (style == 1)
+            hinset = 0;
 
-			// SVG for border
+		System.out.println("Group style " + style);
+		// Style 0: Group, 1:Title, 2:Line, 3:None
+        if (style == 1)
+        {   // Group name as box on top with outline below
+            HTMLUtil.indent(html, indent+1);
+            html.print("<div class=\"GroupTitle\" style=\"top: 0px; left: 0px; width: " + (width-3) +"px; " + font + " color: white; background-color: black;\">");
+            html.print(name);
+            html.println("</div>");
+            HTMLUtil.indent(html, indent+1);
+            html.println("<svg width=\"" + width + "px\" height=\"" + height + "px\" style=\"" + font + "\">");
+            HTMLUtil.indent(html, indent+2);
+            html.println("<rect x=\"1\" y=\"1\" width=\"" + (width-3) + "\" height=\"" + (height-3) + "\" stroke=\"#000\" stroke-width=\"2\" fill=\"transparent\"\"/>");
+            HTMLUtil.indent(html, indent+1);
+            html.println("</svg>");
+        }
+        else if (style != 3)
+		{	// SVG for border
 			HTMLUtil.indent(html, indent+1);
 			html.println("<svg width=\"" + width + "px\" height=\"" + height + "px\" style=\"" + font + "\">");
 			HTMLUtil.indent(html, indent+2);
-			html.println("<rect x=\"" + inset + "\" y=\"" + inset + "\" width=\"" + (width-dinset) + "\" height=\"" + (height-dinset) + "\" stroke=\"#000\" stroke-width=\"2\" fill=\"transparent\"\"/>");
+			html.println("<rect x=\"" + hinset + "\" y=\"" + vinset + "\" width=\"" + (width-2*hinset) + "\" height=\"" + (height-2*vinset) + "\" stroke=\"#000\" stroke-width=\"2\" fill=\"transparent\"\"/>");
 			HTMLUtil.indent(html, indent+1);
 			html.println("</svg>");
-
-			// Group name as label on top of border
+		}
+		if (style == 0)
+		{   // Group name as label on top of border
             HTMLUtil.indent(html, indent+1);
-            html.print("<div class=\"GroupLabel\" style=\"top: 0px; left: " + dinset + "px; " + font + " background-color: white;\">");
+            html.print("<div class=\"GroupLabel\" style=\"top: 0px; left: " + 2*hinset + "px; " + font + " background-color: white;\">");
             html.print(name);
             html.println("</div>");
-
-            // Wrap content in <div>
+		}
+        if (style != 3)
+        {   // Wrap content in <div>
 			HTMLUtil.indent(html, indent+1);
-			html.println("<div class=\"GroupBox\" style=\"top: " + dinset + "px; left: " + dinset + "px; width: " + (width-4*inset) + "px; height: " + (height - 4*inset) + "px;\">");
+			html.println("<div class=\"GroupBox\" style=\"top: " + 2*vinset + "px; left: " + 2*hinset + "px; width: " + (width-4*hinset) + "px; height: " + (height - 4*vinset) + "px;\">");
 		}
 
 		for (final Widget child : children)
 			child.getHTML(html, indent+2);
 
-		if (style == 0)
+		if (style != 3)
 		{   // Close the content-div
 			HTMLUtil.indent(html, indent+1);
 			html.println("</div>");
