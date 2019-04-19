@@ -23,7 +23,7 @@ public class BoolButtonWidget extends PVWidget
         WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.BoolButton", "bool_button");
     }
 
-    private final boolean show_led;
+    private boolean show_led;
 
 	public BoolButtonWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
@@ -35,18 +35,19 @@ public class BoolButtonWidget extends PVWidget
 		font.addToStyles(styles);
 
 		if (XMLUtil.getChildBoolean(xml, "labels_from_pv").orElse(false))
-		{
 	        attributes.put("data-pv-labels", "true");
-		}
-		else
-		{
-		    final String on = XMLUtil.getChildString(parent, xml, "on_label").orElse("On");
-		    final String off = XMLUtil.getChildString(parent, xml, "off_label").orElse("Off");
-            attributes.put("data-on", on);
-            attributes.put("data-off", off);
-		}
+
+	    final String on = XMLUtil.getChildString(parent, xml, "on_label").orElse("On");
+	    final String off = XMLUtil.getChildString(parent, xml, "off_label").orElse("Off");
+        attributes.put("data-on", on);
+        attributes.put("data-off", off);
 
 		show_led = XMLUtil.getChildBoolean(xml, "show_led").orElse(true);
+
+		// Don't show LED when using this widget as a stand-in for the slide button
+		if (xml.getAttribute("type").equals("slide_button"))
+		    show_led = false;
+
 		final String on_color = XMLUtil.getColor(xml, "on_color").orElse("#3CFF3C");
 		final String off_color = XMLUtil.getColor(xml, "off_color").orElse("#3C643C");
         attributes.put("data-on-color", on_color);
@@ -68,9 +69,12 @@ public class BoolButtonWidget extends PVWidget
 	{
 	    if (show_led)
 	    {
-            final int rx = 22/2, ry = 22/2;
-            html.append("<svg class=\"LED\" style=\"width: 22px; height: 22px;\">");
-            html.append("<ellipse cx=\"" + rx + "\" cy=\"" +  ry + "\" rx=\"" + rx + "\" ry=\"" + ry + "\" fill=\"grey\"></ellipse>");
+	        int size = Math.min(width, height);
+            final int r = (int) (size/3.7);
+            size = r+r;
+
+            html.append("<svg class=\"LED\" style=\"width: " + size + "px; height: " + size + "px;\">");
+            html.append("<ellipse cx=\"" + r + "\" cy=\"" +  r + "\" rx=\"" + r + "\" ry=\"" + r + "\" fill=\"grey\"></ellipse>");
     	    html.append("</svg>");
 	    }
         html.append("<span>");

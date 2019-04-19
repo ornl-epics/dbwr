@@ -2,19 +2,13 @@
 DisplayBuilderWebRuntime.prototype.widget_update_methods["bool_button"] = function(widget, data)
 {
     let on, off;
-    if (widget.data("pv-labels"))
+    // Get PV labels?
+    if (widget.data("pv-labels")   &&
+        data.labels !== undefined  &&
+        data.labels.length >= 2)
     {
-        // Get PV labels
-        if (data.labels !== undefined  &&  data.labels.length >= 2)
-        {
-            off = data.labels[0];
-            on = data.labels[1];
-        }
-        else
-        {
-            off = "Off";
-            on = "On";
-        }
+        off = data.labels[0];
+        on = data.labels[1];
     }
     else
     {
@@ -23,7 +17,7 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["bool_button"] = functi
     }
     
     let bit = widget.data("bit");
-    let state
+    let state;
     if (bit < 0)
         state = data.value > 0;
     else
