@@ -1,0 +1,10 @@
+button svg
+{
+	overflow: visible;
+}
+
+button svg ellipse
+{
+	stroke: #323232B4;
+	stroke-width: 2.345;
+}
