@@ -72,13 +72,13 @@ The widget constructor parses the display file XML for the widget.
 Static Widget
 -------------
 
-A static widget implemets `Widget.fillHTML()` to create the static HTML content.
+A static widget implements `Widget.fillHTML()` to create the static HTML content.
 
 Dynamic Widget
 --------------
 
 A dynamic widget registers Javascript in a static initializer that calls `WidgetFactory.addJavaScript()`.
-That Javascript can then register init or update methods via
+That Javascript can then register `init` or `update` methods via
 `DisplayBuilderWebRuntime.prototype.widget_init_methods` and
 `DisplayBuilderWebRuntime.prototype.widget_update_methods`.
 
