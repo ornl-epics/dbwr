@@ -54,6 +54,7 @@ The following widget types and features have been implemented with basic functio
  * Combo
  * Group with group border
  * Embedded Displays
+ * Tabs
  * XYPlot
  * Image
  * Macro support
