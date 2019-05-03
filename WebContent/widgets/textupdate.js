@@ -38,7 +38,11 @@ function format_engineering(number, precision)
 }
 
 
-
+/** Format data as text (e.g. number with precision, units)
+ *  @param widget Widget that has 'format' etc.
+ *  @param data PV data
+ *  @returns Formatted text
+ */
 function format_pv_data_as_text(widget, data)
 {
     let text;
