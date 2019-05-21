@@ -14,23 +14,23 @@ import java.util.Objects;
  */
 public class DisplayKey
 {
-	private final String display;
-	private final Map<String, String> macros;
+    private final String display;
+    private final Map<String, String> macros;
 
-	public DisplayKey(final String display, final Map<String, String> macros)
-	{
+    public DisplayKey(final String display, final Map<String, String> macros)
+    {
         this.display = display;
         this.macros = macros;
     }
 
-	public String getDisplay()
-	{
-	    return display;
-	}
-
-	public Map<String, String> getMacros()
+    public String getDisplay()
     {
-	    return macros;
+        return display;
+    }
+
+    public Map<String, String> getMacros()
+    {
+        return macros;
     }
 
     @Override

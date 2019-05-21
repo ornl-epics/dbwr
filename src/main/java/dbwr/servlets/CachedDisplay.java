@@ -15,26 +15,26 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class CachedDisplay
 {
-	private final DisplayKey key;
-	private final String html;
-	private final AtomicInteger calls = new AtomicInteger();
-	private final Instant created;
+    private final DisplayKey key;
+    private final String html;
+    private final AtomicInteger calls = new AtomicInteger();
+    private final Instant created;
     private volatile Instant stamp;
-	private final long ms;
+    private final long ms;
 
-	CachedDisplay(final DisplayKey key, final String html, final long ms)
-	{
+    CachedDisplay(final DisplayKey key, final String html, final long ms)
+    {
         this.key = key;
         this.html = html;
         this.created = stamp = Instant.now();
         this.ms = ms;
     }
 
-	void registerCall()
-	{
-	    stamp = Instant.now();
-	    calls.incrementAndGet();
-	}
+    void registerAccess()
+    {
+        stamp = Instant.now();
+        calls.incrementAndGet();
+    }
 
     public String getDisplay()
     {
@@ -57,13 +57,13 @@ public class CachedDisplay
     }
 
     public int getCalls()
-	{
-	    return calls.get();
-	}
+    {
+        return calls.get();
+    }
 
-	public long getMillisec()
-	{
-	    return ms;
+    public long getMillisec()
+    {
+        return ms;
     }
 
     public String getHTML()
