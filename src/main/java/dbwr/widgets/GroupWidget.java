@@ -29,54 +29,54 @@ public class GroupWidget extends Widget
         WidgetFactory.addJavaScript("group.js");
     }
 
-	private final String name;
-	private final int style;
-	private final FontInfo font;
-	private final List<Widget> children = new ArrayList<>();
-	private final Map<String, String> macros;
+    private final String name;
+    private final int style;
+    private final FontInfo font;
+    private final List<Widget> children = new ArrayList<>();
+    private final Map<String, String> macros;
 
-	public GroupWidget(final ParentWidget parent, final Element xml) throws Exception
-	{
-		super(parent, xml, "group", 300, 200);
-		// Get macros first in case they're used for the name etc.
-		macros = MacroUtil.fromXML(xml);
-		MacroUtil.expand(parent, macros);
+    public GroupWidget(final ParentWidget parent, final Element xml) throws Exception
+    {
+        super(parent, xml, "group", 300, 200);
+        // Get macros first in case they're used for the name etc.
+        macros = MacroUtil.fromXML(xml);
+        MacroUtil.expand(parent, macros);
 
-		name = XMLUtil.getChildString(this, xml, "name").orElse("");
+        name = XMLUtil.getChildString(this, xml, "name").orElse("");
 
-		if (xml.getAttribute("typeId").startsWith("org.csstudio.opibuilder"))
-		{
-		    switch (XMLUtil.getChildInteger(xml, "border_style").orElse(0))
-		    {
-		    case 13:
-		        // GROUP
-		        style = 0;
-		        break;
-		    default:
-		        // NONE
-		        style = 3;
-		    }
-		}
-		else
-		    style = XMLUtil.getChildInteger(xml, "style").orElse(0);
+        if (xml.getAttribute("typeId").startsWith("org.csstudio.opibuilder"))
+        {
+            switch (XMLUtil.getChildInteger(xml, "border_style").orElse(0))
+            {
+            case 13:
+                // GROUP
+                style = 0;
+                break;
+            default:
+                // NONE
+                style = 3;
+            }
+        }
+        else
+            style = XMLUtil.getChildInteger(xml, "style").orElse(0);
 
-		font = XMLUtil.getFont(xml, "font").orElse(LabelWidget.DEFAULT_FONT);
+        font = XMLUtil.getFont(xml, "font").orElse(LabelWidget.DEFAULT_FONT);
 
-		classes.add("Group");
-		// classes.add("Debug");
+        classes.add("Group");
+        // classes.add("Debug");
 
-		for (final Element widget_xml : XMLUtil.getChildElements(xml, "widget"))
-		{
-			final Widget child = WidgetFactory.createWidget(this, widget_xml);
-			children.add(child);
-		}
-	}
+        for (final Element widget_xml : XMLUtil.getChildElements(xml, "widget"))
+        {
+            final Widget child = WidgetFactory.createWidget(this, widget_xml);
+            children.add(child);
+        }
+    }
 
-	@Override
+    @Override
     public Collection<String> getMacroNames()
-	{
-	    final List<String> names = new ArrayList<>(super.getMacroNames());
-	    names.addAll(macros.keySet());
+    {
+        final List<String> names = new ArrayList<>(super.getMacroNames());
+        names.addAll(macros.keySet());
         return names;
     }
 
@@ -90,19 +90,18 @@ public class GroupWidget extends Widget
     }
 
     @Override
-	protected void fillHTML(final PrintWriter html, final int indent)
-	{
-		html.println();
+    protected void fillHTML(final PrintWriter html, final int indent)
+    {
+        html.println();
 
-		int hinset = (font.getSize()+1)/2;
-		int vinset = hinset;
-		if (style == 2)
-		    hinset = vinset = 0;
-		else if (style == 1)
+        int hinset = (font.getSize()+1)/2;
+        int vinset = hinset;
+        if (style == 2)
+            hinset = vinset = 0;
+        else if (style == 1)
             hinset = 0;
 
-		System.out.println("Group style " + style);
-		// Style 0: Group, 1:Title, 2:Line, 3:None
+        // Style 0: Group, 1:Title, 2:Line, 3:None
         if (style == 1)
         {   // Group name as box on top with outline below
             HTMLUtil.indent(html, indent+1);
@@ -117,36 +116,36 @@ public class GroupWidget extends Widget
             html.println("</svg>");
         }
         else if (style != 3)
-		{	// SVG for border
-			HTMLUtil.indent(html, indent+1);
-			html.println("<svg width=\"" + width + "px\" height=\"" + height + "px\" style=\"" + font + "\">");
-			HTMLUtil.indent(html, indent+2);
-			html.println("<rect x=\"" + hinset + "\" y=\"" + vinset + "\" width=\"" + (width-2*hinset) + "\" height=\"" + (height-2*vinset) + "\" stroke=\"#000\" stroke-width=\"2\" fill=\"transparent\"\"/>");
-			HTMLUtil.indent(html, indent+1);
-			html.println("</svg>");
-		}
-		if (style == 0)
-		{   // Group name as label on top of border
+        {    // SVG for border
+            HTMLUtil.indent(html, indent+1);
+            html.println("<svg width=\"" + width + "px\" height=\"" + height + "px\" style=\"" + font + "\">");
+            HTMLUtil.indent(html, indent+2);
+            html.println("<rect x=\"" + hinset + "\" y=\"" + vinset + "\" width=\"" + (width-2*hinset) + "\" height=\"" + (height-2*vinset) + "\" stroke=\"#000\" stroke-width=\"2\" fill=\"transparent\"\"/>");
+            HTMLUtil.indent(html, indent+1);
+            html.println("</svg>");
+        }
+        if (style == 0)
+        {   // Group name as label on top of border
             HTMLUtil.indent(html, indent+1);
             html.print("<div class=\"GroupLabel\" style=\"top: 0px; left: " + 2*hinset + "px; " + font + " background-color: white;\">");
             html.print(name);
             html.println("</div>");
-		}
+        }
         if (style != 3)
         {   // Wrap content in <div>
-			HTMLUtil.indent(html, indent+1);
-			html.println("<div class=\"GroupBox\" style=\"top: " + 2*vinset + "px; left: " + 2*hinset + "px; width: " + (width-4*hinset) + "px; height: " + (height - 4*vinset) + "px;\">");
-		}
+            HTMLUtil.indent(html, indent+1);
+            html.println("<div class=\"GroupBox\" style=\"top: " + 2*vinset + "px; left: " + 2*hinset + "px; width: " + (width-4*hinset) + "px; height: " + (height - 4*vinset) + "px;\">");
+        }
 
-		for (final Widget child : children)
-			child.getHTML(html, indent+2);
+        for (final Widget child : children)
+            child.getHTML(html, indent+2);
 
-		if (style != 3)
-		{   // Close the content-div
-			HTMLUtil.indent(html, indent+1);
-			html.println("</div>");
-		}
+        if (style != 3)
+        {   // Close the content-div
+            HTMLUtil.indent(html, indent+1);
+            html.println("</div>");
+        }
 
-		HTMLUtil.indent(html, indent);
-	}
+        HTMLUtil.indent(html, indent);
+    }
 }
