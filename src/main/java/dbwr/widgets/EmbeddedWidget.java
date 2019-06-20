@@ -105,17 +105,8 @@ public class EmbeddedWidget extends Widget
         // 0: No resize, scrollbars as needed
         // 1: Resize content
         // 2: Resize container
-        if (resize == 0)
-        {
-            // System.out.println("Auto-Scroll " + file + " to fit " + embedded_display.width + " x " + embedded_display.height + " into " + width + " x " + height);
-            // Enable scrollbars based on self-declared size of container vs. content
-            if (embedded_display.width > width  ||
-                embedded_display.height > height)
-                styles.put("overflow", "scroll");
-            else
-                styles.put("overflow", "hidden");
-        }
-        else if (resize == 1)
+        // 3: Stretch content separately in X and Y
+        if (resize == 1)
         {
             // System.out.println("Resize content " + file + " from " + embedded_display.width + " x " + embedded_display.height + " to " + width + " x " + height);
             final double zoom_x = embedded_display.width > 0 ? (double)width / embedded_display.width : 1.0;
@@ -125,13 +116,32 @@ public class EmbeddedWidget extends Widget
             styles.put("transform-origin", "left top");
             styles.put("transform", "scale(" + zoom + ")");
         }
-        else
+        else if (resize == 2)
         {
             // System.out.println("Resize container " + width + " x " + height + " to fit " + file + " " + embedded_display.width + " x " + embedded_display.height);
             // Keep 'final' width, height unchanged, but update the style settings
             styles.put("width",  Integer.toString(embedded_display.width) +"px");
             styles.put("height", Integer.toString(embedded_display.height)+"px");
             styles.put("overflow", "hidden");
+        }
+        else if (resize == 3)
+        {
+            // System.out.println("Stretch content " + file + " from " + embedded_display.width + " x " + embedded_display.height + " to " + width + " x " + height);
+            final double zoom_x = embedded_display.width > 0 ? (double)width / embedded_display.width : 1.0;
+            final double zoom_y = embedded_display.height > 0 ? (double)height / embedded_display.height : 1.0;
+
+            styles.put("transform-origin", "left top");
+            styles.put("transform", "scale(" + zoom_x + ", " + zoom_y + ")");
+        }
+        else // resize == 0 or a new option that's ignored
+        {
+            // System.out.println("Auto-Scroll " + file + " to fit " + embedded_display.width + " x " + embedded_display.height + " into " + width + " x " + height);
+            // Enable scrollbars based on self-declared size of container vs. content
+            if (embedded_display.width > width  ||
+                    embedded_display.height > height)
+                styles.put("overflow", "scroll");
+            else
+                styles.put("overflow", "hidden");
         }
 
         return buf.toString();
