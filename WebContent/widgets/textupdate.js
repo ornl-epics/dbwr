@@ -92,7 +92,8 @@ function format_pv_data_as_text(widget, data)
                     text = data.value.toFixed(precision);
             }
         }
-        if (data.units !== undefined  &&  widget.data("show-units") != "false")
+        // show-units is by default undefined, or false to suppress units
+        if (data.units !== undefined  &&  widget.data("show-units") === undefined)
            text = text + " " + data.units;
     }
     else
