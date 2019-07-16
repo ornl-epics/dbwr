@@ -45,6 +45,12 @@ function format_engineering(number, precision)
  */
 function format_pv_data_as_text(widget, data)
 {
+    // If precision is defined on widget, use it
+    let precision = widget.data("precision");
+    // Otherwise use precision from data
+    if (precision === undefined  &&  data.precision !== undefined)
+        precision = data.precision;
+    
     let text;
     if (data.text !== undefined)
     {
@@ -61,13 +67,13 @@ function format_pv_data_as_text(widget, data)
         {
             if (widget.data("format") == "exponential")
             {
-                if (data.precision === undefined)
+                if (precision === undefined)
                     text = data.value.toExponential().replace('e', 'E');
                 else
-                    text = data.value.toExponential(data.precision).replace('e', 'E');
+                    text = data.value.toExponential(precision).replace('e', 'E');
             }
             else if (widget.data("format") == "engineering")
-                text = format_engineering(data.value, data.precision);
+                text = format_engineering(data.value, precision);
             else if (widget.data("format") == "hex")
             {
                 text = (data.value | 0).toString(16);
@@ -83,7 +89,7 @@ function format_pv_data_as_text(widget, data)
                 if (data.precision === undefined)
                     text = data.value.toString();
                 else
-                    text = data.value.toFixed(data.precision);
+                    text = data.value.toFixed(precision);
             }
         }
         if (data.units !== undefined  &&  widget.data("show-units") != "false")

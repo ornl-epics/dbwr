@@ -44,6 +44,10 @@ public class BaseTextWidget extends PVWidget
         default:
 		}
 
+		final int precision = XMLUtil.getChildInteger(xml, "precision").orElse(-1);
+		if (precision != -1)
+		    attributes.put("data-precision", Integer.toString(precision));
+
 		final FontInfo font = XMLUtil.getFont(xml, "font").orElse(LabelWidget.DEFAULT_FONT);
 		font.addToStyles(styles);
 
