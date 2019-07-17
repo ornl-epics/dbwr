@@ -303,8 +303,10 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["image"] = function(wid
         return;
     }
     
-    // Auto-scale the value range
-    // (only possible if there is data, hei > 0
+    // TODO Somehow enable/disable auto-scale at runtime (for now always enabled)
+    // Auto-scale the value range by determining the overall max
+    // (only possible if there is data, hei > 0)
+    // Leaving min unchanged
     max = data.value.reduce( (a, b) => Math.max(a, b) );
     
     // Draw data into the off-screen image buffer canvas
