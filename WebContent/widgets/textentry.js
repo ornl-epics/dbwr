@@ -17,12 +17,16 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods['textentry'] = function(w
     
     widget.keydown(event =>
     {
-        if (event.keyCode == 13)
-        {
-            let val = widget.val();
-            console.log("ENTERED " + widget.data("pv") + " = " + val);
-            // Loose focus, which restores the original value resp. most recent update
+        // On escape, loose focus, which restores the original value resp. most recent update
+        if (event.keyCode == 27)
             widget.blur();
+        else if (event.keyCode == 13)
+        {
+            // Get user's value, then blur() to loose focus and restore last known PV value
+            let val = widget.val();
+            widget.blur();
+
+            console.log("ENTERED " + widget.data("pv") + " = " + val);
             console.log("For now back to " + widget.val());
             // TODO write val to PV
         }
