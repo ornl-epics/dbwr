@@ -54,6 +54,11 @@ class DisplayBuilderWebRuntime
         console.log(message);
     }
     
+    clearLog()
+    {
+        this.info.html("");
+    }
+    
     /** Lifecycle step 1: Load display
      * 
      *  Will then connect to PVs
@@ -231,10 +236,13 @@ class DisplayBuilderWebRuntime
                     cb(message);
             }
         }
+        else if (message.type == 'error')
+        {
+            this.log("Error: " + message.message);
+        }
         else
         {
-            console.log("Received unknown PV message");
-            console.log(message);
+            this.log("Unknown message " + JSON.stringify(message));
         }
     }
 
@@ -273,6 +281,20 @@ class DisplayBuilderWebRuntime
      */
     write(pv, value)
     {
+        let info = this.pv_infos[pv];
+        if (info === undefined)
+        {
+            this.log("Cannot write unknown PV " + pv);
+            return;
+        }
+        this.clearLog();
+        
+        if (typeof(info.data.value) == "number")
+        {
+            value = parseFloat(value);
+            console.log("Writing " + pv + " as number " + value);
+        }
+        
         this.pvws.write(pv, value);
     }
 }

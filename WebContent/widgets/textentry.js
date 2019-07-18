@@ -7,10 +7,9 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods['textentry'] = function(w
     {
         // console.log("Focus in...." + widget.val());
         widget.data("editing", widget.val());
-        
     });
 
-    // When loosing focus, restore current value.
+    // When focus is lost, restore current value.
     // If new value was written ('Enter'), that
     // will soon trigger a value update
     widget.focusout(() =>
@@ -23,12 +22,12 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods['textentry'] = function(w
     // Handle 'Esc' and 'Enter' key presses
     widget.keydown(event =>
     {
-        // On escape, loose focus, which restores the original value resp. most recent update
+        // On escape, drop focus, which restores the original value resp. most recent update
         if (event.keyCode == 27)
             widget.blur();
         else if (event.keyCode == 13)
         {
-            // Get user's value, then blur() to loose focus and restore last known PV value
+            // Get user's value, then blur() to drop focus and restore last known PV value
             let val = widget.val();
             widget.blur();
 
@@ -59,12 +58,13 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods['textentry'] = function
     
     // See textupdate.js to center vertically?
 
-    // TODO After testing the 'write' and 'return' vs. 'tab/escape' handling:
-    // widget.prop('disabled', data.readonly);
     
+    // Indicate read/write access via cursor
     if (data.readonly)
         widget.css("cursor", "not-allowed");
     else
         widget.css("cursor", "auto");
+    // Disable when read-only
+    widget.prop('disabled', data.readonly);
 }
 
