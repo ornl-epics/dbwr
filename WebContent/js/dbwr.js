@@ -143,7 +143,7 @@ class DisplayBuilderWebRuntime
      */
     _initWidget(widget)
     {
-        let type = widget.attr("data-type");
+        let type = widget.data("type");
 
         // Call registered init method for widget type
         let method = this.widget_init_methods[type];
@@ -154,7 +154,7 @@ class DisplayBuilderWebRuntime
         }
 
         // Handle 'data-pv'
-        let pv_name = widget.attr("data-pv");
+        let pv_name = widget.data("pv");
         if (pv_name)
             this.subscribe(widget, type, pv_name);
         
@@ -257,7 +257,7 @@ class DisplayBuilderWebRuntime
     {
         widget.removeClass("BorderMinor BorderMajor BorderInvalid BorderDisconnected");
         // By default, be alarm sensitive
-        if (widget.attr("data-alarm-border") != "false")
+        if (widget.data("alarm-border") != "false")
         {
             if (data.severity == Severity.MINOR)
                 widget.addClass("BorderMinor");

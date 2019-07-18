@@ -7,10 +7,13 @@
 package dbwr.widgets;
 
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.w3c.dom.Element;
 
+import dbwr.macros.MacroProvider;
 import dbwr.macros.MacroUtil;
 import dbwr.parser.FontInfo;
 import dbwr.parser.HTMLUtil;
@@ -76,6 +79,30 @@ public class ActionButtonWidget extends Widget
     				attributes.put("data-linked-file-" + index, resolved);
     				if (! macros.isEmpty())
                         attributes.put("data-linked-macros-" + index, HTMLUtil.escape(MacroUtil.toJSON(macros)));
+			    }
+			    else if ("write_pv".equalsIgnoreCase(action_type))
+			    {
+			        // Add Local pv_name as macro
+			        final Optional<String> pv_name_macro = XMLUtil.getChildString(parent, xml, "pv_name");
+			        final MacroProvider macros;
+                    if (pv_name_macro.isPresent())
+			        {
+			            final Map<String, String> map = new HashMap<String, String>();
+			            for (final String name : parent.getMacroNames())
+			                map.put(name, parent.getMacroValue(name));
+			            map.put("pv_name", pv_name_macro.get());
+			            macros = MacroProvider.forMap(map);
+			        }
+			        else
+			            macros = parent;
+
+			        final String pv = XMLUtil.getChildString(macros, ae, "pv_name").orElse("");
+			        final String value = XMLUtil.getChildString(macros, ae, "value").orElse("");
+                    attributes.put("data-pv-" + index, pv);
+                    attributes.put("data-value-" + index, value);
+
+                    // Show PV name as tool-tip
+                    attributes.put("title", pv);
 			    }
 			}
 		}
