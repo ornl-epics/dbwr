@@ -51,9 +51,6 @@ public class BaseTextWidget extends PVWidget
 		final FontInfo font = XMLUtil.getFont(xml, "font").orElse(LabelWidget.DEFAULT_FONT);
 		font.addToStyles(styles);
 
-		// Set 'line-height' to support vertical alignment of text
-		styles.put("line-height", styles.get("height"));
-
 		if (! XMLUtil.getChildBoolean(xml, "transparent").orElse(false))
 		{
 			final String background_color = XMLUtil.getColor(xml, "background_color").orElse(default_background);

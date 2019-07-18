@@ -22,5 +22,8 @@ public class TextUpdateWidget extends BaseTextWidget
     public TextUpdateWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 		super(parent, xml, "textupdate", "#F0F0F0");
+
+		// Set 'line-height' to support vertical alignment of text
+        styles.put("line-height", styles.get("height"));
 	}
 }

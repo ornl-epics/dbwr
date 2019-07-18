@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import org.w3c.dom.Element;
 
 import dbwr.parser.WidgetFactory;
+import dbwr.parser.XMLUtil;
 
 public class TextEntryWidget extends BaseTextWidget
 {
@@ -21,24 +22,31 @@ public class TextEntryWidget extends BaseTextWidget
         WidgetFactory.addCSS("textentry.css");
     }
 
+    private final boolean multiline;
+
 	public TextEntryWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 		super(parent, xml, "textentry", "#7FF");
 
-        attributes.put("type", "text");
-        attributes.put("value", "<" + pv_name + ">");
+		multiline = XMLUtil.getChildBoolean(xml, "multi_line").orElse(false);
 
+		attributes.put("type", "text");
+		// <input> uses value, multiline uses fillHTML()
+		if (! multiline)
+		    attributes.put("value", "<" + pv_name + ">");
 	}
 
     @Override
     protected String getHTMLElement()
     {
-        return "input";
+        return multiline ? "textarea" : "input";
     }
 
     @Override
     protected void fillHTML(final PrintWriter html, final int indent)
     {
         // No HTML inside the <input> element
+        if (multiline)
+            html.append("<" + pv_name + ">");
     }
 }

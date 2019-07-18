@@ -19,13 +19,17 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods['textentry'] = function(w
         widget.removeData("editing");
     });
     
-    // Handle 'Esc' and 'Enter' key presses
+    // Handle 'Esc' and (Ctrl) 'Enter' key presses
     widget.keydown(event =>
     {
         // On escape, drop focus, which restores the original value resp. most recent update
         if (event.keyCode == 27)
             widget.blur();
-        else if (event.keyCode == 13)
+        // Submit value to PV when
+        // a) input and plain Enter
+        // b) text area and Ctrl-Enter
+        else if (event.keyCode == 13  &&
+                 (widget.is("input") || event.ctrlKey))
         {
             // Get user's value, then blur() to drop focus and restore last known PV value
             let val = widget.val();
@@ -54,10 +58,8 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods['textentry'] = function
         return;
     }
     
+    // jQuery uses val() for both input.value and textarea.html
     widget.val(text);
-    
-    // See textupdate.js to center vertically?
-
     
     // Indicate read/write access via cursor
     if (data.readonly)

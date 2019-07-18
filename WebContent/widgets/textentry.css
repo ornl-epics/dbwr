@@ -3,3 +3,9 @@ input.TextField
 {
     border: none;
 }
+
+textarea.TextField
+{
+    border: none;
+    resize: none;
+}
