@@ -39,8 +39,6 @@ public class TextEntryWidget extends BaseTextWidget
     @Override
     protected void fillHTML(final PrintWriter html, final int indent)
     {
-//        html.append("<input type=\"text\" value=\"");
-//        HTMLUtil.escape(html, "<" + pv_name + ">");
-//        html.append("\"/>");
+        // No HTML inside the <input> element
     }
 }

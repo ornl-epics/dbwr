@@ -266,6 +266,15 @@ class DisplayBuilderWebRuntime
         if (method)
             method(widget, data)
     }
+    
+    /** Write to PV
+     *  @param pvs PV name
+     *  @param value number or string
+     */
+    write(pv, value)
+    {
+        this.pvws.write(pv, value);
+    }
 }
 
 // Widget types can register init(widget) methods
