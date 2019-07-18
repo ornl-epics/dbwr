@@ -1,4 +1,24 @@
 
+function __restore_text_entry(widget)
+{
+    let current = widget.data("editing");
+    if (current == undefined)
+        return false;
+    
+    widget.val(current);            
+    widget.removeData("editing");            
+    return true;
+}
+
+function __submit_text_entry(widget, val)
+{
+    // Write entered value to PV
+    let pv = widget.data("pv")
+    console.log("Text entry writes " + pv + " = " + val);
+    // console.log("For now back to " + widget.val());
+    dbwr.write(pv, val)
+}
+
 DisplayBuilderWebRuntime.prototype.widget_init_methods['textentry'] = function(widget)
 {
     // On focus, save current value in 'editing',
@@ -9,41 +29,51 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods['textentry'] = function(w
         widget.data("editing", widget.val());
     });
 
+    // Handle 'Esc' and (Ctrl) 'Enter' key presses
+    widget.keydown(event =>
+    {
+        // On escape, drop focus, which restores the original value resp. most recent update
+        if (event.keyCode == 27)
+        {
+            if (widget.is("textarea"))
+                __restore_text_entry(widget);
+            widget.blur();
+        }
+            
+        // Submit value to PV on enter
+        else if (event.keyCode == 13)
+        {
+            // For input, submit on enter
+            if (widget.is("input"))
+            {
+                // Get user's value, then blur() to drop focus and restore last known PV value
+                let entered = widget.val();
+                widget.blur();
+                __submit_text_entry(widget, entered);
+            }
+            // For text area, require ctrl-enter.
+            // Submit by simply dropping focus
+            else if (event.ctrlKey)
+                widget.blur();
+        }
+    })
+
     // When focus is lost, restore current value.
     // If new value was written ('Enter'), that
     // will soon trigger a value update
     widget.focusout(() =>
     {
         // console.log("Focus out..." + widget.val());
-        widget.val(widget.data("editing"))
-        widget.removeData("editing");
+        
+        let entered = widget.val();
+        
+        // Some text area users are incapable of pressing Ctrl,
+        // so submit on exit.
+        // They need to push Esc to exit widget w/o submitting.
+        if (__restore_text_entry(widget)  &&  widget.is("textarea"))
+            __submit_text_entry(widget, entered);
     });
-    
-    // Handle 'Esc' and (Ctrl) 'Enter' key presses
-    widget.keydown(event =>
-    {
-        // On escape, drop focus, which restores the original value resp. most recent update
-        if (event.keyCode == 27)
-            widget.blur();
-        // Submit value to PV when
-        // a) input and plain Enter
-        // b) text area and Ctrl-Enter
-        else if (event.keyCode == 13  &&
-                 (widget.is("input") || event.ctrlKey))
-        {
-            // Get user's value, then blur() to drop focus and restore last known PV value
-            let val = widget.val();
-            widget.blur();
-
-            // Write entered value to PV
-            let pv = widget.data("pv")
-            console.log("Text entry writes " + pv + " = " + val);
-            // console.log("For now back to " + widget.val());
-            dbwr.write(pv, val)
-        }
-    })
 }
-
 
 DisplayBuilderWebRuntime.prototype.widget_update_methods['textentry'] = function(widget, data)
 {
@@ -55,18 +85,19 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods['textentry'] = function
     {
         widget.data("editing", text);
         console.log("Editing, caching " + text);
-        return;
     }
-    
-    // jQuery uses val() for both input.value and textarea.html
-    widget.val(text);
-    
-    // Indicate read/write access via cursor
-    if (data.readonly)
-        widget.css("cursor", "not-allowed");
     else
-        widget.css("cursor", "auto");
-    // Disable when read-only
-    widget.prop('disabled', data.readonly);
+    {
+        // jQuery uses val() for both input.value and textarea.html
+        widget.val(text);
+    
+        // Indicate read/write access via cursor
+        if (data.readonly)
+            widget.css("cursor", "not-allowed");
+        else
+            widget.css("cursor", "auto");
+        // Disable when read-only
+        widget.prop('disabled', data.readonly);
+    }
 }
 
