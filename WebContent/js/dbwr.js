@@ -408,3 +408,60 @@ function set_visibility(widget, visible)
     widget.css("display", visible ? "block" : "none");        
 }
 // End of common WidgetRule.update methods
+
+
+
+// Context menu support
+
+/** Given a widget with 'id',
+ *  create a 'id_context' div
+ *  with the provided entries.
+ *  
+ *  Items may be plain text
+ *  or jQuery items that handle click() etc.
+ *  
+ *  @param widget
+ *  @param ...items
+ */
+function create_contextmenu(widget, ...items)
+{
+    let menu_id = widget.attr("id") + "_context";
+    
+    // In case menu already exists, remove
+    jQuery("#" + menu_id).remove();
+    
+    let entries = jQuery("<ul>");
+    items.forEach(item => jQuery("<li>").html(item).appendTo(entries));
+    
+    let menu = jQuery("<div>").addClass("ContextMenu")
+                              .attr("id", menu_id)
+                              .append(entries);
+    widget.after(menu);
+}
+
+function hide_contextmenu(widget)
+{
+    let menu = jQuery("#" + widget.attr("id") + "_context");
+    menu.hide();
+}
+
+/** Event handler for click() or contextmenu()
+ *  @param event
+ */
+function toggle_contextmenu(event)
+{
+    let widget = jQuery(event.target);
+    let menu = jQuery("#" + widget.attr("id") + "_context");
+
+    if (menu.is(":visible"))
+        menu.hide();
+    else
+    {
+        // Content is relative to <div Screen>
+        menu.css("left", (event.pageX-27) + "px");
+        menu.css("top",  (event.pageY-10) + "px");
+        menu.show();
+    }
+    
+    event.preventDefault();
+}

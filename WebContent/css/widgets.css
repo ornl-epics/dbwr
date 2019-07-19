@@ -103,6 +103,18 @@ svg.Widget
     z-index: 2;
 }
 
+.ContextMenu ul
+{
+    margin: 5px;
+    padding: 5px;
+}
+
+.ContextMenu li
+{
+	list-style: none;
+	padding-bottom: 5px;
+}
+
 #info_panel
 {
 	float: right;
