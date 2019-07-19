@@ -94,13 +94,14 @@ svg.Widget
 .ContextMenu
 {
     border: 1px solid black;
-	position: absolute;
+    position: fixed;
     background-color: rgb(255, 255, 255);
     display: block;
     left: 100px;
     top: 150px;
     display: none;
     z-index: 2;
+    box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2); 
 }
 
 .ContextMenu ul

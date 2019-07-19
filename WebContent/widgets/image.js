@@ -321,8 +321,14 @@ function __redraw_image_with_data(widget, data)
         for (let x=0; x<wid; ++x)
         {
             let v = data.value[vi++];
-            let c = Math.min(Math.round((v - min) * crange), 255);
-            let m = _colormap[c];
+            let c = Math.round((v - min) * crange);
+            let m;
+            if (c < 0)
+                m = _colormap[0];
+            else if (c > 255)
+                m = _colormap[255];
+            else
+                m = _colormap[c];
             img.data[i++] = m[0];
             img.data[i++] = m[1];
             img.data[i++] = m[2];
@@ -347,22 +353,22 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["image"] = __redraw_ima
 DisplayBuilderWebRuntime.prototype.widget_init_methods["image"] = function(widget)
 {
     // Image min/max/autoscale config UI for context menu
-    let mintext = jQuery("<input>").attr("type", "text")
-                                   .change(event =>
+    let mintext = jQuery("<input>").attr("type", "text");
+    mintext.change(event =>
     {
         widget.data("min", parseFloat(mintext.val()));
         __redraw_image(widget);
     });
     
-    let maxtext = jQuery("<input>").attr("type", "text")
-                                   .change(event =>
+    let maxtext = jQuery("<input>").attr("type", "text");
+    maxtext.change(event =>
     {
         widget.data("max", parseFloat(maxtext.val()));
         __redraw_image(widget);
     });
  
-    let checkbox = jQuery("<input>").attr("type", "checkbox")
-                                    .click(event =>
+    let checkbox = jQuery("<input>").attr("type", "checkbox");
+    checkbox.click(event =>
     {
         widget.data("autoscale", checkbox.prop('checked'));
         __redraw_image(widget);
@@ -370,7 +376,7 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["image"] = function(widge
     
     create_contextmenu(widget,
                        "Image Settings",
-                       jQuery("<label>").append("Max: ").append(mintext),
+                       jQuery("<label>").append("Min: ").append(mintext),
                        jQuery("<label>").append("Max: ").append(maxtext),
                        jQuery("<label>").append(checkbox).append("&nbsp; Autoscale"));
     

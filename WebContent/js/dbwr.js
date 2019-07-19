@@ -431,6 +431,9 @@ function create_contextmenu(widget, ...items)
     jQuery("#" + menu_id).remove();
     
     let entries = jQuery("<ul>");
+    
+    // jQuery("<li>").html(menu_id).appendTo(entries);
+    
     items.forEach(item => jQuery("<li>").html(item).appendTo(entries));
     
     let menu = jQuery("<div>").addClass("ContextMenu")
@@ -450,6 +453,9 @@ function hide_contextmenu(widget)
  */
 function toggle_contextmenu(event)
 {
+    console.log(event.target.getBoundingClientRect());
+    
+    console.log("CLient: " + event.clientX + ", " + event.clientY);
     let widget = jQuery(event.target);
     let menu = jQuery("#" + widget.attr("id") + "_context");
 
@@ -457,9 +463,9 @@ function toggle_contextmenu(event)
         menu.hide();
     else
     {
-        // Content is relative to <div Screen>
-        menu.css("left", (event.pageX-27) + "px");
-        menu.css("top",  (event.pageY-10) + "px");
+        // position: fixed, not relative to any container
+        menu.css("left", event.pageX + "px");
+        menu.css("top",  event.pageY + "px");
         menu.show();
     }
     
