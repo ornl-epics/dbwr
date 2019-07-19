@@ -441,6 +441,8 @@ function create_contextmenu(widget, items)
     let menu = jQuery("<div>").addClass("ContextMenu")
                               .attr("id", menu_id)
                               .append(entries);
+    // Hide when pointer moves out of menu
+    menu.mouseleave(() => hide_contextmenu(widget));
     widget.after(menu);
 }
 
@@ -454,19 +456,12 @@ function hide_contextmenu(widget)
     }
 }
 
-
+// Hide menu when pressing Escape
 jQuery(window).keydown(event =>
 {
     if (event.keyCode == 27)
         hide_contextmenu(__active_menu);
 });
-
-//jQuery(window).click(event =>
-//{
-//    console.log(event);
-//    hide_contextmenu(__active_menu);
-//});
-
 
 /** Event handler for click() or contextmenu()
  *  @param event
@@ -484,9 +479,10 @@ function toggle_contextmenu(event)
         // console.log("Page: " + event.pageX + "," + event.pageY);
         // console.log("Client: " + event.clientX + "," + event.clientY);
         // Would expect that pageX/Y are required, but clientX/Y are
-        // in fact positioning the menu at the mouse cursor
-        menu.css("left", event.clientX + "px");
-        menu.css("top",  event.clientY + "px");
+        // in fact positioning the menu at the mouse cursor.
+        // Move 10/10 into the menu to avoid immediate mouseleave() event.
+        menu.css("left", (event.clientX-10) + "px");
+        menu.css("top",  (event.clientY-10) + "px");
         menu.show();
         __active_menu = widget;
     }
