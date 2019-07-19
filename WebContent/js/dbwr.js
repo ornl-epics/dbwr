@@ -413,6 +413,8 @@ function set_visibility(widget, visible)
 
 // Context menu support
 
+let __active_menu = undefined;
+
 /** Given a widget with 'id',
  *  create a 'id_context' div
  *  with the provided entries.
@@ -444,9 +446,27 @@ function create_contextmenu(widget, items)
 
 function hide_contextmenu(widget)
 {
-    let menu = jQuery("#" + widget.attr("id") + "_context");
-    menu.hide();
+    if (__active_menu !== undefined)
+    {
+        __active_menu = undefined;
+        let menu = jQuery("#" + widget.attr("id") + "_context");
+        menu.hide();
+    }
 }
+
+
+jQuery(window).keydown(event =>
+{
+    if (event.keyCode == 27)
+        hide_contextmenu(__active_menu);
+});
+
+//jQuery(window).click(event =>
+//{
+//    console.log(event);
+//    hide_contextmenu(__active_menu);
+//});
+
 
 /** Event handler for click() or contextmenu()
  *  @param event
@@ -457,7 +477,7 @@ function toggle_contextmenu(event)
     let menu = jQuery("#" + widget.attr("id") + "_context");
 
     if (menu.is(":visible"))
-        menu.hide();
+        hide_contextmenu(widget);
     else
     {
         // CSS position: fixed, not relative to any container.
@@ -468,6 +488,7 @@ function toggle_contextmenu(event)
         menu.css("left", event.clientX + "px");
         menu.css("top",  event.clientY + "px");
         menu.show();
+        __active_menu = widget;
     }
     
     event.preventDefault();
