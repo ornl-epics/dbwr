@@ -91,6 +91,18 @@ svg.Widget
 {
 }
 
+.ContextMenu
+{
+    border: 1px solid black;
+	position: absolute;
+    background-color: rgb(255, 255, 255);
+    display: block;
+    left: 100px;
+    top: 150px;
+    display: none;
+    z-index: 2;
+}
+
 #info_panel
 {
 	float: right;

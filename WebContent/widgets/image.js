@@ -266,6 +266,46 @@ let _colormap = _viridis;
 // Off-screen canvas used to draw image for data width x height
 let _img_buf = document.createElement('canvas');
 
+function create_contextmenu(widget, ...labels)
+{
+    let menu_id = widget.attr("id") + "_context";
+    let items = jQuery("<ul>");
+    jQuery("<li>").text(menu_id).appendTo(items);
+    labels.forEach(label => jQuery("<li>").text(label).appendTo(items));
+    
+    let menu = jQuery("<div>").addClass("ContextMenu")
+                              .attr("id", menu_id)
+                              .append(items);
+    widget.after(menu);
+}
+
+function __image_context_menu(event)
+{
+    let widget = jQuery(event.target);
+    console.log(event);
+    console.log("Image context menu at " + event.pageX + ", " + event.pageY);
+    
+    let menu = jQuery("#" + widget.attr("id") + "_context");
+
+    // Content is relative to <div Screen>
+    menu.css("left", (event.pageX-27) + "px");
+    menu.css("top",  (event.pageY-10) + "px");
+
+    
+    menu.show();
+    console.log("Show:");
+    console.log(menu);
+    
+    event.preventDefault();
+}
+
+DisplayBuilderWebRuntime.prototype.widget_init_methods["image"] = function(widget)
+{
+    create_contextmenu(widget, "Autoscale", "Hello", "there...");
+    
+    widget.contextmenu(__image_context_menu);
+}
+
 DisplayBuilderWebRuntime.prototype.widget_update_methods["image"] = function(widget, data)
 {
     // Chrome's Performance monitor shows that most of the time for handling an image
