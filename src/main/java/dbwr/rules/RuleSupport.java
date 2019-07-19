@@ -120,7 +120,11 @@ public class RuleSupport
      */
     private String convertExp(final String exp)
     {
-        return exp.replace("and", " && ")
+        // Instead of 'pvInt0' for integer value
+        // use plain 'pv0' value.
+        // Map python 'and', 'or', 'not' to Javascript
+        return exp.replace("pvInt", "pv")
+                  .replace("and", " && ")
                   .replace("or", " || ")
                   .replace("not", " ! ");
     }
