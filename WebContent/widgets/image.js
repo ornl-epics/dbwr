@@ -264,58 +264,14 @@ let _viridis =
 let _colormap = _viridis;
 
 // Off-screen canvas used to draw image for data width x height
+// Shared by all images
 let _img_buf = document.createElement('canvas');
 
-DisplayBuilderWebRuntime.prototype.widget_init_methods["image"] = function(widget)
-{
-    let autoscale = widget.attr("id") + "_autoscale";
-    let checkbox = jQuery("<input>").attr("type", "checkbox")
-                                    .attr("id", autoscale);
-    checkbox.click(event =>
-    {
-        widget.data("autoscale", checkbox.prop('checked'));
-    });
-
-    let min = widget.attr("id") + "_min";
-    let mintext = jQuery("<input>").attr("type", "text")
-                                   .attr("id", min);
-    mintext.change(event =>
-    {
-        widget.data("min", parseFloat(mintext.val()));
-    });
-    
-    let max = widget.attr("id") + "_max";
-    let maxtext = jQuery("<input>").attr("type", "text")
-                                   .attr("id", max);
-    maxtext.change(event =>
-    {
-        widget.data("max", parseFloat(maxtext.val()));
-    });
-    
-    create_contextmenu(widget,
-                       "Image Settings",
-                       jQuery("<label>").append("Max: ").append(mintext),
-                       jQuery("<label>").append("Max: ").append(maxtext),
-                       jQuery("<label>").append(checkbox).append("&nbsp; Autoscale"));
-
-    
-    widget.click(event =>
-    {
-        checkbox.prop('checked', widget.data("autoscale"));
-        mintext.val(widget.data("min"));
-        maxtext.val(widget.data("max"));
-        
-        toggle_contextmenu(event);
-    });
-    
-    // TODO Force widget update when settings change, don't wait until next data update
-}
-
-DisplayBuilderWebRuntime.prototype.widget_update_methods["image"] = function(widget, data)
+function __redraw_image_with_data(widget, data)
 {
     // Chrome's Performance monitor shows that most of the time for handling an image
     // update is spent in here. .. as expected.
-    // Creat the image in Worker thread?
+    // Create the image in Worker thread?
     // Would have to postMessage() the data.value into the worker and
     // then get the image back out via addEventListener().
     // Do those data copies defeat the purpose?
@@ -379,3 +335,53 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["image"] = function(wid
     gc.imageSmoothingEnabled = scr_wid < wid;
     gc.drawImage(_img_buf, 0, 0, scr_wid, scr_hei);
 }
+
+function __redraw_image(widget)
+{
+    let data = dbwr.pv_infos[widget.data("pv")].data;
+    __redraw_image_with_data(widget, data);
+}
+
+DisplayBuilderWebRuntime.prototype.widget_update_methods["image"] = __redraw_image_with_data;
+
+DisplayBuilderWebRuntime.prototype.widget_init_methods["image"] = function(widget)
+{
+    // Image min/max/autoscale config UI for context menu
+    let mintext = jQuery("<input>").attr("type", "text")
+                                   .change(event =>
+    {
+        widget.data("min", parseFloat(mintext.val()));
+        __redraw_image(widget);
+    });
+    
+    let maxtext = jQuery("<input>").attr("type", "text")
+                                   .change(event =>
+    {
+        widget.data("max", parseFloat(maxtext.val()));
+        __redraw_image(widget);
+    });
+ 
+    let checkbox = jQuery("<input>").attr("type", "checkbox")
+                                    .click(event =>
+    {
+        widget.data("autoscale", checkbox.prop('checked'));
+        __redraw_image(widget);
+    });
+    
+    create_contextmenu(widget,
+                       "Image Settings",
+                       jQuery("<label>").append("Max: ").append(mintext),
+                       jQuery("<label>").append("Max: ").append(maxtext),
+                       jQuery("<label>").append(checkbox).append("&nbsp; Autoscale"));
+    
+    widget.click(event =>
+    {
+        // Update menu UI from image widget
+        checkbox.prop('checked', widget.data("autoscale"));
+        mintext.val(widget.data("min"));
+        maxtext.val(widget.data("max"));
+        
+        toggle_contextmenu(event);
+    });
+}
+
