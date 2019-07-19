@@ -375,10 +375,13 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["image"] = function(widge
     });
     
     create_contextmenu(widget,
-                       "Image Settings",
-                       jQuery("<label>").append("Min: ").append(mintext),
-                       jQuery("<label>").append("Max: ").append(maxtext),
-                       jQuery("<label>").append(checkbox).append("&nbsp; Autoscale"));
+                       [
+                           "Image Settings",
+                           jQuery("<label>").append("Min: ").append(mintext),
+                           jQuery("<label>").append("Max: ").append(maxtext),
+                           jQuery("<label>").append(checkbox).append("&nbsp; Autoscale")
+                           
+                       ]);
     
     widget.click(event =>
     {

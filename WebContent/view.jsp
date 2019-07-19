@@ -105,7 +105,7 @@ jQuery("#disconnect").click(() => dbwr.pvws.close() );
 
 jQuery(() =>
 {
-	dbwr.loadContent('<%=display_name%>', '<%=macro_text%>');
+	dbwr.load_content('<%=display_name%>', '<%=macro_text%>');
 });
 </script>
 </body>

@@ -42,8 +42,8 @@ class DisplayBuilderWebRuntime
         this.display = "";
         this.info = jQuery("#info");
         this.pvws = new PVWS(pvws_url,
-                             connected => this._handleConnection(connected),
-                             message   => this._handleMessage(message));
+                             connected => this._handle_connection(connected),
+                             message   => this._handle_message(message));
         this.pv_infos = {}
     }
     
@@ -54,7 +54,7 @@ class DisplayBuilderWebRuntime
         console.log(message);
     }
     
-    clearLog()
+    clear_log()
     {
         this.info.html("");
     }
@@ -66,7 +66,7 @@ class DisplayBuilderWebRuntime
      *  @param display URL of display to load
      *  @param macros Macros (JSON)
      */
-    loadContent(display, macros)
+    load_content(display, macros)
     {
         this.display = display;
         this.log("Loading '" + display + "' with " + macros);
@@ -109,7 +109,7 @@ class DisplayBuilderWebRuntime
      *  
      *  @param connected True/false as PVWS connects/disconnects
      */
-    _handleConnection(connected)
+    _handle_connection(connected)
     {
         jQuery("#status").attr("src", connected ? "../pvws/img/connected.png" : "../pvws/img/disconnected.png");
         if (connected)
@@ -218,7 +218,7 @@ class DisplayBuilderWebRuntime
      *  Checks for 'update' messages and invokes the registered callbacks for the PV
      *  @param message Web socket message
      */
-    _handleMessage(message)
+    _handle_message(message)
     {
         if (message.type == 'update')
         {
@@ -288,7 +288,7 @@ class DisplayBuilderWebRuntime
             this.log("Cannot write unknown PV " + pv);
             return;
         }
-        this.clearLog();
+        this.clear_log();
         
         if (typeof(info.data.value) == "number")
         {
@@ -423,7 +423,7 @@ function set_visibility(widget, visible)
  *  @param widget
  *  @param ...items
  */
-function create_contextmenu(widget, ...items)
+function create_contextmenu(widget, items)
 {
     let menu_id = widget.attr("id") + "_context";
     

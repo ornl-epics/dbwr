@@ -116,6 +116,20 @@ svg.Widget
 	padding-bottom: 5px;
 }
 
+.ContextMenu li a
+{
+	text-decoration: none;
+	color: black;
+	padding: 5px;
+}
+
+.ContextMenu li  a:hover
+{
+	background-color: #CCF;
+}
+
+
+
 #info_panel
 {
 	float: right;

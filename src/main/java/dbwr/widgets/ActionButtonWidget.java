@@ -47,7 +47,7 @@ public class ActionButtonWidget extends Widget
         final Element el = XMLUtil.getChildElement(xml, "actions");
         if (el != null)
         {
-            final int index = 0;
+            int index = 0;
             for (final Element ae : XMLUtil.getChildElements(el, "action"))
             {
                 // Always show description, no matter if open_display, write_pv, ...
@@ -107,6 +107,7 @@ public class ActionButtonWidget extends Widget
                     // Show PV name as tool-tip
                     attributes.put("title", pv);
                 }
+                ++index;
             }
         }
 
