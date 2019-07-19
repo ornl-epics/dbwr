@@ -298,6 +298,16 @@ class DisplayBuilderWebRuntime
         
         this.pvws.write(pv, value);
     }
+    
+    /** List info about all PVs */
+    show_pvs()
+    {
+        Object.values(dbwr.pv_infos)
+              .forEach( info  =>
+        {
+            console.log(info.data);
+        });
+    }
 }
 
 // Widget types can register init(widget) methods
@@ -489,3 +499,12 @@ function toggle_contextmenu(event)
     
     event.preventDefault();
 }
+
+
+
+function help()
+{
+    console.log("Display Builder Web Runtime");
+    console.log("dbwr.show_pvs()   - List PVs");
+}
+
