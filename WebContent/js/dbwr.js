@@ -453,9 +453,6 @@ function hide_contextmenu(widget)
  */
 function toggle_contextmenu(event)
 {
-    console.log(event.target.getBoundingClientRect());
-    
-    console.log("CLient: " + event.clientX + ", " + event.clientY);
     let widget = jQuery(event.target);
     let menu = jQuery("#" + widget.attr("id") + "_context");
 
@@ -463,9 +460,13 @@ function toggle_contextmenu(event)
         menu.hide();
     else
     {
-        // position: fixed, not relative to any container
-        menu.css("left", event.pageX + "px");
-        menu.css("top",  event.pageY + "px");
+        // CSS position: fixed, not relative to any container.
+        // console.log("Page: " + event.pageX + "," + event.pageY);
+        // console.log("Client: " + event.clientX + "," + event.clientY);
+        // Would expect that pageX/Y are required, but clientX/Y are
+        // in fact positioning the menu at the mouse cursor
+        menu.css("left", event.clientX + "px");
+        menu.css("top",  event.clientY + "px");
         menu.show();
     }
     
