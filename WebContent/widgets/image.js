@@ -271,24 +271,44 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["image"] = function(widge
     let autoscale = widget.attr("id") + "_autoscale";
     let checkbox = jQuery("<input>").attr("type", "checkbox")
                                     .attr("id", autoscale);
-    checkbox.click(() =>
+    checkbox.click(event =>
     {
         widget.data("autoscale", checkbox.prop('checked'));
-        hide_contextmenu(widget);
-        console.log("checkbox " + checkbox.prop('checked'));
-        console.log("data " + widget.data("autoscale"));
+    });
+
+    let min = widget.attr("id") + "_min";
+    let mintext = jQuery("<input>").attr("type", "text")
+                                   .attr("id", min);
+    mintext.change(event =>
+    {
+        widget.data("min", parseFloat(mintext.val()));
     });
     
-    checkbox = jQuery("<label>").append(checkbox).append("&nbsp; Autoscale");
+    let max = widget.attr("id") + "_max";
+    let maxtext = jQuery("<input>").attr("type", "text")
+                                   .attr("id", max);
+    maxtext.change(event =>
+    {
+        widget.data("max", parseFloat(maxtext.val()));
+    });
     
+    create_contextmenu(widget,
+                       "Image Settings",
+                       jQuery("<label>").append("Max: ").append(mintext),
+                       jQuery("<label>").append("Max: ").append(maxtext),
+                       jQuery("<label>").append(checkbox).append("&nbsp; Autoscale"));
+
     
-    create_contextmenu(widget, "Image Settings", checkbox);
     widget.click(event =>
     {
-        console.log("Init checkbox: " + widget.data("autoscale") == true);
-        checkbox.prop('checked', widget.data("autoscale") == true);
+        checkbox.prop('checked', widget.data("autoscale"));
+        mintext.val(widget.data("min"));
+        maxtext.val(widget.data("max"));
+        
         toggle_contextmenu(event);
     });
+    
+    // TODO Force widget update when settings change, don't wait until next data update
 }
 
 DisplayBuilderWebRuntime.prototype.widget_update_methods["image"] = function(widget, data)
@@ -328,11 +348,11 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["image"] = function(wid
         return;
     }
     
-    // TODO Somehow enable/disable auto-scale at runtime (for now always enabled)
     // Auto-scale the value range by determining the overall max
     // (only possible if there is data, hei > 0)
     // Leaving min unchanged
-    max = data.value.reduce( (a, b) => Math.max(a, b) );
+    if (widget.data("autoscale"))
+        max = data.value.reduce( (a, b) => Math.max(a, b) );
     
     // Draw data into the off-screen image buffer canvas
     _img_buf.width = wid;
