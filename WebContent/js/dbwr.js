@@ -266,6 +266,7 @@ class DisplayBuilderWebRuntime
             else if (data.severity == Severity.INVALID)
                 widget.addClass("BorderInvalid");
         }
+        // Always show disconnected state, even when not otherwise alarm sensitive
         if (data.severity == Severity.UNDEFINED)
            widget.addClass("BorderDisconnected");
         

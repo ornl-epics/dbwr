@@ -1,7 +1,7 @@
 
 function handleActionButtonClick(widget)
 {    
-    // XXX Only handles first action (-0)
+    // TODO Handle multiple actions, not just -0
     
     let pv  = widget.data("pv-0");
     let val = widget.data("value-0");
@@ -47,17 +47,22 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods['action_button'] = functi
     let pv_name = widget.data("pv-" + i);
     while (pv_name !== undefined)
     {
-        console.log("Button subscribes to " + pv_name);
         dbwr.subscribe(widget, 'action_button', pv_name);
         ++i;
         pv_name = widget.data("pv-" + i);
+        
+        // Mark as disconnected
+        widget.addClass("BorderDisconnected");
+        // On first PV update, border is cleared.
+        // Do _not_ show other alarms
+        widget.data("alarm-border", "false");
     }
 }
 
 
 DisplayBuilderWebRuntime.prototype.widget_update_methods['action_button'] = function(widget, data)
 {
-    // TODO Alarm border?
+    // _handle_widget_pv_update() clears disconnected alarm border
 
     if (data.readonly)
         widget.css("cursor", "not-allowed");

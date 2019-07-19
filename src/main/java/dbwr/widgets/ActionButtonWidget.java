@@ -31,101 +31,104 @@ public class ActionButtonWidget extends Widget
         WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.MenuButton", "action_button");
     }
 
-	private String text;
+    private String text;
 
-	public ActionButtonWidget(final ParentWidget parent, final Element xml) throws Exception
-	{
-		super(parent, xml, "action_button");
+    public ActionButtonWidget(final ParentWidget parent, final Element xml) throws Exception
+    {
+        super(parent, xml, "action_button");
 
-		// classes.add("Debug");
+        // classes.add("Debug");
 
-		final FontInfo font = XMLUtil.getFont(xml, "font").orElse(LabelWidget.DEFAULT_FONT);
-		font.addToStyles(styles);
+        final FontInfo font = XMLUtil.getFont(xml, "font").orElse(LabelWidget.DEFAULT_FONT);
+        font.addToStyles(styles);
 
-		XMLUtil.getColor(xml, "foreground_color").ifPresent(color -> styles.put("color", color));
+        XMLUtil.getColor(xml, "foreground_color").ifPresent(color -> styles.put("color", color));
 
-		final Element el = XMLUtil.getChildElement(xml, "actions");
-		if (el != null)
-		{
-			final int index = 0;
-			for (final Element ae : XMLUtil.getChildElements(el, "action"))
-			{
-			    // Always show description, no matter if open_display, write_pv, ...
-			    final String desc = XMLUtil.getChildString(parent, ae, "description").orElse("");
-			    attributes.put("data-linked-label-" + index, HTMLUtil.escape(desc));
+        final Element el = XMLUtil.getChildElement(xml, "actions");
+        if (el != null)
+        {
+            final int index = 0;
+            for (final Element ae : XMLUtil.getChildElements(el, "action"))
+            {
+                // Always show description, no matter if open_display, write_pv, ...
+                final String desc = XMLUtil.getChildString(parent, ae, "description").orElse("");
+                attributes.put("data-linked-label-" + index, HTMLUtil.escape(desc));
 
-			    final String action_type = ae.getAttribute("type");
-			    if ("open_webpage".equals(action_type))
-			    {
-			        final String url = XMLUtil.getChildString(parent, ae, "url").orElse("");
+                final String action_type = ae.getAttribute("type");
+                if ("open_webpage".equals(action_type))
+                {
+                    final String url = XMLUtil.getChildString(parent, ae, "url").orElse("");
                     attributes.put("data-linked-url-" + index, HTMLUtil.escape(url));
-			    }
-			    else if ("open_display".equalsIgnoreCase(action_type))
-			    {
-    				final String file = XMLUtil.getChildString(parent, ae, "file").orElse(XMLUtil.getChildString(parent, ae, "path").orElse(null));
-    				if (file == null)
-    					continue;
+                }
+                else if ("open_display".equalsIgnoreCase(action_type))
+                {
+                    final String file = XMLUtil.getChildString(parent, ae, "file").orElse(XMLUtil.getChildString(parent, ae, "path").orElse(null));
+                    if (file == null)
+                        continue;
 
-    				// Read macros into map
-    				final Map<String, String> macros = MacroUtil.fromXML(ae);
-    				MacroUtil.expand(parent, macros);
+                    // Read macros into map
+                    final Map<String, String> macros = MacroUtil.fromXML(ae);
+                    MacroUtil.expand(parent, macros);
 
-    		        // Add parent macros
-    				for (final String name : parent.getMacroNames())
-    		            macros.putIfAbsent(name, parent.getMacroValue(name));
+                    // Add parent macros
+                    for (final String name : parent.getMacroNames())
+                        macros.putIfAbsent(name, parent.getMacroValue(name));
 
-    				// TODO Escape file
-    				final String resolved = Resolver.resolve(this, file);
-    				attributes.put("data-linked-file-" + index, resolved);
-    				if (! macros.isEmpty())
+                    // TODO Escape file
+                    final String resolved = Resolver.resolve(this, file);
+                    attributes.put("data-linked-file-" + index, resolved);
+                    if (! macros.isEmpty())
                         attributes.put("data-linked-macros-" + index, HTMLUtil.escape(MacroUtil.toJSON(macros)));
-			    }
-			    else if ("write_pv".equalsIgnoreCase(action_type))
-			    {
-			        // Add Local pv_name as macro
-			        final Optional<String> pv_name_macro = XMLUtil.getChildString(parent, xml, "pv_name");
-			        final MacroProvider macros;
-                    if (pv_name_macro.isPresent())
-			        {
-			            final Map<String, String> map = new HashMap<String, String>();
-			            for (final String name : parent.getMacroNames())
-			                map.put(name, parent.getMacroValue(name));
-			            map.put("pv_name", pv_name_macro.get());
-			            macros = MacroProvider.forMap(map);
-			        }
-			        else
-			            macros = parent;
 
-			        final String pv = XMLUtil.getChildString(macros, ae, "pv_name").orElse("");
-			        final String value = XMLUtil.getChildString(macros, ae, "value").orElse("");
+                    // Show link as tool-tip
+                    attributes.put("title", file);
+                }
+                else if ("write_pv".equalsIgnoreCase(action_type))
+                {
+                    // Add Local pv_name as macro
+                    final Optional<String> pv_name_macro = XMLUtil.getChildString(parent, xml, "pv_name");
+                    final MacroProvider macros;
+                    if (pv_name_macro.isPresent())
+                    {
+                        final Map<String, String> map = new HashMap<String, String>();
+                        for (final String name : parent.getMacroNames())
+                            map.put(name, parent.getMacroValue(name));
+                        map.put("pv_name", pv_name_macro.get());
+                        macros = MacroProvider.forMap(map);
+                    }
+                    else
+                        macros = parent;
+
+                    final String pv = XMLUtil.getChildString(macros, ae, "pv_name").orElse("");
+                    final String value = XMLUtil.getChildString(macros, ae, "value").orElse("");
                     attributes.put("data-pv-" + index, pv);
                     attributes.put("data-value-" + index, value);
 
                     // Show PV name as tool-tip
                     attributes.put("title", pv);
-			    }
-			}
-		}
+                }
+            }
+        }
 
-		text = XMLUtil.getChildString(parent, xml, "text").orElse("$(actions)");
+        text = XMLUtil.getChildString(parent, xml, "text").orElse("$(actions)");
 
-		// TODO Handle $(actions) as text
-		if (text.equals("$(actions)"))
-		    if (attributes.containsKey("data-linked-label-0"))
-		        text = HTMLUtil.unescape(attributes.get("data-linked-label-0"));
-		    else
-		        text = "Button";
-	}
+        // TODO Handle $(actions) as text
+        if (text.equals("$(actions)"))
+            if (attributes.containsKey("data-linked-label-0"))
+                text = HTMLUtil.unescape(attributes.get("data-linked-label-0"));
+            else
+                text = "Button";
+    }
 
-	@Override
-	protected String getHTMLElement()
-	{
-	    return "button";
-	}
+    @Override
+    protected String getHTMLElement()
+    {
+        return "button";
+    }
 
-	@Override
-	protected void fillHTML(final PrintWriter html, final int indent)
-	{
-		html.append(HTMLUtil.escape(text));
-	}
+    @Override
+    protected void fillHTML(final PrintWriter html, final int indent)
+    {
+        html.append(HTMLUtil.escape(text));
+    }
 }
