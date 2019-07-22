@@ -11,6 +11,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Display Builder Web Runtime</title>
+<link rel="stylesheet" type="text/css" href="css/normalize.css">
 <link rel="stylesheet" type="text/css" href="css/widgets.css">
 <%
 for (String c : WidgetFactory.css)
