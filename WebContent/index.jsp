@@ -92,7 +92,7 @@ cache
 
 <p></p>
 
-<div id="info"></div>
+<div id="info"><%="JRE: " + System.getProperty("java.vendor") + " " + System.getProperty("java.version") %></div>
 
 <script type="text/javascript" src="js/index.js"></script> 
 
