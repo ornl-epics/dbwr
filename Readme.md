@@ -46,17 +46,18 @@ The following widget types and features have been implemented with basic functio
  * Polyline
  * Polygon
  * Text Update
- * Text Input
+ * Text Input (can write)
  * Text formatting (precision, units, enum labels)
  * LED
  * Multi-State LED
  * Action Button to open display or web link
+ * Action Button to write value to PV
  * Combo
  * Group with group border
  * Embedded Displays
  * Tabs
  * XYPlot
- * Image
+ * Image, runtime options to change scaling and color map
  * Macro support
  * Alarm-sensitive border based on PV
  * Limited Rule support: Color of rect/circle/label, visibility
