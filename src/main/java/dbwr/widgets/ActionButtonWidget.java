@@ -35,7 +35,7 @@ public class ActionButtonWidget extends Widget
 
     public ActionButtonWidget(final ParentWidget parent, final Element xml) throws Exception
     {
-        super(parent, xml, "action_button");
+        super(parent, xml, "action_button", 100, 30);
 
         // classes.add("Debug");
 
