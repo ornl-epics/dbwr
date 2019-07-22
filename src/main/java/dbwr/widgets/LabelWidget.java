@@ -36,26 +36,7 @@ public class LabelWidget extends Widget
 		final FontInfo font = XMLUtil.getFont(xml, "font").orElse(DEFAULT_FONT);
 		font.addToStyles(styles);
 
-		int w = width, h = height;
-		final int rotate = XMLUtil.getChildInteger(xml, "rotation_step").orElse(0);
-        if (rotate > 0)
-        {
-            if (rotate == 1  ||  rotate == 3)
-            {
-                // Rotate around upper left corner
-                styles.put("transform-origin", "0% 0% 0");
-                w = height;
-                h = width;
-                if (rotate == 1)
-                    styles.put("top", Integer.toString(y+w)+"px");
-                else if (rotate == 3)
-                    styles.put("left", Integer.toString(x+h)+"px");
-
-                styles.put("width", Integer.toString(w)+"px");
-                styles.put("height", Integer.toString(h)+"px");
-            }
-            styles.put("transform", "rotate(-" + (90*rotate) + "deg)");
-        }
+		final int h = handleRotationStep(this, xml);
 
 		if (! XMLUtil.getChildBoolean(xml, "transparent").orElse(true))
 		    styles.put("background-color", XMLUtil.getColor(xml, "background_color").orElse("#FFF"));
@@ -77,6 +58,31 @@ public class LabelWidget extends Widget
 		else if (align == 2)
             styles.put("line-height", Integer.toString(2 * h - font.getSize()) + "px");
 	}
+
+    static int handleRotationStep(final Widget widget, final Element xml) throws Exception
+    {
+        int w = widget.width, h = widget.height;
+		final int rotate = XMLUtil.getChildInteger(xml, "rotation_step").orElse(0);
+        if (rotate > 0)
+        {
+            if (rotate == 1  ||  rotate == 3)
+            {
+                // Rotate around upper left corner
+                widget.styles.put("transform-origin", "0% 0% 0");
+                w = widget.height;
+                h = widget.width;
+                if (rotate == 1)
+                    widget.styles.put("top", Integer.toString(widget.y+w)+"px");
+                else if (rotate == 3)
+                    widget.styles.put("left", Integer.toString(widget.x+h)+"px");
+
+                widget.styles.put("width", Integer.toString(w)+"px");
+                widget.styles.put("height", Integer.toString(h)+"px");
+            }
+            widget.styles.put("transform", "rotate(-" + (90*rotate) + "deg)");
+        }
+        return h;
+    }
 
 	@Override
 	protected void fillHTML(final PrintWriter html, final int indent)

@@ -113,6 +113,8 @@ public class ActionButtonWidget extends Widget
 
         text = XMLUtil.getChildString(parent, xml, "text").orElse("$(actions)");
 
+        LabelWidget.handleRotationStep(this, xml);
+
         // TODO Handle $(actions) as text
         if (text.equals("$(actions)"))
             if (attributes.containsKey("data-linked-label-0"))
