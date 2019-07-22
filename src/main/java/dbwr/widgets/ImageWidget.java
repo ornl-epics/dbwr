@@ -27,6 +27,15 @@ public class ImageWidget extends PVWidget
 		attributes.put("data-min", XMLUtil.getChildString(parent, xml, "minimum").orElse("0"));
         attributes.put("data-max", XMLUtil.getChildString(parent, xml, "maximum").orElse("255"));
         attributes.put("data-autoscale", XMLUtil.getChildString(parent, xml, "autoscale").orElse("true"));
+
+        final Element e = XMLUtil.getChildElement(xml, "color_map");
+        if (e != null)
+        {
+            final String map = XMLUtil.getChildString(parent, e, "name")
+                                      .orElse("VIRIDIS")
+                                      .toLowerCase();
+            attributes.put("data-colormap", map);
+        }
 	}
 
     @Override

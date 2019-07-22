@@ -104,6 +104,11 @@ svg.Widget
     box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2); 
 }
 
+.ContextMenu .Header
+{
+	font-weight: bold;
+}
+
 .ContextMenu ul
 {
     margin: 5px;
