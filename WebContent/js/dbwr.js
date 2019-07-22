@@ -392,7 +392,7 @@ class WidgetRule
     update(widget, value)
     {
         // Override should use value to update widget's property
-        console.error("WidgetRule.update() needs to be overridden")
+        console.error("WidgetRule.update() needs to be overridden for " + this.wid + "." + this.property);
     }
 }
 

@@ -44,6 +44,10 @@ public class ActionButtonWidget extends Widget
 
         XMLUtil.getColor(xml, "foreground_color").ifPresent(color -> styles.put("color", color));
 
+        final String background_color = XMLUtil.getColor(xml, "background_color").orElse("#D2D2D2");
+        if (! background_color.equals("#D2D2D2"))
+            styles.put("background-image", "linear-gradient(to bottom right, " + background_color + ", #DDD)");
+
         final Element el = XMLUtil.getChildElement(xml, "actions");
         if (el != null)
         {
@@ -121,6 +125,11 @@ public class ActionButtonWidget extends Widget
                 text = HTMLUtil.unescape(attributes.get("data-linked-label-0"));
             else
                 text = "Button";
+
+        // Rule: Set background color
+        getRuleSupport().handleColorRule(parent, xml, this,
+                "background_color", background_color,
+                "set_action_button_background_color");
     }
 
     @Override

@@ -51,7 +51,7 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods['action_button'] = functi
           .map(key => widget.data(key))
           .forEach(pv_name =>
           {
-              console.log("Action button PV " + pv_name);
+              console.log("Action button 'write' PV " + pv_name);
               dbwr.subscribe(widget, 'action_button', pv_name);
               
               // Mark as disconnected
@@ -98,5 +98,10 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods['action_button'] = func
     else
         widget.css("cursor", "pointer");
     widget.prop('disabled', data.readonly);
+}
+
+function set_action_button_background_color(widget, color)
+{
+    widget.css("background-image", "linear-gradient(to bottom right, " + color + ", #DDD)");
 }
 
