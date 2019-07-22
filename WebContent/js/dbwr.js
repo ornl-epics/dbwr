@@ -9,6 +9,28 @@ Severity.MAJOR = "MAJOR";
 Severity.INVALID = "INVALID";
 Severity.UNDEFINED = "UNDEFINED";
 
+/** Apply alarm-based outline to widget
+ * 
+ *  Default unless widget registers with widget_alarm_methods[]
+ */
+function apply_alarm_outline(widget, severity)
+{
+    widget.removeClass("BorderMinor BorderMajor BorderInvalid BorderDisconnected");
+    // By default, be alarm sensitive
+    if (widget.data("alarm-border") != "false")
+    {
+        if (severity == Severity.MINOR)
+            widget.addClass("BorderMinor");
+        else if (severity == Severity.MAJOR)
+            widget.addClass("BorderMajor");
+        else if (severity == Severity.INVALID)
+            widget.addClass("BorderInvalid");
+    }
+    // Always show disconnected state, even when not otherwise alarm sensitive
+    if (severity == Severity.UNDEFINED)
+       widget.addClass("BorderDisconnected");
+}
+        
 
 /** Info for one PV */
 class PVInfo
@@ -144,6 +166,8 @@ class DisplayBuilderWebRuntime
     _initWidget(widget)
     {
         let type = widget.data("type");
+        if (type === undefined)
+            return;
 
         // Call registered init method for widget type
         let method = this.widget_init_methods[type];
@@ -184,7 +208,12 @@ class DisplayBuilderWebRuntime
     {
         // console.log("Subscribe for " + type + " widget to PV " + pv_name);
         // Until we get an update from the PV, consider widget disconnected
-        widget.addClass("BorderDisconnected");
+        let method = DisplayBuilderWebRuntime.prototype.widget_alarm_methods[type]
+        if (method)
+            method(widget, Severity.UNDEFINED);
+        else
+            apply_alarm_outline(widget, Severity.UNDEFINED);
+        
         this._subscribe(pv_name, data => this._handle_widget_pv_update(widget, type, data));
     }
 
@@ -255,23 +284,15 @@ class DisplayBuilderWebRuntime
      */
     _handle_widget_pv_update(widget, type, data)
     {
-        widget.removeClass("BorderMinor BorderMajor BorderInvalid BorderDisconnected");
-        // By default, be alarm sensitive
-        if (widget.data("alarm-border") != "false")
-        {
-            if (data.severity == Severity.MINOR)
-                widget.addClass("BorderMinor");
-            else if (data.severity == Severity.MAJOR)
-                widget.addClass("BorderMajor");
-            else if (data.severity == Severity.INVALID)
-                widget.addClass("BorderInvalid");
-        }
-        // Always show disconnected state, even when not otherwise alarm sensitive
-        if (data.severity == Severity.UNDEFINED)
-           widget.addClass("BorderDisconnected");
+        // Indicate alarm
+        let method = DisplayBuilderWebRuntime.prototype.widget_alarm_methods[type]
+        if (method)
+            method(widget, data.severity);
+        else
+            apply_alarm_outline(widget, data.severity);
         
         // Widget's own update method handles the rest
-        let method = this.widget_update_methods[type];
+        method = this.widget_update_methods[type];
         if (method)
             method(widget, data)
     }
@@ -337,6 +358,17 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods = {};
 // widget: jQuery object for the <div> or <svg> or ...
 // data: Latest PV data
 DisplayBuilderWebRuntime.prototype.widget_update_methods = {};
+
+// By default, widgets will get an alarm-sensitive CSS outline.
+// To implement different alarm handling, register a method
+//
+// DisplayBuilderWebRuntime.prototype.widget_alarm_methods["xyz"] = function(widget, severity)
+// {
+//     if (severity == Severity.MINOR) ...
+// }
+
+DisplayBuilderWebRuntime.prototype.widget_alarm_methods = {};
+
 
 // Rules register here widget ID.
 DisplayBuilderWebRuntime.prototype.widget_rules = {};
