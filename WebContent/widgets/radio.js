@@ -14,14 +14,13 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["radio"] = function(widge
 
     if (items.length > 0)
         widget.data("items", items);
+    
+    widget.data("itemcount", -1);
 }
 
 
 DisplayBuilderWebRuntime.prototype.widget_update_methods["radio"] = function(widget, data)
 {
-    console.log("Update radio ");
-    console.log(data);
-    
     // Fetch items from PV?
     let items = widget.data("items");
     if (items === undefined)
@@ -34,28 +33,27 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["radio"] = function(wid
         }
     }
 
-    // Have buttons been created?
-    widget.html("");
+    // (Re)-create buttons?
     let N = items.length;
-    let width = parseFloat(widget.css("width"));
-    for (let i=0; i<N; ++i)
+    if (widget.data("itemcount") != N)
     {
-        let radio = jQuery("<input>").attr("type", "radio")
-                                     .attr("name", widget.attr("id"));
-        radio.click(event =>
+        widget.html("");
+        let width = parseFloat(widget.css("width"));
+        for (let i=0; i<N; ++i)
         {
-            let pv  = widget.data("pv");
-            if (typeof(data.value) == "number")
+            let radio = jQuery("<input>").attr("type", "radio")
+                                         .attr("name", widget.attr("id"));
+            radio.click(event =>
             {
-                console.log("TODO: Write PV " + pv + " = " + i);
-                dbwr.write(pv, i);
-            }
-            else
-            {
-                console.log("TODO: Write PV " + pv + " = " + items[i]);
-                dbwr.write(pv, items[i]);                            
-            }
-        });
-        widget.append(jQuery("<label>").append(radio).append(" " + items[i] + " "));
+                let pv  = widget.data("pv");
+                if (typeof(data.value) == "number")
+                    dbwr.write(pv, i);
+                else
+                    dbwr.write(pv, items[i]);                            
+            });
+            widget.append(jQuery("<label>").append(radio).append(" " + items[i] + " "));
+        }
+        
+        widget.data("itemcount", N);
     }
 }
