@@ -374,6 +374,31 @@ DisplayBuilderWebRuntime.prototype.widget_alarm_methods = {};
 DisplayBuilderWebRuntime.prototype.widget_rules = {};
 
 
+/** Helper for handling updates based on a "bit"
+ * 
+ *  Checks for bits 0, 1, .. or any non-zero value for bit = -1
+ *  @param widget WIdget with 'data-bit'
+ *  @param data PV data
+ *  @returns Is addressed bit set?
+ */
+function is_bit_set(widget, data)
+{
+    let bit = widget.data("bit");
+    if (bit < 0)
+        return data.value > 0;
+    
+    let mask = 1 << bit;
+    return data.value & mask; 
+}
+
+function get_bit_value(widget, yes_no)
+{
+    let bit = widget.data("bit");
+    if (bit < 0)
+        return yes_no ? 1 : 0;
+    
+    return 1 << bit;
+}
 
 class WidgetRule
 {

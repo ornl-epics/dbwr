@@ -28,13 +28,17 @@ public class CheckboxWidget extends PVWidget
 	{
 		super(parent, xml, "checkbox");
 
-		attributes.put("type", "checkbox");
 		label = XMLUtil.getChildString(parent, xml, "label").orElse("Label");
+
+		attributes.put("data-bit", XMLUtil.getChildString(parent, xml, "bit").orElse("0"));
 	}
 
     @Override
     protected void fillHTML(PrintWriter html, int indent)
     {
-        html.append("<label><input type=\"checkbox\" disabled>").append(HTMLUtil.escape(" " + label)).append("</label>");
+        html.append("<label>")
+            .append("<input type=\"checkbox\">")
+            .append(" ").append(HTMLUtil.escape(label))
+            .append("</label>");
     }
 }

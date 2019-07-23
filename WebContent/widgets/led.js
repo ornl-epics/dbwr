@@ -48,23 +48,8 @@ DisplayBuilderWebRuntime.prototype.widget_alarm_methods["led"] = update_led_bord
 
 DisplayBuilderWebRuntime.prototype.widget_update_methods["led"] = function(widget, data)
 {
-    let bit = widget.data("bit");
-    let color;
-    if (bit < 0)
-    {
-        if (data.value > 0)
-            color = widget.data("on-color");
-        else
-            color = widget.data("off-color");
-    }
+    if (is_bit_set(widget, data))
+        set_svg_background_color(widget, widget.data("on-color"));
     else
-    {
-        let mask = 1 << bit;
-        if (data.value & mask)
-            color = widget.data("on-color");
-        else
-            color = widget.data("off-color");
-    }
-    
-    set_svg_background_color(widget, color);
+        set_svg_background_color(widget, widget.data("off-color"));
 }
