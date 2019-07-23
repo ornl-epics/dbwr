@@ -51,10 +51,7 @@ public class LabelWidget extends Widget
 
 		align = XMLUtil.getChildInteger(xml, "vertical_alignment").orElse(0);
 		if (align == 1)
-		{
-		    final int lines = text.split("\n").length;
-		    styles.put("line-height",  Integer.toString(h / lines) + "px");
-		}
+		    styles.put("line-height",  Integer.toString(h) + "px");
 		else if (align == 2)
             styles.put("line-height", Integer.toString(2 * h - font.getSize()) + "px");
 	}
@@ -87,6 +84,10 @@ public class LabelWidget extends Widget
 	@Override
 	protected void fillHTML(final PrintWriter html, final int indent)
 	{
+	    // To support vertical centering with single as well as multi-line text,
+	    // wrap in inner span, and use line-height == height on outer <div>
+	    html.append("<span class=\"InnerText\">");
+	    HTMLUtil.indent(html, indent);
 	    // Turn '\n' into <br>,
 	    // then escape each line to handle special characters
 	    boolean first = true;
@@ -98,5 +99,6 @@ public class LabelWidget extends Widget
 	            html.append("<br>");
 	        HTMLUtil.escape(html, line);
 	    }
+        html.append("</span>");
 	}
 }

@@ -55,6 +55,13 @@ svg.Widget
 	overflow: visible;
 }
 
+span.InnerText
+{
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+
 /* Border used to debug layout */
 .Debug
 {
