@@ -35,6 +35,6 @@ public class CheckboxWidget extends PVWidget
     @Override
     protected void fillHTML(PrintWriter html, int indent)
     {
-        html.append("<input type=\"checkbox\" disabled>").append(HTMLUtil.escape(label));
+        html.append("<label><input type=\"checkbox\" disabled>").append(HTMLUtil.escape(" " + label)).append("</label>");
     }
 }
