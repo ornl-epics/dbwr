@@ -391,15 +391,6 @@ function is_bit_set(widget, data)
     return data.value & mask; 
 }
 
-function get_bit_value(widget, yes_no)
-{
-    let bit = widget.data("bit");
-    if (bit < 0)
-        return yes_no ? 1 : 0;
-    
-    return 1 << bit;
-}
-
 class WidgetRule
 {
     /** @param wid Widget ID, "w123"
