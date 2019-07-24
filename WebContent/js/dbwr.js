@@ -391,6 +391,20 @@ function is_bit_set(widget, data)
     return data.value & mask; 
 }
 
+/** @param data PV Data
+ *  @returns Data as string, using label for enum
+ */
+function get_data_string(data)
+{
+    if (data.labels === undefined)
+        return '' + data.value;
+    
+    if (data.value >= 0  &&  data.value < data.labels.length)
+        return data.labels[data.value];
+    
+    return 'Invalid enum ' + data.value;
+}
+
 class WidgetRule
 {
     /** @param wid Widget ID, "w123"
@@ -403,8 +417,10 @@ class WidgetRule
         this.widget = jQuery("#" + wid);
         this.property = property;
         this.pvs = pvs;
-        // value['NameOfPV'] is updated to latest numeric value
+        // value['NameOfPV'] is updated to latest numeric or 'native' value
         this.value = {};
+        // valueStr['NameOfPV'] is updated to latest string value
+        this.valueStr = {};
         
         // console.log("Register for " + wid + ":");
         // console.log(this);
@@ -420,7 +436,12 @@ class WidgetRule
     {
         // console.log("Starting rule for PVs " + this.pvs);
         for (let pv of this.pvs)
-            dbwr._subscribe(pv, data => { this.value[pv] = data.value; this._trigger(pv); });
+            dbwr._subscribe(pv, data =>
+            {
+                this.value[pv] = data.value;
+                this.valueStr[pv] = get_data_string(data);
+                this._trigger(pv);
+            });
     }
     
     _trigger(pv)

@@ -103,7 +103,10 @@ public class RuleSupport
 
             int N = pvs.size();
             for (int i=0; i<N; ++i)
+            {
                 scripts.append("  let pv" + i + " = this.value['" + pvs.get(i) + "'];\n");
+                scripts.append("  let pvStr" + i + " = this.valueStr['" + pvs.get(i) + "'];\n");
+            }
 
             N = expr.size();
             for (int i=0; i<N; ++i)
