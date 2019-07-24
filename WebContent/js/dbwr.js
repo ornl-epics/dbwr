@@ -447,7 +447,9 @@ class WidgetRule
     _trigger(pv)
     {
         let value = this.eval();
-        console.log("Rule for " + this.wid + "." + this.property + " triggered by " + pv + ": " + value);
+        console.log("Rule for " + this.widget.data("type") + " " +
+                    this.wid + " '" + this.property +
+                    "' triggered by " + pv + ": " + value);
         this.update(this.widget, value);
     }
     
