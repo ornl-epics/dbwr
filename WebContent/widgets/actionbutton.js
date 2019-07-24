@@ -51,7 +51,7 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods['action_button'] = functi
           .map(key => widget.data(key))
           .forEach(pv_name =>
           {
-              console.log("Action button 'write' PV " + pv_name);
+              // console.log("Action button 'write' PV " + pv_name);
               dbwr.subscribe(widget, 'action_button', pv_name);
               
               // Mark as disconnected
