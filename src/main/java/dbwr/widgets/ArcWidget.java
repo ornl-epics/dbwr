@@ -86,7 +86,9 @@ public class ArcWidget extends SvgWidget
             html.print("M" + x0 + "," + y0);
         }
         // Arc to end angle
-        angle = Math.toRadians(arc_start + arc_size);
+        // Arc cannot draw a full circle where start and end point of arc match.
+        // Easiest workaround is to draw almost but not quite 360 degrees
+        angle = Math.toRadians(arc_start + Math.min(359.5, arc_size));
         final double x1 = cx + rx * Math.cos(angle);
         final double y1 = cy - ry * Math.sin(angle);
 
