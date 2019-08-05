@@ -61,6 +61,7 @@ function query_cache()
                                                   .append($("<td>").css("text-align", "right").text( (size / 1024.0).toFixed(1) + " kB" ))
                                                   .append($("<td>").css("text-align", "right").text(calls))
                                                   .append($("<td>").css("text-align", "right").text( (ms / 1000.0).toFixed(3) + " s")) );
+            makeTableSortable(table, true);
             info.append(table);
             // Scroll to 'bottom' to show table
             window.scrollTo(0, 100000);

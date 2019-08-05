@@ -8,6 +8,7 @@
 <title>Display Builder Web Runtime</title>
 <link rel="stylesheet" type="text/css" href="css/widgets.css">
 <script type="text/javascript" src="../pvws/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../pvws/js/tablesort.js"></script>
 </head>
 
 <body>
