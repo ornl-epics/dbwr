@@ -6,7 +6,10 @@
  ******************************************************************************/
 package dbwr.widgets;
 
+import static dbwr.WebDisplayRepresentation.logger;
+
 import java.io.PrintWriter;
+import java.util.logging.Level;
 
 import org.w3c.dom.Element;
 
@@ -44,11 +47,16 @@ public class ComboWidget extends PVWidget
 		if (! XMLUtil.getChildBoolean(xml, "items_from_pv").orElse(true))
 		{
 		    final Element ie = XMLUtil.getChildElement(xml, "items");
-		    int i = 0;
-		    for (final Element item : XMLUtil.getChildElements(ie, "item"))
+		    if (ie == null)
+		        logger.log(Level.WARNING, "Combo " + getWID() + " without <items>");
+		    else
 		    {
-		        attributes.put("data-item-" + i, XMLUtil.getString(item));
-		        ++i;
+    		    int i = 0;
+    		    for (final Element item : XMLUtil.getChildElements(ie, "item"))
+    		    {
+    		        attributes.put("data-item-" + i, XMLUtil.getString(item));
+    		        ++i;
+    		    }
 		    }
 		}
 	}
