@@ -28,7 +28,10 @@ public class PictureWidget extends Widget
 	{
 		super(parent, xml, "picture", 150, 100);
 
-		final String file = XMLUtil.getChildString(this, xml, "file").orElse("missing_image.png");
+		// BOY used "image_file"
+		final String file = XMLUtil.getChildString(this, xml, "file")
+		                           .orElse(XMLUtil.getChildString(this, xml, "image_file")
+		                                          .orElse("missing_image.png"));
 		attributes.put("data-file", file);
 
 		// See label for rotation?
