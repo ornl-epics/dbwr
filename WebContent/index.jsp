@@ -95,6 +95,13 @@ cache
 
 <div id="info"><%="JRE: " + System.getProperty("java.vendor") + " " + System.getProperty("java.version") %></div>
 
+<hr>
+
+<div id="versions">
+2019-08-05 Several widgets support writing<br>
+2019-07-04 Initial version presented at EPICS Meeting<br>
+</div>
+
 <script type="text/javascript" src="js/index.js"></script> 
 
 </body>
