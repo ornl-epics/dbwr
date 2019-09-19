@@ -423,6 +423,7 @@ class WidgetRule
         // valueStr['NameOfPV'] is updated to latest string value
         this.valueStr = {};
         
+        // Register rule so it will be initialized
         // console.log("Register for " + wid + ":");
         // console.log(this);
         let rules = DisplayBuilderWebRuntime.prototype.widget_rules[wid];
@@ -456,7 +457,7 @@ class WidgetRule
     
     eval()
     {
-        // Override should use this.value[..] and rule expressions to determine value
+        // Override should use this.value[..] or valueStr[..] and rule expressions to determine value
         console.error("WidgetRule.eval() needs to be overridden");
         return undefined;
     }
