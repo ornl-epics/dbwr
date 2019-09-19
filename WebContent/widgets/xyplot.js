@@ -42,6 +42,9 @@ class XYTrace
      */
     update(pv, value)
     {
+        if (value == "NaN")
+            value = [];
+        // console.log("XYPlot received data for " + pv + ": " + value.length + " samples");
         if (pv == this.pvy)
             this.y = value;
         else if (pv == this.pvx)
@@ -54,18 +57,21 @@ class XYTrace
         if (this.x.length > 0  &&  this.y.length > 0)
         {
             let i, N = Math.min(this.x.length, this.y.length);
+            // console.log("Plotting x[], y[]: " + N);
             for (i=0; i<N; ++i)
                 this.plotobj.data.push( [ this.x[i], this.y[i] ] );        
         }
         else if (this.y.length > 0)
         {
             let i, N = this.y.length;
+            // console.log("Plotting i, y[]: " + N);
             for (i=0; i<N; ++i)
                 this.plotobj.data.push( [ i, this.y[i] ] );        
         }
         else
         {
             let i, N = this.x.length;
+            // console.log("Plotting x[], i: " + N);
             for (i=0; i<N; ++i)
                 this.plotobj.data.push( [ this.x[i], i ] );        
         }
