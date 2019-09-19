@@ -122,6 +122,7 @@ class DisplayBuilderWebRuntime
                 {
                     console.log("Error:");
                     console.log(xhr);
+                    jQuery("html").html(xhr.responseText);
                 });
     }
 
