@@ -152,11 +152,19 @@ public class RuleSupport
                    color_text -> "'" + color_text + "'", update_code);
     }
 
+    /** Check if there is a rule for the visibility
+     *
+     *  @param macros Macro provider, usually the parent widget
+     *  @param xml XML for this widget
+     *  @param widget Widget where rule might need to be added
+     *  @param default_visibility Original value for the visibility
+     *  @throws Exception on error
+     */
     public void handleVisibilityRule(final MacroProvider macros, final Element xml,
                                      final Widget widget, final boolean default_visibility) throws Exception
     {
         handleRule(macros, xml, widget, "visible",
-                (mac, exp) -> Boolean.toString(XMLUtil.getChildBoolean(exp, "value").orElseThrow(() -> new Exception("Missing true/false value"))),
+                (mac, exp) -> Boolean.toString(XMLUtil.getChildBoolean(exp, "value").orElseThrow(() -> new Exception("Missing true/false value, got '" + exp + "'"))),
                 Boolean.toString(default_visibility),
                 truefalse -> truefalse, "set_visibility");
     }

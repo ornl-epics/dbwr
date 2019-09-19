@@ -9,12 +9,19 @@ package dbwr.parser;
 
 import static dbwr.WebDisplayRepresentation.logger;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.logging.Level;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -375,4 +382,33 @@ public class XMLUtil
 		final boolean bold = font_xml.getAttribute("style").equals("BOLD");
 		return Optional.of(new FontInfo(size, bold));
 	}
+
+	/** Write DOM to stream
+     *  @param node Node from which on to write. May be the complete {@link Document}
+     *  @param stream Output stream
+     *  @throws Exception on error
+     */
+    public static void writeDocument(final Node node, final OutputStream stream) throws Exception
+    {
+        final Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+        transformer.setOutputProperty(OutputKeys.ENCODING, ENCODING);
+        transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
+        transformer.transform(new DOMSource(node), new StreamResult(stream));
+    }
+
+    /** Write DOM to stream
+     *  @param node Node from which on to write. May be the complete {@link Document}
+     *  @return XML as text
+     *  @throws Exception on error
+     */
+    public static String toString(final Node node) throws Exception
+    {
+        final ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        writeDocument(node, buf);
+        buf.close();
+        return buf.toString();
+    }
 }

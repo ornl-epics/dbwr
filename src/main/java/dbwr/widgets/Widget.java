@@ -6,6 +6,8 @@
  ******************************************************************************/
 package dbwr.widgets;
 
+import static dbwr.WebDisplayRepresentation.logger;
+
 import java.io.PrintWriter;
 import java.net.URL;
 import java.util.Collection;
@@ -14,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.w3c.dom.Element;
@@ -100,9 +103,16 @@ public class Widget implements ParentWidget
         visible = XMLUtil.getChildBoolean(xml, "visible").orElse(true);
         if (! visible)
             styles.put("display", "none");
-        getRuleSupport().handleVisibilityRule(parent, xml, this, visible);
-
-        getRuleSupport().handleNumericRule(parent, xml, this, "x", x, "set_x_pos");
+        try
+        {
+            getRuleSupport().handleVisibilityRule(parent, xml, this, visible);
+            getRuleSupport().handleNumericRule(parent, xml, this, "x", x, "set_x_pos");
+        }
+        catch (final Exception ex)
+        {
+            logger.log(Level.WARNING, "Error in rule for " + toString() +
+                       ":\n" + XMLUtil.toString(xml), ex);
+        }
 	}
 
 	/** @return Widget ID, "w" followed by unique number */
@@ -205,5 +215,12 @@ public class Widget implements ParentWidget
 		fillHTML(html, indent);
 		endHTML(html, indent);
 	}
+
+	@Override
+	public String toString()
+	{
+	    return getClass().getSimpleName() + " ID " + getWID();
+	}
 }
+
 
