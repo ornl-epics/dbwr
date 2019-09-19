@@ -6,11 +6,14 @@
  ******************************************************************************/
 package dbwr.rules;
 
+import static dbwr.WebDisplayRepresentation.logger;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.w3c.dom.Element;
@@ -49,6 +52,17 @@ public class RuleSupport
         String parse(MacroProvider macros, Element exp) throws Exception;
     }
 
+    /** Create client-side JavaScript for rule
+     *  @param macros Macro provider, typically parent widget
+     *  @param xml XML for this widget
+     *  @param widget Currently handled widget
+     *  @param property Property for which to convert rules
+     *  @param value_parser Parser that turns rule expression into value for the property
+     *  @param default_value Default value of property
+     *  @param value_format Formatter for property's value
+     *  @param update_code Javascript code to call to update the property with the rule-based value
+     *  @throws Exception
+     */
     private void handleRule(final MacroProvider macros, final Element xml,
                             final Widget widget, final String property,
                             final ValueParser value_parser,
@@ -64,6 +78,9 @@ public class RuleSupport
         {
             if (! property.equals(re.getAttribute("prop_id")))
                 continue;
+
+            if (Boolean.parseBoolean(re.getAttribute("out_exp")))
+                throw new Exception("Can only handle plain rules, not 'out_exp' types");
 
             // Collect PVs,..
             final List<String> pvs = new ArrayList<>();
@@ -94,27 +111,39 @@ public class RuleSupport
             // }
             // rule1.update = set_svg_background_color
             final String rule = "rule" + id.incrementAndGet();
-            scripts.append("let " + rule +
+
+            // Create script for this rule
+            final StringBuilder buf = new StringBuilder();
+            buf.append("// Rule '").append(re.getAttribute("name")).append("'\n");
+            buf.append("let " + rule +
                            " = new WidgetRule('" + widget.getWID() + "', '" + property + "', [" +
                            pvs.stream().map(pv -> "'" + pv + "'").collect(Collectors.joining(",")) +
                            "]);\n");
-            scripts.append(rule + ".eval = function()\n");
-            scripts.append("{\n");
+            buf.append(rule + ".eval = function()\n");
+            buf.append("{\n");
 
             int N = pvs.size();
             for (int i=0; i<N; ++i)
             {
-                scripts.append("  let pv" + i + " = this.value['" + pvs.get(i) + "'];\n");
-                scripts.append("  let pvStr" + i + " = this.valueStr['" + pvs.get(i) + "'];\n");
+                buf.append("  let pv" + i + " = this.value['" + pvs.get(i) + "'];\n");
+                buf.append("  let pvStr" + i + " = this.valueStr['" + pvs.get(i) + "'];\n");
             }
 
             N = expr.size();
             for (int i=0; i<N; ++i)
-                scripts.append("  if (" + expr.get(i) + ") return " + value_format.apply(values.get(i)) + ";\n");
-            scripts.append("  return " + value_format.apply(default_value) + ";\n");
+                buf.append("  if (" + expr.get(i) + ") return " + value_format.apply(values.get(i)) + ";\n");
+            buf.append("  return " + value_format.apply(default_value) + ";\n");
 
-            scripts.append("}\n");
-            scripts.append(rule + ".update = " + update_code + "\n");
+            buf.append("}\n");
+            buf.append(rule + ".update = " + update_code + "\n");
+
+            final String script = buf.toString();
+            logger.log(Level.INFO,
+                       widget + " rule:\n" +
+                       XMLUtil.toString(re) +
+                       script);
+
+            scripts.append(buf.toString());
         }
     }
 
