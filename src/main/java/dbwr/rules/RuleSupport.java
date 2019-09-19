@@ -10,6 +10,7 @@ import static dbwr.WebDisplayRepresentation.logger;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
@@ -49,7 +50,15 @@ public class RuleSupport
     @FunctionalInterface
     private interface ValueParser
     {
-        String parse(MacroProvider macros, Element exp) throws Exception;
+        /** Parse value from a rule's '&lt;exp&gt;'
+         *
+         *  @param macros Macro provider, typically parent widget
+         *  @param use_expression Use use '&lt;expression&gt;'? Otherwise use '&lt;value&gt;'
+         *  @param exp XML '&lt;exp&gt;'
+         *  @return Value to place in client-side javaScript
+         *  @throws Exception on error
+         */
+        String parse(MacroProvider macros, boolean use_expression, Element exp) throws Exception;
     }
 
     /** Create client-side JavaScript for rule
@@ -79,8 +88,7 @@ public class RuleSupport
             if (! property.equals(re.getAttribute("prop_id")))
                 continue;
 
-            if (Boolean.parseBoolean(re.getAttribute("out_exp")))
-                throw new Exception("Can only handle plain rules, not 'out_exp' types");
+            final boolean use_exp = Boolean.parseBoolean(re.getAttribute("out_exp"));
 
             // Collect PVs,..
             final List<String> pvs = new ArrayList<>();
@@ -93,11 +101,11 @@ public class RuleSupport
             // Expressions, values
             final List<String> expr = new ArrayList<>();
             final List<String> values = new ArrayList<>();
-            for (final Element e : XMLUtil.getChildElements(re, "exp"))
+            for (final Element exp : XMLUtil.getChildElements(re, "exp"))
             {
                 // TODO Better expression check/convert
-                expr.add(convertExp(MacroUtil.expand(macros, e.getAttribute("bool_exp"))));
-                values.add(value_parser.parse(macros, e));
+                expr.add(convertExp(MacroUtil.expand(macros, exp.getAttribute("bool_exp"))));
+                values.add(value_parser.parse(macros, use_exp, exp));
             }
 
             // Created <script>:
@@ -138,10 +146,19 @@ public class RuleSupport
             buf.append(rule + ".update = " + update_code + "\n");
 
             final String script = buf.toString();
-            logger.log(Level.INFO,
-                       widget + " rule:\n" +
-                       XMLUtil.toString(re) +
-                       script);
+            if (logger.isLoggable(Level.INFO))
+            {
+                // Show XML for the rule, but skip the <?xml.. header and trim whitespace
+                final String rule_xml = Arrays.stream(XMLUtil.toString(re).split("\\n"))
+                                               .filter(line -> !line.startsWith("<?xml"))
+                                               .map(String::trim)
+                                               .collect(Collectors.joining("\n"));
+                logger.log(Level.INFO,
+                           widget + " rule:\n" +
+                           rule_xml +
+                           "\n" +
+                           script);
+            }
 
             scripts.append(buf.toString());
         }
@@ -161,25 +178,49 @@ public class RuleSupport
                   .replace("not", " ! ");
     }
 
+    private static final ValueParser parse_string_value = (mac, use_expression, exp) ->
+    {
+        if (use_expression)
+            return XMLUtil.getChildString(mac, exp, "expression").orElseThrow(() -> new Exception("Missing expression"));
+        else
+            return XMLUtil.getChildString(mac, exp, "value").orElseThrow(() -> new Exception("Missing value"));
+    };
+
     public void handleNumericRule(final MacroProvider macros, final Element xml,
             final Widget widget, final String property, final double default_value,
             final String update_code) throws Exception
     {
         handleRule(macros, xml, widget, property,
-                   (mac, exp) -> XMLUtil.getChildString(mac, exp, "value").orElseThrow(() -> new Exception("Missing value")),
+                   parse_string_value,
                    Double.toString(default_value),
                    text -> text, update_code);
     }
+
+    private static final ValueParser parse_color_value = (mac, use_expression, exp) ->
+    {
+        if (use_expression)
+            return XMLUtil.getColor(exp, "expression").orElseThrow(() -> new Exception("Missing expression for color"));
+        else
+            return XMLUtil.getColor(exp, "value").orElseThrow(() -> new Exception("Missing value for color"));
+    };
 
     public void handleColorRule(final MacroProvider macros, final Element xml,
                                 final Widget widget, final String property, final String default_color,
                                 final String update_code) throws Exception
     {
         handleRule(macros, xml, widget, property,
-                   (mac, exp) -> XMLUtil.getColor(exp, "value").orElseThrow(() -> new Exception("Missing color")),
+                   parse_color_value,
                    default_color,
                    color_text -> "'" + color_text + "'", update_code);
     }
+
+    private static final ValueParser parse_boolean_value = (mac, use_expression, exp) ->
+    {
+        if (use_expression)
+            return XMLUtil.getChildString(mac, exp, "expression").orElseThrow(() -> new Exception("Missing boolean expression"));
+        else
+            return Boolean.toString(XMLUtil.getChildBoolean(exp, "value").orElseThrow(() -> new Exception("Missing true/false value, got '" + exp + "'")));
+    };
 
     /** Check if there is a rule for the visibility
      *
@@ -193,9 +234,9 @@ public class RuleSupport
                                      final Widget widget, final boolean default_visibility) throws Exception
     {
         handleRule(macros, xml, widget, "visible",
-                (mac, exp) -> Boolean.toString(XMLUtil.getChildBoolean(exp, "value").orElseThrow(() -> new Exception("Missing true/false value, got '" + exp + "'"))),
-                Boolean.toString(default_visibility),
-                truefalse -> truefalse, "set_visibility");
+                   parse_boolean_value,
+                   Boolean.toString(default_visibility),
+                   truefalse -> truefalse, "set_visibility");
     }
 
     public void addScripts(final PrintWriter html)
