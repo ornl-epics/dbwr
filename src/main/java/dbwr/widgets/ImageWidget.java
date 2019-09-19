@@ -36,6 +36,9 @@ public class ImageWidget extends PVWidget
                                       .toLowerCase();
             attributes.put("data-colormap", map);
         }
+
+        // Rules: 'maximum'
+        getRuleSupport().handleNumericRule(parent, xml, this, "maximum", 255, "set_image_maximum");
 	}
 
     @Override

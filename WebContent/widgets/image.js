@@ -617,6 +617,14 @@ function __redraw_image(widget)
     __redraw_image_with_data(widget, data);
 }
 
+// Called by rules on 'maximum'
+function set_image_maximum(widget, maximum)
+{
+    widget.data("max", maximum);
+    // console.log("Rule sets image max to " + maximum + ", redrawing");
+    __redraw_image(widget);
+}
+
 DisplayBuilderWebRuntime.prototype.widget_update_methods["image"] = __redraw_image_with_data;
 
 DisplayBuilderWebRuntime.prototype.widget_init_methods["image"] = function(widget)
