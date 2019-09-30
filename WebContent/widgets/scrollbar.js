@@ -1,13 +1,23 @@
 
-DisplayBuilderWebRuntime.prototype.widget_init_methods["slider"] = function(widget)
+function __submit_slider_value(widget, val)
+{
+    // Write entered value to PV
+    let pv = widget.data("pv")
+    console.log("Slider writes " + pv + " = " + val);
+    dbwr.write(pv, val)
+}
+
+
+DisplayBuilderWebRuntime.prototype.widget_init_methods["scrollbar"] = function(widget)
 {
     let slider = widget.children("input");
     slider.on("input", () => __submit_slider_value(widget, slider.val()));
 }
 
-DisplayBuilderWebRuntime.prototype.widget_update_methods["slider"] = function(widget, data)
+
+DisplayBuilderWebRuntime.prototype.widget_update_methods["scrollbar"] = function(widget, data)
 {
-    // console.log("Update slider");
+    // console.log("Update scrollbar");
     // console.log(widget);
     // console.log(data);
 
@@ -27,8 +37,4 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["slider"] = function(wi
     slider.attr("min", minval);
     slider.attr("max", maxval);
     slider.val(data.value);
-
-    // Update label
-    let label = widget.children("label");
-    label.text(format_pv_data_as_text(widget, data));
 }
