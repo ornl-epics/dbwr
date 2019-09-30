@@ -21,6 +21,7 @@ public class ScrollbarWidget extends PVWidget
 {
     static
     {
+        WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.scrollbar", "scrollbar");
         WidgetFactory.addJavaScript("scrollbar.js");
     }
 
