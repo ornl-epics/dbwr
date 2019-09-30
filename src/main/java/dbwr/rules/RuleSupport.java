@@ -79,88 +79,95 @@ public class RuleSupport
                             final Function<String, String> value_format,
                             final String update_code) throws Exception
     {
-        final Element rules = XMLUtil.getChildElement(xml, "rules");
-        if (rules == null)
-            return;
-
-        for (final Element re : XMLUtil.getChildElements(rules, "rule"))
+        try
         {
-            if (! property.equals(re.getAttribute("prop_id")))
-                continue;
+            final Element rules = XMLUtil.getChildElement(xml, "rules");
+            if (rules == null)
+                return;
 
-            final boolean use_exp = Boolean.parseBoolean(re.getAttribute("out_exp"));
-
-            // Collect PVs,..
-            final List<String> pvs = new ArrayList<>();
-            for (final Element e : XMLUtil.getChildElements(re, "pv_name"))
-                pvs.add(MacroUtil.expand(macros, XMLUtil.getString(e)));
-            // Legacy PV names
-            for (final Element e : XMLUtil.getChildElements(re, "pv"))
-                pvs.add(MacroUtil.expand(macros, XMLUtil.getString(e)));
-
-            // Expressions, values
-            final List<String> expr = new ArrayList<>();
-            final List<String> values = new ArrayList<>();
-            for (final Element exp : XMLUtil.getChildElements(re, "exp"))
+            for (final Element re : XMLUtil.getChildElements(rules, "rule"))
             {
-                // TODO Better expression check/convert
-                expr.add(convertExp(MacroUtil.expand(macros, exp.getAttribute("bool_exp"))));
-                values.add(value_parser.parse(macros, use_exp, exp));
+                if (! property.equals(re.getAttribute("prop_id")))
+                    continue;
+
+                final boolean use_exp = Boolean.parseBoolean(re.getAttribute("out_exp"));
+
+                // Collect PVs,..
+                final List<String> pvs = new ArrayList<>();
+                for (final Element e : XMLUtil.getChildElements(re, "pv_name"))
+                    pvs.add(MacroUtil.expand(macros, XMLUtil.getString(e)));
+                // Legacy PV names
+                for (final Element e : XMLUtil.getChildElements(re, "pv"))
+                    pvs.add(MacroUtil.expand(macros, XMLUtil.getString(e)));
+
+                // Expressions, values
+                final List<String> expr = new ArrayList<>();
+                final List<String> values = new ArrayList<>();
+                for (final Element exp : XMLUtil.getChildElements(re, "exp"))
+                {
+                    // TODO Better expression check/convert
+                    expr.add(convertExp(MacroUtil.expand(macros, exp.getAttribute("bool_exp"))));
+                    values.add(value_parser.parse(macros, use_exp, exp));
+                }
+
+                // Created <script>:
+                // let rule1 = new WidgetRule('w9180', 'property', ['sim://ramp', 'sim://sine' ]);
+                // rule1.eval = function()
+                // {
+                //   let pv0 = this.value['sim://ramp'];
+                //   let pv1 = this.value['sim://sine'];
+                //   if (pv0>2) return 24;
+                //   return 42;
+                // }
+                // rule1.update = set_svg_background_color
+                final String rule = "rule" + id.incrementAndGet();
+
+                // Create script for this rule
+                final StringBuilder buf = new StringBuilder();
+                buf.append("// Rule '").append(re.getAttribute("name")).append("'\n");
+                buf.append("let " + rule +
+                               " = new WidgetRule('" + widget.getWID() + "', '" + property + "', [" +
+                               pvs.stream().map(pv -> "'" + pv + "'").collect(Collectors.joining(",")) +
+                               "]);\n");
+                buf.append(rule + ".eval = function()\n");
+                buf.append("{\n");
+
+                int N = pvs.size();
+                for (int i=0; i<N; ++i)
+                {
+                    buf.append("  let pv" + i + " = this.value['" + pvs.get(i) + "'];\n");
+                    buf.append("  let pvStr" + i + " = this.valueStr['" + pvs.get(i) + "'];\n");
+                }
+
+                N = expr.size();
+                for (int i=0; i<N; ++i)
+                    buf.append("  if (" + expr.get(i) + ") return " + value_format.apply(values.get(i)) + ";\n");
+                buf.append("  return " + value_format.apply(default_value) + ";\n");
+
+                buf.append("}\n");
+                buf.append(rule + ".update = " + update_code + "\n");
+
+                final String script = buf.toString();
+                if (logger.isLoggable(Level.INFO))
+                {
+                    // Show XML for the rule, but skip the <?xml.. header and trim whitespace
+                    final String rule_xml = Arrays.stream(XMLUtil.toString(re).split("\\n"))
+                                                   .filter(line -> !line.startsWith("<?xml"))
+                                                   .map(String::trim)
+                                                   .collect(Collectors.joining("\n"));
+                    logger.log(Level.INFO,
+                               widget + " rule:\n" +
+                               rule_xml +
+                               "\n" +
+                               script);
+                }
+
+                scripts.append(buf.toString());
             }
-
-            // Created <script>:
-            // let rule1 = new WidgetRule('w9180', 'property', ['sim://ramp', 'sim://sine' ]);
-            // rule1.eval = function()
-            // {
-            //   let pv0 = this.value['sim://ramp'];
-            //   let pv1 = this.value['sim://sine'];
-            //   if (pv0>2) return 24;
-            //   return 42;
-            // }
-            // rule1.update = set_svg_background_color
-            final String rule = "rule" + id.incrementAndGet();
-
-            // Create script for this rule
-            final StringBuilder buf = new StringBuilder();
-            buf.append("// Rule '").append(re.getAttribute("name")).append("'\n");
-            buf.append("let " + rule +
-                           " = new WidgetRule('" + widget.getWID() + "', '" + property + "', [" +
-                           pvs.stream().map(pv -> "'" + pv + "'").collect(Collectors.joining(",")) +
-                           "]);\n");
-            buf.append(rule + ".eval = function()\n");
-            buf.append("{\n");
-
-            int N = pvs.size();
-            for (int i=0; i<N; ++i)
-            {
-                buf.append("  let pv" + i + " = this.value['" + pvs.get(i) + "'];\n");
-                buf.append("  let pvStr" + i + " = this.valueStr['" + pvs.get(i) + "'];\n");
-            }
-
-            N = expr.size();
-            for (int i=0; i<N; ++i)
-                buf.append("  if (" + expr.get(i) + ") return " + value_format.apply(values.get(i)) + ";\n");
-            buf.append("  return " + value_format.apply(default_value) + ";\n");
-
-            buf.append("}\n");
-            buf.append(rule + ".update = " + update_code + "\n");
-
-            final String script = buf.toString();
-            if (logger.isLoggable(Level.INFO))
-            {
-                // Show XML for the rule, but skip the <?xml.. header and trim whitespace
-                final String rule_xml = Arrays.stream(XMLUtil.toString(re).split("\\n"))
-                                               .filter(line -> !line.startsWith("<?xml"))
-                                               .map(String::trim)
-                                               .collect(Collectors.joining("\n"));
-                logger.log(Level.INFO,
-                           widget + " rule:\n" +
-                           rule_xml +
-                           "\n" +
-                           script);
-            }
-
-            scripts.append(buf.toString());
+        }
+        catch (final Exception ex)
+        {
+            logger.log(Level.WARNING, "Error in rule:\n" + XMLUtil.toString(xml), ex);
         }
     }
 
@@ -180,10 +187,16 @@ public class RuleSupport
 
     private static final ValueParser parse_string_value = (mac, use_expression, exp) ->
     {
+        String value = null;
         if (use_expression)
-            return XMLUtil.getChildString(mac, exp, "expression").orElseThrow(() -> new Exception("Missing expression"));
-        else
-            return XMLUtil.getChildString(mac, exp, "value").orElseThrow(() -> new Exception("Missing value"));
+        {   // Rules that use_expression should contain <expression>...
+            value = XMLUtil.getChildString(mac, exp, "expression").orElse(null);
+            if (value != null)
+                return value;
+            logger.log(Level.WARNING, "Rule should contain <expression>:\n" + XMLUtil.toString(exp.getParentNode()));
+            // .. but older *.opi files might just have a constant <value> just as in the non-use_expression case
+        }
+        return XMLUtil.getChildString(mac, exp, "value").orElseThrow(() -> new Exception("Missing value"));
     };
 
     public void handleNumericRule(final MacroProvider macros, final Element xml,
@@ -246,3 +259,4 @@ public class RuleSupport
         html.println("</script>");
     }
 }
+

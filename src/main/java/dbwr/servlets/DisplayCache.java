@@ -53,5 +53,6 @@ public class DisplayCache
     public static void clear()
     {
         cache.clear();
+        logger.log(Level.INFO, "Cache cleared");
     }
 }
