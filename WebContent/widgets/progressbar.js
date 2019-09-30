@@ -1,12 +1,8 @@
 
 DisplayBuilderWebRuntime.prototype.widget_update_methods["progressbar"] = function(widget, data)
 {
-    if (widget.data("limits-from-pv"))
-    {
-        if (data.min !== undefined)
-            widget.attr("min", data.min);
-        if (data.max !== undefined)
-            widget.attr("max", data.max);
-    }
+    let range = get_min_max(widget, data);
+    widget.attr("min", range[0]);
+    widget.attr("max", range[1]);
     widget.val(data.value);
 }

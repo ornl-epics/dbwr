@@ -375,10 +375,30 @@ DisplayBuilderWebRuntime.prototype.widget_alarm_methods = {};
 DisplayBuilderWebRuntime.prototype.widget_rules = {};
 
 
+/** Helper for handling limits-from-pv, min, max
+ * 
+ *  @param widget WIdget with 'limits-from-pv', 'min', 'max'
+ *  @param data PV data
+ *  @returns [ min, max ]
+ */
+function get_min_max(widget, data)
+{
+    let minval = widget.attr("min");
+    let maxval = widget.attr("max");
+    if (widget.data("limits-from-pv"))
+    {
+        if (data.min !== undefined  &&  isFinite(data.min))
+            minval = data.min;
+        if (data.max !== undefined  &&  isFinite(data.max))
+            maxval = data.max;
+    }
+    return [ minval, maxval ];
+}
+
 /** Helper for handling updates based on a "bit"
  * 
  *  Checks for bits 0, 1, .. or any non-zero value for bit = -1
- *  @param widget WIdget with 'data-bit'
+ *  @param widget Widget with 'data-bit'
  *  @param data PV data
  *  @returns Is addressed bit set?
  */

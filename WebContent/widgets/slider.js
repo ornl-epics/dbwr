@@ -12,20 +12,12 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["slider"] = function(wi
     // console.log(data);
 
     // Determine range
-    let minval = widget.attr("min");
-    let maxval = widget.attr("max");
-    if (widget.data("limits-from-pv"))
-    {
-        if (data.min !== undefined  &&  data.min != "NaN")
-            minval = data.min;
-        if (data.max !== undefined  &&  data.max != "NaN")
-            maxval = data.max;
-    }
+    let range = get_min_max(widget, data);
     
     // Update slider
     let slider = widget.children("input");
-    slider.attr("min", minval);
-    slider.attr("max", maxval);
+    slider.attr("min", range[0]);
+    slider.attr("max", range[1]);
     slider.val(data.value);
 
     // Update label

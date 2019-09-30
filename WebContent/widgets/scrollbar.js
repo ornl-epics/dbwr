@@ -1,19 +1,17 @@
 
 function __submit_slider_value(widget, val)
 {
-    // Write entered value to PV
+    // Write value to PV
     let pv = widget.data("pv")
-    console.log("Slider writes " + pv + " = " + val);
+    // console.log("Slider writes " + pv + " = " + val);
     dbwr.write(pv, val)
 }
-
 
 DisplayBuilderWebRuntime.prototype.widget_init_methods["scrollbar"] = function(widget)
 {
     let slider = widget.children("input");
     slider.on("input", () => __submit_slider_value(widget, slider.val()));
 }
-
 
 DisplayBuilderWebRuntime.prototype.widget_update_methods["scrollbar"] = function(widget, data)
 {
@@ -22,19 +20,15 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["scrollbar"] = function
     // console.log(data);
 
     // Determine range
-    let minval = widget.attr("min");
-    let maxval = widget.attr("max");
-    if (widget.data("limits-from-pv"))
-    {
-        if (data.min !== undefined  &&  data.min != "NaN")
-            minval = data.min;
-        if (data.max !== undefined  &&  data.max != "NaN")
-            maxval = data.max;
-    }
+    let range = get_min_max(widget, data);
     
     // Update slider
     let slider = widget.children("input");
-    slider.attr("min", minval);
-    slider.attr("max", maxval);
+    slider.attr("min", range[0]);
+    slider.attr("max", range[1]);
     slider.val(data.value);
+    
+    // Show value in tool-tip
+    let info = widget.data("pv") + " = " + format_pv_data_as_text(widget, data);
+    widget.attr("title", info);
 }
