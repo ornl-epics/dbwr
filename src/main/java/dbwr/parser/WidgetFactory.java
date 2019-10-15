@@ -99,6 +99,9 @@ public class WidgetFactory
 		if (type == null)
             type = xml.getAttribute("typeId");
 
+		if (type == null  ||  type.isEmpty())
+		    throw new Exception("Cannot determine widget type for " + XMLUtil.toString(xml));
+
 		final Class<Widget> clazz = widget_classes.get(type);
 		if (clazz == null)
 			return new UnknownWidget(parent, xml, type);
