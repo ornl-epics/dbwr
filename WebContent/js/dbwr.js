@@ -208,12 +208,18 @@ class DisplayBuilderWebRuntime
     subscribe(widget, type, pv_name)
     {
         // console.log("Subscribe for " + type + " widget to PV " + pv_name);
-        // Until we get an update from the PV, consider widget disconnected
-        let method = DisplayBuilderWebRuntime.prototype.widget_alarm_methods[type]
-        if (method)
-            method(widget, Severity.UNDEFINED);
-        else
-            apply_alarm_outline(widget, Severity.UNDEFINED);
+        
+        // If specifically set to 'false', skip alarms.
+        // Otherwise (true, undefined) show alarms
+        if (widget.data("alarm-border") !== false)
+        {
+            // Until we get an update from the PV, consider widget disconnected
+            let method = DisplayBuilderWebRuntime.prototype.widget_alarm_methods[type];
+            if (method)
+                method(widget, Severity.UNDEFINED);
+            else
+                apply_alarm_outline(widget, Severity.UNDEFINED);
+        }
         
         this._subscribe(pv_name, data => this._handle_widget_pv_update(widget, type, data));
     }
@@ -285,17 +291,22 @@ class DisplayBuilderWebRuntime
      */
     _handle_widget_pv_update(widget, type, data)
     {
-        // Indicate alarm
-        let method = DisplayBuilderWebRuntime.prototype.widget_alarm_methods[type]
-        if (method)
-            method(widget, data.severity);
-        else
-            apply_alarm_outline(widget, data.severity);
+        // If specifically set to 'false', skip alarms.
+        // Otherwise (true, undefined) show alarms
+        if (widget.data("alarm-border") !== false)
+        {
+            // Indicate alarm
+            let method = DisplayBuilderWebRuntime.prototype.widget_alarm_methods[type];
+            if (method)
+                method(widget, data.severity);
+            else
+                apply_alarm_outline(widget, data.severity);
+        }
         
         // Widget's own update method handles the rest
-        method = this.widget_update_methods[type];
-        if (method)
-            method(widget, data)
+        let update = this.widget_update_methods[type];
+        if (update)
+            update(widget, data)
     }
     
     /** Write to PV
