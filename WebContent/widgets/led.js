@@ -42,9 +42,9 @@ function update_led_border(widget, severity)
         border.css("border", "3px dotted #F0F");
 }
 
-
+// Both types of LED use the same round border
 DisplayBuilderWebRuntime.prototype.widget_alarm_methods["led"] = update_led_border;
-
+DisplayBuilderWebRuntime.prototype.widget_alarm_methods["multi_state_led"] = update_led_border;
 
 DisplayBuilderWebRuntime.prototype.widget_update_methods["led"] = function(widget, data)
 {
@@ -52,4 +52,22 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["led"] = function(widge
         set_svg_background_color(widget, widget.data("on-color"));
     else
         set_svg_background_color(widget, widget.data("off-color"));
+}
+
+DisplayBuilderWebRuntime.prototype.widget_update_methods["multi_state_led"] = function(widget, data)
+{
+    let color = widget.data("fallback-color");
+    let index = 0;
+    let value = widget.data("state-value-" + index);
+    while (value !== undefined)
+    {
+        if (data.value == value)
+        {
+            color = widget.data("state-color-" + index);
+            break;
+        }
+        ++index;
+        value = widget.data("state-value-" + index);
+    }
+    widget.find("ellipse,rect").attr("fill", color);
 }
