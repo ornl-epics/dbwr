@@ -15,10 +15,13 @@ Severity.UNDEFINED = "UNDEFINED";
  */
 function apply_alarm_outline(widget, severity)
 {
+    // Remove previous alarm indication
     widget.removeClass("BorderMinor BorderMajor BorderInvalid BorderDisconnected");
-    // By default, be alarm sensitive
-    if (widget.data("alarm-border") != "false")
-    {
+    // Always show disconnected state, even when not otherwise alarm sensitive
+    if (severity == Severity.UNDEFINED)
+       widget.addClass("BorderDisconnected");
+    else if (widget.data("alarm-border") != "false")
+    {   // Show remaining states unless specifically not alarm sensitive
         if (severity == Severity.MINOR)
             widget.addClass("BorderMinor");
         else if (severity == Severity.MAJOR)
@@ -26,9 +29,6 @@ function apply_alarm_outline(widget, severity)
         else if (severity == Severity.INVALID)
             widget.addClass("BorderInvalid");
     }
-    // Always show disconnected state, even when not otherwise alarm sensitive
-    if (severity == Severity.UNDEFINED)
-       widget.addClass("BorderDisconnected");
 }
         
 
