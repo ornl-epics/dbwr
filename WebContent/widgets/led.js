@@ -2,7 +2,7 @@ function update_led_border(widget, severity)
 {
     if (widget.find("ellipse").get(0) === undefined)
     {   // Not a round LED, use outline
-        apply_alarm_outline(widget, Severity.UNDEFINED);
+        apply_alarm_outline(widget, severity);
         return;
     }
     
