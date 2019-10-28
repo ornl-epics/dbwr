@@ -41,6 +41,12 @@ function __handleAction(widget, index)
 
 DisplayBuilderWebRuntime.prototype.widget_init_methods['action_button'] = function(widget)
 {
+    if (widget.data("enabled") === false)
+    {   // If specifically not enabled...
+        widget.css("cursor", "not-allowed");
+        return;
+    }
+    
     // Subscribe to all data-pv-#
     // Check all data items for "pv-..." since
     // there might be a data-pv-1 but no data-pv-0

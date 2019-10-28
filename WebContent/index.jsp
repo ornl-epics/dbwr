@@ -98,7 +98,7 @@ cache
 <hr>
 
 <div id="versions">
-2019-10-28 Fix alarm border location for LED and ByteMonior.<br>
+2019-10-28 Fix alarm border location for LED and ByteMonior. Check if action button 'enabled'.<br>
 2019-09-30 More lenient rule 'expression' vs. 'value' lookup. Slider and scrollbar widgets.<br>
 2019-09-19 Support simple 'out_exp' in visibility rules. Image plot supports rules on 'maximum'. XYPlot plots what's available when some PVs are NaN.<br>
 2019-08-05 Several widgets support writing<br>

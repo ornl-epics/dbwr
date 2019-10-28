@@ -51,29 +51,32 @@ public class Widget implements ParentWidget
     protected final ParentWidget parent;
 
     /** Classes to add to the HTML for this widget */
-	protected final Set<String> classes = new HashSet<>();
+    protected final Set<String> classes = new HashSet<>();
 
-	/** Attributes to add to the HTML for this widget */
-	protected final Map<String, String> attributes = new LinkedHashMap<>();
+    /** Attributes to add to the HTML for this widget */
+    protected final Map<String, String> attributes = new LinkedHashMap<>();
 
-	/** Styles (inline) to add to the HTML for this widget */
-	protected final Map<String, String> styles = new LinkedHashMap<>();
+    /** Styles (inline) to add to the HTML for this widget */
+    protected final Map<String, String> styles = new LinkedHashMap<>();
 
-	/** Widget position and size */
-	protected final int x, y, width, height;
+    /** Widget position and size */
+    protected final int x, y, width, height;
 
-	/** Is widget visible? */
-	protected final boolean visible;
+    /** Is widget enabled? */
+    protected final boolean enabled;
 
-	/** @param parent Parent widget
-	 *  @param xml XML for this widget
-	 *  @param type Type to declare in data-type
-	 *  @throws Exception on error
-	 */
-	public Widget(final ParentWidget parent, final Element xml, final String type) throws Exception
-	{
-		this(parent, xml, type, 100, 20);
-	}
+    /** Is widget visible? */
+    protected final boolean visible;
+
+    /** @param parent Parent widget
+     *  @param xml XML for this widget
+     *  @param type Type to declare in data-type
+     *  @throws Exception on error
+     */
+    public Widget(final ParentWidget parent, final Element xml, final String type) throws Exception
+    {
+        this(parent, xml, type, 100, 20);
+    }
 
     /** @param parent Parent widget
      *  @param xml XML for this widget
@@ -82,23 +85,27 @@ public class Widget implements ParentWidget
      *  @param default_height .. and height to use when not provided in XML
      *  @throws Exception on error
      */
-	public Widget(final ParentWidget parent, final Element xml, final String type, final int default_width, final int default_height) throws Exception
-	{
-	    this.parent = parent;
-		x = XMLUtil.getChildInteger(xml, "x").orElse(0);
-		y = XMLUtil.getChildInteger(xml, "y").orElse(0);
-		width = XMLUtil.getChildInteger(xml, "width").orElse(default_width);
-		height = XMLUtil.getChildInteger(xml, "height").orElse(default_height);
+    public Widget(final ParentWidget parent, final Element xml, final String type, final int default_width, final int default_height) throws Exception
+    {
+        this.parent = parent;
+        x = XMLUtil.getChildInteger(xml, "x").orElse(0);
+        y = XMLUtil.getChildInteger(xml, "y").orElse(0);
+        width = XMLUtil.getChildInteger(xml, "width").orElse(default_width);
+        height = XMLUtil.getChildInteger(xml, "height").orElse(default_height);
 
-		classes.add("Widget");
+        classes.add("Widget");
 
-		attributes.put("id", getWID());
-		attributes.put("data-type", type);
+        attributes.put("id", getWID());
+        attributes.put("data-type", type);
 
-		styles.put("top", Integer.toString(y)+"px");
-		styles.put("left", Integer.toString(x)+"px");
-		styles.put("width", Integer.toString(width)+"px");
-		styles.put("height", Integer.toString(height)+"px");
+        styles.put("top", Integer.toString(y)+"px");
+        styles.put("left", Integer.toString(x)+"px");
+        styles.put("width", Integer.toString(width)+"px");
+        styles.put("height", Integer.toString(height)+"px");
+
+        enabled = XMLUtil.getChildBoolean(xml, "enabled").orElse(true);
+        if (! enabled)
+            attributes.put("data-enabled", "false");
 
         visible = XMLUtil.getChildBoolean(xml, "visible").orElse(true);
         if (! visible)
@@ -113,17 +120,17 @@ public class Widget implements ParentWidget
             logger.log(Level.WARNING, "Error in rule for " + toString() +
                        ":\n" + XMLUtil.toString(xml), ex);
         }
-	}
+    }
 
-	/** @return Widget ID, "w" followed by unique number */
-	public final String getWID()
-	{
-	    return "w" + id;
-	}
+    /** @return Widget ID, "w" followed by unique number */
+    public final String getWID()
+    {
+        return "w" + id;
+    }
 
-	@Override
+    @Override
     public URL getDisplay()
-	{
+    {
         return parent.getDisplay();
     }
 
@@ -135,7 +142,7 @@ public class Widget implements ParentWidget
 
     @Override
     public Collection<String> getMacroNames()
-	{
+    {
         return parent.getMacroNames();
     }
 
@@ -146,81 +153,81 @@ public class Widget implements ParentWidget
     }
 
     protected void appendClasses(final PrintWriter html)
-	{
-		html.append("class=\"");
-		html.append(classes.stream().collect(Collectors.joining(" ")));
-		html.append("\"");
-	}
+    {
+        html.append("class=\"");
+        html.append(classes.stream().collect(Collectors.joining(" ")));
+        html.append("\"");
+    }
 
-	protected void appendAttributes(final PrintWriter html)
-	{
-		for (final Map.Entry<String, String> entry : attributes.entrySet())
-			html.append(" ")
-			    .append(entry.getKey())
-			    .append("=\"")
-			    .append(HTMLUtil.escape(entry.getValue()))
-			    .append("\"");
-	}
+    protected void appendAttributes(final PrintWriter html)
+    {
+        for (final Map.Entry<String, String> entry : attributes.entrySet())
+            html.append(" ")
+                .append(entry.getKey())
+                .append("=\"")
+                .append(HTMLUtil.escape(entry.getValue()))
+                .append("\"");
+    }
 
-	protected void appendStyles(final PrintWriter html)
-	{
-		html.append("style=\"");
-		boolean first = true;
-		for (final Map.Entry<String, String> entry : styles.entrySet())
-		{
-			if (first)
-				first = false;
-			else
-				html.append(' ');
-			html.append(entry.getKey()).append(": ").append(entry.getValue()).append(';');
-		}
-		html.append("\"");
-	}
+    protected void appendStyles(final PrintWriter html)
+    {
+        html.append("style=\"");
+        boolean first = true;
+        for (final Map.Entry<String, String> entry : styles.entrySet())
+        {
+            if (first)
+                first = false;
+            else
+                html.append(' ');
+            html.append(entry.getKey()).append(": ").append(entry.getValue()).append(';');
+        }
+        html.append("\"");
+    }
 
-	/** @return "div" or "svg" or "..." to use as main element */
-	protected String getHTMLElement()
-	{
-	    return "div";
-	}
+    /** @return "div" or "svg" or "..." to use as main element */
+    protected String getHTMLElement()
+    {
+        return "div";
+    }
 
-	protected void startHTML(final PrintWriter html, final int indent)
-	{
-		HTMLUtil.indent(html, indent);
-		html.append("<").append(getHTMLElement()).append(" ");
-		appendClasses(html);
-		appendAttributes(html);
-		html.append(' ');
-		appendStyles(html);
-		html.append(">");
-	}
+    protected void startHTML(final PrintWriter html, final int indent)
+    {
+        HTMLUtil.indent(html, indent);
+        html.append("<").append(getHTMLElement()).append(" ");
+        appendClasses(html);
+        appendAttributes(html);
+        html.append(' ');
+        appendStyles(html);
+        html.append(">");
+    }
 
-	/** Fill body of the HTML element
-	 *
-	 *  @param html
-	 *  @param indent
-	 */
-	protected void fillHTML(final PrintWriter html, final int indent)
-	{
-	    // Derived class most likely implements this
-	}
+    /** Fill body of the HTML element
+     *
+     *  @param html
+     *  @param indent
+     */
+    protected void fillHTML(final PrintWriter html, final int indent)
+    {
+        // Derived class most likely implements this
+    }
 
-	protected void endHTML(final PrintWriter html, final int indent)
-	{
-		html.append("</").append(getHTMLElement()).append(">").println();
-	}
+    protected void endHTML(final PrintWriter html, final int indent)
+    {
+        html.append("</").append(getHTMLElement()).append(">").println();
+    }
 
-	public void getHTML(final PrintWriter html, int indent)
-	{
-		startHTML(html, indent);
-		fillHTML(html, indent);
-		endHTML(html, indent);
-	}
+    public void getHTML(final PrintWriter html, int indent)
+    {
+        startHTML(html, indent);
+        fillHTML(html, indent);
+        endHTML(html, indent);
+    }
 
-	@Override
-	public String toString()
-	{
-	    return getClass().getSimpleName() + " ID " + getWID();
-	}
+    @Override
+    public String toString()
+    {
+        return getClass().getSimpleName() + " ID " + getWID();
+    }
 }
 
 
