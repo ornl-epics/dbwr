@@ -11,7 +11,8 @@ Severity.UNDEFINED = "UNDEFINED";
 
 /** Apply alarm-based outline to widget
  * 
- *  Default unless widget registers with widget_alarm_methods[]
+ *  Default unless widget registers with widget_alarm_methods[].
+ *  Adds/remove BorderXXX classes.
  */
 function apply_alarm_outline(widget, severity)
 {
@@ -28,6 +29,51 @@ function apply_alarm_outline(widget, severity)
             widget.addClass("BorderMajor");
         else if (severity == Severity.INVALID)
             widget.addClass("BorderInvalid");
+    }
+}
+
+/** Apply alarm-based border around widget by adding a 'border' <div>
+ * 
+ *  Used for example by LEDs which already have a wide 'stroke'
+ *  that interferes with the normal CSS-based border
+ *  unless more 'padding' is added.
+ *  Also for widgets that need a round border.
+ */
+function update_alarm_div(widget, severity, pad, round)
+{
+    // Add a <div id="w123_border"> _before_ the widget
+    let id = widget.attr("id");
+    let bid = id + "_border";
+    let border = jQuery("#" + bid);
+    if (border.get(0) === undefined)
+    {
+        border = jQuery("<div>").attr("id", bid)
+                                .addClass("Widget");
+        widget.before(border);
+    }
+    
+    let width = parseInt(widget.css("width"));
+    let height = parseInt(widget.css("height"));
+    if (round)
+        border.css("border-radius", (width/2)+"px/" + (height/2) + "px");
+    border.css("left",   (parseInt(widget.css("left")) - pad) + "px");
+    border.css("top",    (parseInt(widget.css("top"))  - pad) + "px");
+    border.css("width",  (width + 2*pad) + "px");
+    border.css("height", (height+ 2*pad) + "px");
+
+    // Always clear border, and always show disconnected state
+    if (severity == Severity.NONE)
+        border.css("border", "");
+    else if (severity == Severity.UNDEFINED)
+        border.css("border", "3px dotted #F0F");
+    else if (widget.data("alarm-border") != "false")
+    {   // Show remaining states unless specifically not alarm sensitive
+        if (severity == Severity.MINOR)
+            border.css("border", "3px solid #F80");
+        else if (severity == Severity.MAJOR)
+            border.css("border", "3px double #F00");
+        else if (severity == Severity.INVALID)
+            border.css("border", "3px dashed #F0F");
     }
 }
         

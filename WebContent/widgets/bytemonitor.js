@@ -1,4 +1,7 @@
 
+DisplayBuilderWebRuntime.prototype.widget_alarm_methods["byte_monitor"] =
+    (widget, severity) =>  update_alarm_div(widget, severity, 4, false);
+
 DisplayBuilderWebRuntime.prototype.widget_update_methods["byte_monitor"] = function(widget, data)
 {
     let on = widget.data("on-color");
