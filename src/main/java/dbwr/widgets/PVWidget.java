@@ -17,6 +17,23 @@ public class PVWidget extends Widget
 {
 	protected final String pv_name;
 
+	/** Modify certain PV name elements
+	 *  @param pv Original PV name
+	 *  @return Potentially updated PV name
+	 */
+	public static String munchPV(String pv)
+	{
+	    if (pv == null)
+	        return null;
+
+	    // Remove ' {"longString":true}'
+	    final int i = pv.indexOf(" {\"long");
+	    if (i > 0)
+	        pv = pv.substring(0, i);
+
+	    return pv;
+	}
+
 	public PVWidget(final ParentWidget parent, final Element xml, final String type) throws Exception
 	{
 		this(parent, xml, type, 100, 20);
@@ -25,7 +42,7 @@ public class PVWidget extends Widget
 	public PVWidget(final ParentWidget parent, final Element xml, final String type, final int default_width, final int default_height) throws Exception
 	{
 		super(parent, xml, type, default_width, default_height);
-		pv_name = XMLUtil.getChildString(parent, xml, "pv_name").orElse(null);
+		pv_name = munchPV(XMLUtil.getChildString(parent, xml, "pv_name").orElse(null));
 		attributes.put("data-pv", pv_name);
 		// Show PV name as tool-tip
         attributes.put("title", pv_name);
