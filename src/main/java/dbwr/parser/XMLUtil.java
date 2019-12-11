@@ -9,6 +9,7 @@ package dbwr.parser;
 
 import static dbwr.WebDisplayRepresentation.logger;
 
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -316,26 +317,43 @@ public class XMLUtil
         return Boolean.parseBoolean(text);
     }
 
+    public static Color getAWTColor(final Element xml, final String name)
+    {
+        final Element el = getChildElement(xml, name);
+        if (el == null)
+            return null;
+
+        final Element col_xml = getChildElement(el, "color");
+        if (col_xml == null)
+        {
+            logger.log(Level.WARNING, "Color element <" + name +"> is missing <color>");
+            return null;
+        }
+        // Ignore legacy *.opi when it just contains <color name="ABC"/>
+        if (col_xml.getAttribute("red").isEmpty())
+            return null;
+        // <color name="OK" red="0" green="255" blue="0"></color>
+        final int red = Integer.parseInt(col_xml.getAttribute("red"));
+        final int green = Integer.parseInt(col_xml.getAttribute("green"));
+        final int blue = Integer.parseInt(col_xml.getAttribute("blue"));
+        return new Color(red, green, blue);
+    }
+
+    public static String getWebColor(final Color awt_color)
+    {
+        if (awt_color == null)
+            return null;
+        return String.format("#%02X%02X%02X", awt_color.getRed(),
+                                              awt_color.getGreen(),
+                                              awt_color.getBlue());
+    }
+
 	public static Optional<String> getColor(final Element xml, final String name)
 	{
-		final Element el = getChildElement(xml, name);
-		if (el == null)
-			return Optional.empty();
-
-		final Element col_xml = getChildElement(el, "color");
-		if (col_xml == null)
-		{
-			logger.log(Level.WARNING, "Color element <" + name +"> is missing <color>");
-			return Optional.empty();
-		}
-		// Ignore legacy *.opi when it just contains <color name="ABC"/>
-		if (col_xml.getAttribute("red").isEmpty())
-		    return Optional.empty();
-		// <color name="OK" red="0" green="255" blue="0"></color>
-		final int red = Integer.parseInt(col_xml.getAttribute("red"));
-		final int green = Integer.parseInt(col_xml.getAttribute("green"));
-		final int blue = Integer.parseInt(col_xml.getAttribute("blue"));
-		return Optional.of(String.format("#%02X%02X%02X", red, green, blue));
+	    final Color color = getAWTColor(xml, name);
+	    if (color == null)
+	        return Optional.empty();
+	    return Optional.of(getWebColor(color));
 	}
 
 	public static Optional<FontInfo> getFont(final Element xml, final String name)
@@ -412,3 +430,4 @@ public class XMLUtil
         return buf.toString();
     }
 }
+

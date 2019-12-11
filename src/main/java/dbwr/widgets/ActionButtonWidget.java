@@ -6,6 +6,7 @@
  ******************************************************************************/
 package dbwr.widgets;
 
+import java.awt.Color;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,8 @@ public class ActionButtonWidget extends Widget
 
     private String text;
 
+    private static final Color DEFAULT_BACKGROUND = new Color(0xD2, 0xD2, 0xD1);
+
     public ActionButtonWidget(final ParentWidget parent, final Element xml) throws Exception
     {
         super(parent, xml, "action_button", 100, 30);
@@ -44,9 +47,19 @@ public class ActionButtonWidget extends Widget
 
         XMLUtil.getColor(xml, "foreground_color").ifPresent(color -> styles.put("color", color));
 
-        final String background_color = XMLUtil.getColor(xml, "background_color").orElse("#D2D2D2");
-        if (! background_color.equals("#D2D2D2"))
-            styles.put("background-image", "linear-gradient(to bottom right, " + background_color + ", #DDD)");
+        final String background_color;
+        final Color bg = XMLUtil.getAWTColor(xml, "background_color");
+        if (bg != null  &&  ! DEFAULT_BACKGROUND.equals(bg))
+        {
+            background_color = XMLUtil.getWebColor(bg);
+            final String highlight = XMLUtil.getWebColor(bg.brighter());
+            styles.put("background-image",
+                       "linear-gradient(to bottom right, " +
+                                        background_color + " 0%, " +
+                                        highlight + " 90%)");
+        }
+        else
+            background_color = "#D2D2D2";
 
         final Element el = XMLUtil.getChildElement(xml, "actions");
         if (el != null)
@@ -144,3 +157,4 @@ public class ActionButtonWidget extends Widget
         html.append(HTMLUtil.escape(text));
     }
 }
+
