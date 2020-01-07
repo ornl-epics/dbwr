@@ -23,9 +23,6 @@ public class TextUpdateWidget extends BaseTextWidget
 	{
 		super(parent, xml, "textupdate", "#F0F0F0");
 
-		// Set 'line-height' to support vertical alignment of text
-        styles.put("line-height", styles.get("height"));
-
         LabelWidget.handleRotationStep(this, xml);
 	}
 }

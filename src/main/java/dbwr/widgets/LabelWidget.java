@@ -36,24 +36,14 @@ public class LabelWidget extends Widget
 		final FontInfo font = XMLUtil.getFont(xml, "font").orElse(DEFAULT_FONT);
 		font.addToStyles(styles);
 
-		final int h = handleRotationStep(this, xml);
+		handleRotationStep(this, xml);
 
 		if (! XMLUtil.getChildBoolean(xml, "transparent").orElse(true))
 		    styles.put("background-color", XMLUtil.getColor(xml, "background_color").orElse("#FFF"));
 
         styles.put("color", XMLUtil.getColor(xml, "foreground_color").orElse("#000"));
 
-		int align = XMLUtil.getChildInteger(xml, "horizontal_alignment").orElse(0);
-		if (align == 1)
-		    styles.put("text-align", "center");
-		else if (align == 2)
-            styles.put("text-align", "right");
-
-		align = XMLUtil.getChildInteger(xml, "vertical_alignment").orElse(0);
-		if (align == 1)
-		    styles.put("line-height",  Integer.toString(h) + "px");
-		else if (align == 2)
-            styles.put("line-height", Integer.toString(2 * h - font.getSize()) + "px");
+        handleTextAlignment(this, xml);
 	}
 
     static int handleRotationStep(final Widget widget, final Element xml) throws Exception
@@ -81,11 +71,27 @@ public class LabelWidget extends Widget
         return h;
     }
 
+    static void handleTextAlignment(final Widget widget, final Element xml) throws Exception
+    {
+        widget.classes.add("AlignedText");
+        int align = XMLUtil.getChildInteger(xml, "horizontal_alignment").orElse(0);
+        if (align == 1)
+            widget.classes.add("AlignedHorizCenter");
+        else if (align == 2)
+            widget.classes.add("AlignedRight");
+
+        align = XMLUtil.getChildInteger(xml, "vertical_alignment").orElse(0);
+        if (align == 1)
+            widget.classes.add("AlignedVertCenter");
+        else if (align == 2)
+            widget.classes.add("AlignedBottom");
+    }
+
 	@Override
 	protected void fillHTML(final PrintWriter html, final int indent)
 	{
 	    // To support vertical centering with single as well as multi-line text,
-	    // wrap in inner span, and use line-height == height on outer <div>
+	    // wrap in inner span
 	    html.append("<span class=\"InnerText\">");
 	    HTMLUtil.indent(html, indent);
 	    // Turn '\n' into <br>,

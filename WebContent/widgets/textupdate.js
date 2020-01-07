@@ -107,10 +107,6 @@ function update_text_widget(widget, data)
     // Use newlines to start new line via <br>
     let lines = format_pv_data_as_text(widget, data).split("\n");
     widget.html("<span>" + lines.join("<br>") + "</span>");
-    
-    // Center vertically by splitting widget height into lines
-    let line_height = widget.height() / lines.length;
-    widget.css("line-height", line_height + "px");
 }
 
 DisplayBuilderWebRuntime.prototype.widget_update_methods["textupdate"] = update_text_widget

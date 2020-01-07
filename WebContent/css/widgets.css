@@ -55,11 +55,27 @@ svg.Widget
 	overflow: visible;
 }
 
-span.InnerText
+.AlignedText
 {
-    display: inline-block;
-    vertical-align: middle;
-    line-height: normal;
+	display: inline-flex;
+}
+.AlignedHorizCenter
+{
+    justify-content: center;	
+    text-align: center;
+}
+.AlignedRight
+{
+    justify-content: flex-end;    
+    text-align: end;
+}
+.AlignedVertCenter
+{
+    align-items: center;    
+}
+.AlignedBottom
+{
+    align-items: flex-end;    
 }
 
 /* Border used to debug layout */

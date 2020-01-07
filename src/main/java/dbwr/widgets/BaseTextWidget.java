@@ -61,15 +61,7 @@ public class BaseTextWidget extends PVWidget
                                              "set_text_background_color");
 		}
 
-		XMLUtil.getChildInteger(xml, "horizontal_alignment").ifPresent(align ->
-		{
-		    if (align == 1)
-		        styles.put("text-align", "center");
-            else if (align == 2)
-                styles.put("text-align", "right");
-        });
-
-		// TODO For now, text is always vertically centered...
+		LabelWidget.handleTextAlignment(this, xml);
 	}
 
     @Override
