@@ -98,6 +98,7 @@ cache
 <hr>
 
 <div id="versions">
+2020-01-07 Use 'flex' display to align label, textupdate.<br>
 2019-12-11 Coloring of buttons w/ custom background color.<br>
 2019-12-10 Patch legacy 'longString' PV names.<br>
 2019-10-28 Fix alarm border location for LED and ByteMonior. Check if action button 'enabled'.<br>
