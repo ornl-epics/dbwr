@@ -227,7 +227,15 @@ class DisplayBuilderWebRuntime
         // Handle 'data-pv'
         let pv_name = widget.data("pv");
         if (pv_name)
+        {
             this.subscribe(widget, type, pv_name);
+            
+            widget.mousedown(event =>
+            {
+                if (event.which == 2)
+                    copyTextToClipboard(pv_name);
+            });
+        }
         
         // Init rules of this widget
         let wid = widget.attr("id");

@@ -44,6 +44,7 @@ for (String c : WidgetFactory.css)
 <script type="text/javascript" src="js/flot/jquery.flot.selection.js"></script>
 <script type="text/javascript" src="js/flot/jquery.flot.composeImages.js"></script>
 <script type="text/javascript" src="js/flot/jquery.flot.legend.js"></script>
+<script type="text/javascript" src="js/clipboard.js"></script> 
 <script type="text/javascript" src="js/dbwr.js"></script> 
 <%
 for (String js : WidgetFactory.js)
