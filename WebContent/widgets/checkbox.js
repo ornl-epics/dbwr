@@ -6,6 +6,10 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["checkbox"] = function(wi
     let cb = widget.find("input");
     cb.click(event =>
     {
+        // Only support clicking left button to toggle
+        // (middle button copies PV name and doesn't toggle)
+        if (event.which != 1)
+            return false;
         let pv = widget.data("pv");
         console.log("Write checkbox to " + pv);
         
@@ -31,10 +35,5 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["checkbox"] = function(
     else
         cb.prop("checked", false);
     
-    // Disable when read-only
-    if (data.readonly)
-        cb.css("cursor", "not-allowed");
-    else
-        cb.css("cursor", "auto");
-    cb.prop('disabled', data.readonly);
+    showWriteAccess(cb, data.readonly);
 }

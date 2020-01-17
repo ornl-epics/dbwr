@@ -658,7 +658,16 @@ function toggle_contextmenu(event)
     event.preventDefault();
 }
 
-
+function showWriteAccess(widget, readonly)
+{
+    // Indicate read/write access via cursor
+    if (readonly)
+        widget.css("cursor", "not-allowed");
+    else
+        widget.css("cursor", "auto");
+    // TODO When disabled, cannot click at all, i.e. not copy PV name
+    // widget.prop('disabled', data.readonly);
+}
 
 function help()
 {

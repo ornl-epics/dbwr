@@ -51,6 +51,11 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["radio"] = function(wid
                                          .attr("name", widget.attr("id"));
             radio.click(event =>
             {
+                // Only support clicking left button to toggle
+                // (middle button copies PV name and doesn't toggle)
+                if (event.which != 1)
+                    return false;
+
                 let pv  = widget.data("pv");
                 if (typeof(data.value) == "number")
                     dbwr.write(pv, i);
@@ -74,10 +79,5 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["radio"] = function(wid
     }
     
     let buttons = widget.find("input");
-    if (data.readonly)
-        buttons.css("cursor", "not-allowed");
-    else
-        buttons.css("cursor", "auto");
-    // Disable when read-only
-    buttons.prop('disabled', data.readonly);
+    showWriteAccess(buttons, data.readonly);
 }

@@ -90,14 +90,7 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods['textentry'] = function
     {
         // jQuery uses val() for both input.value and textarea.html
         widget.val(text);
-    
-        // Indicate read/write access via cursor
-        if (data.readonly)
-            widget.css("cursor", "not-allowed");
-        else
-            widget.css("cursor", "auto");
-        // Disable when read-only
-        widget.prop('disabled', data.readonly);
+        showWriteAccess(widget, data.readonly);
     }
 }
 

@@ -99,11 +99,7 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods['action_button'] = functi
 DisplayBuilderWebRuntime.prototype.widget_update_methods['action_button'] = function(widget, data)
 {
     // _handle_widget_pv_update() clears disconnected alarm border
-    if (data.readonly)
-        widget.css("cursor", "not-allowed");
-    else
-        widget.css("cursor", "pointer");
-    widget.prop('disabled', data.readonly);
+    showWriteAccess(widget, data.readonly);
 }
 
 function set_action_button_background_color(widget, color)
