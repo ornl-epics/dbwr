@@ -66,7 +66,6 @@ for (String js : WidgetFactory.js)
 <script type="text/javascript">
 <%
 String display_name = request.getParameter("display");
-// TODO Default to a built-in getClass().getResource("/Demo.bob");
 if (display_name == null)
 	display_name = "";
 // Macros are usually passed as "&macros=JSON map"

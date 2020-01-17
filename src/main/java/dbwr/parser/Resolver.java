@@ -39,6 +39,13 @@ public class Resolver
      */
     public Resolver(final String display_name) throws Exception
     {
+        if (display_name.isEmpty())
+        {
+            url = getClass().getResource("/no_name.bob");
+            stream = url.openStream();
+            return;
+        }
+
         try
         {
             // Try to 'upgrade' to *.bob file
@@ -94,3 +101,4 @@ public class Resolver
         return resolved.toExternalForm();
     }
 }
+
