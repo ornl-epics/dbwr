@@ -21,15 +21,23 @@ public class PolygonWidget extends PolylineWidget
         WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.polygon", "polygon");
     }
 
-	private final String background_color;
+//	private final String background_color;
+	private final String foregroundColor;
+	private final String fillLevel;
 
 	public PolygonWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 		super(parent, xml, "polygon");
-	    background_color = XMLUtil.getColor(xml, "background_color").orElse("#3232FF");
+//	    background_color = XMLUtil.getColor(xml, "background_color").orElse("#3232FF");
+//        getRuleSupport().handleColorRule(parent, xml, this,
+//                                         "background_color", background_color,
+//                                         "set_svg_background_color");
+		foregroundColor = XMLUtil.getColor(xml, "foreground_color").orElse("#3232FF");
         getRuleSupport().handleColorRule(parent, xml, this,
-                                         "background_color", background_color,
-                                         "set_svg_background_color");
+                                         "foreground_color", foregroundColor,
+                                         "set_svg_foreground_color");
+
+        fillLevel = XMLUtil.getChildString(this, xml, "fill_level").orElse("0");
 	}
 
 	@Override
@@ -37,6 +45,7 @@ public class PolygonWidget extends PolylineWidget
 	{
         HTMLUtil.indent(html, indent+2);
         html.println("<polygon points=\"" + points +
-                     "\" stroke=\"" + line_color + "\" stroke-width=\"" + line_width + "\" fill=\"" + background_color + "\"/>");
+                     "\" stroke=\"" + line_color + "\" stroke-width=\"" + line_width + "\" fill=\"" + foregroundColor + "\""
+                     		+ "fill-opacity=\"" + fillLevel + "\"/>");
 	}
 }
