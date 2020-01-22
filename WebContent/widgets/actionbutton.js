@@ -68,8 +68,13 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods['action_button'] = functi
           });
 
     // Just one action?
-    if (widget.data("linked-label-1") === undefined)
+    if (widget.data("linked-label-1") === undefined) {
         widget.click(() => __handleAction(widget, 0));
+        widget.css({
+        	'cursor': 'pointer',
+	        'pointer-events': 'auto'
+        });
+    }
     else
     {
         // Build menu to list all options
@@ -92,6 +97,10 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods['action_button'] = functi
         }
         create_contextmenu(widget, actions);
         widget.click(toggle_contextmenu);
+        widget.css({
+        	'cursor': 'pointer',
+	        'pointer-events': 'auto'
+        });
     }
 }
 

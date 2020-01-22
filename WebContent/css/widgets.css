@@ -48,6 +48,8 @@ pre
 	
 	/* Include padding and border in width, height */
 	box-sizing: border-box;
+	
+	pointer-events: none;
 }
 
 svg.Widget

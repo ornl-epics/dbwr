@@ -21,6 +21,11 @@ function __submit_text_entry(widget, val)
 
 DisplayBuilderWebRuntime.prototype.widget_init_methods['textentry'] = function(widget)
 {
+
+    widget.css({
+    	'cursor': 'pointer',
+        'pointer-events': 'auto'
+    });
     // On focus, save current value in 'editing',
     // which flags the widget as being edited and blocks updates
     widget.focusin(() =>
