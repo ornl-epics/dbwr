@@ -7,9 +7,15 @@
 package dbwr.widgets;
 
 import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
+import dbwr.parser.HTMLUtil;
 import dbwr.parser.WidgetFactory;
 import dbwr.parser.XMLUtil;
 
@@ -34,9 +40,35 @@ public class PictureWidget extends Widget
 		                                          .orElse("missing_image.png"));
 		attributes.put("data-file", file);
 
-		// See label for rotation?
-	}
+		// Rotation
+		/*
+		<permutation_matrix>
+        <row>
+          <col>0.0</col>
+          <col>-1.0</col>
+        </row>
+        <row>
+          <col>1.0</col>
+          <col>0.0</col>
+        </row>
+      </permutation_matrix>
+      
+		// --> transform: matrix(0,1,-1,0,0,0);
+		 */
+		
+		Element permutationMatrix = XMLUtil.getChildElement(xml, "permutation_matrix");
+		NodeList rows = permutationMatrix.getChildNodes();
+		NodeList colsOfRow1 = rows.item(1).getChildNodes();
+		NodeList colsOfRow2 = rows.item(3).getChildNodes();
+		if (colsOfRow1.getLength() == 5 && colsOfRow2.getLength() == 5) {
+			styles.put("transform",
+					"matrix(" + colsOfRow2.item(3).getTextContent() + "," + colsOfRow2.item(1).getTextContent() + ","
+							+ colsOfRow1.item(3).getTextContent() + "," + colsOfRow1.item(1).getTextContent()
+							+ ",1,1)");
+		}
 
+	}
+	
 	@Override
     protected String getHTMLElement()
 	{
@@ -46,6 +78,6 @@ public class PictureWidget extends Widget
     @Override
 	protected void fillHTML(final PrintWriter html, final int indent)
 	{
-	    // Nothing inside 'img'
+		// Nothing inside 'img'
 	}
 }
