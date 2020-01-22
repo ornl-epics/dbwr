@@ -43,6 +43,8 @@ public class TabsWidget extends Widget
 		font.addToStyles(styles);
 
 		active = XMLUtil.getChildInteger(xml, "active_tab").orElse(0);
+		
+		final Integer tabCount = XMLUtil.getChildInteger(xml, "tab_count").orElse(null);
 
 		// Locate labels and content of tabs
 		final Element tbs = XMLUtil.getChildElement(xml, "tabs");
@@ -62,6 +64,9 @@ public class TabsWidget extends Widget
 		        tabs.add(tab);
 
 		        ++i;
+				if (tabCount != null && tabCount == i) {
+					break;
+				}
 		    }
 		}
 		else
@@ -73,6 +78,9 @@ public class TabsWidget extends Widget
 		        labels.add(label);
 		        ++i;
 		        label = XMLUtil.getChildString(parent, xml, "tab_" + i + "_title").orElse(null);
+				if (tabCount != null && tabCount == i) {
+					break;
+				}
 		    }
 		    // Each tab's content was in a group <widget>'s children
             for (final Element bodies : XMLUtil.getChildElements(xml, "widget"))
