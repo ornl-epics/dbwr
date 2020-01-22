@@ -44,7 +44,7 @@ import dbwr.widgets.Widget;
  */
 public class RuleSupport
 {
-    private final AtomicInteger id = new AtomicInteger();
+    private static final AtomicInteger id = new AtomicInteger();
     private final StringBuilder scripts = new StringBuilder();
 
     @FunctionalInterface
