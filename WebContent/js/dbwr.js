@@ -442,7 +442,7 @@ DisplayBuilderWebRuntime.prototype.widget_rules = {};
 
 /** Helper for handling limits-from-pv, min, max
  * 
- *  @param widget WIdget with 'limits-from-pv', 'min', 'max'
+ *  @param widget Widget with 'limits-from-pv', 'min', 'max'
  *  @param data PV data
  *  @returns [ min, max ]
  */

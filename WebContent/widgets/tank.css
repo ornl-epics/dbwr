@@ -1,0 +1,17 @@
+
+.TankBorder
+{
+    stroke: #000000;
+    stroke-width: 2;
+}
+
+.TankBar
+{
+    fill: #0000ff;
+    stroke: #000000;
+    stroke-width: 0.68848258;
+    stroke-miterlimit: 4;
+    stroke-dasharray: none;
+    stroke-linecap: null;
+    stroke-linejoin: null;
+}
