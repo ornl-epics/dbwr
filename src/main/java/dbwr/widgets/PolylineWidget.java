@@ -24,6 +24,7 @@ public class PolylineWidget extends SvgWidget
 
     protected final int line_width;
 	protected String line_color, points;
+    protected String dasharray;
 
 	public PolylineWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
@@ -35,13 +36,18 @@ public class PolylineWidget extends SvgWidget
 		super(parent, xml, type);
 		line_width = XMLUtil.getChildInteger(xml, "line_width").orElse(3);
 
-		// Check for legacy bg. color
-		String color_prop = "background_color";
-		line_color = XMLUtil.getColor(xml, color_prop).orElse(null);
+		// Display Builder uses "line_color"
+		String color_prop = "line_color";
+        line_color = XMLUtil.getColor(xml, color_prop).orElse(null);
 		if (line_color == null)
-		{   // Use current line_color
-		    color_prop = "line_color";
-		    line_color = XMLUtil.getColor(xml, color_prop).orElse("#00F");
+		{   // Fall back to variations of BOY settings, then default
+	        color_prop = "foreground_color";
+	        line_color = XMLUtil.getColor(xml, color_prop).orElse(null);
+	        if (line_color == null)
+	        {
+	            color_prop = "background_color";
+	            line_color = XMLUtil.getColor(xml, color_prop).orElse("#00F");
+	        }
 		}
 		// Rule based on used color property
         getRuleSupport().handleColorRule(parent, xml, this,
@@ -49,6 +55,32 @@ public class PolylineWidget extends SvgWidget
                                          "set_poly_line_color");
 
 		adjustXMLPoints(xml);
+
+
+		// Line style
+		int lineStyle = XMLUtil.getChildInteger(xml, "line_style").orElse(0);
+		switch (lineStyle)
+		{
+        case 1:
+            // dash
+            dasharray = String.format("%d,%d", line_width * 2, line_width);
+            break;
+        case 2:
+            // dot
+            dasharray = Integer.toString(line_width);
+            break;
+        case 3:
+            // dash-dot
+            dasharray = String.format("%d,%d,%d", line_width * 2, line_width, line_width);
+            break;
+        case 4:
+            // dash-dot-dot
+            dasharray = String.format("%d,%d,%d,%d", line_width * 2, line_width, line_width, line_width, line_width);
+            break;
+        default:
+            // Solid
+            dasharray = null;
+        }
 
 	    final StringBuilder buf = new StringBuilder();
 	    final Element pe = XMLUtil.getChildElement(xml, "points");
@@ -91,7 +123,10 @@ public class PolylineWidget extends SvgWidget
 	protected void fillHTML(final PrintWriter html, final int indent)
 	{
         HTMLUtil.indent(html, indent+2);
-        html.println("<polyline fill=\"transparent\" points=\"" + points +
-                     "\" stroke=\"" + line_color + "\" stroke-width=\"" + line_width + "\"/>");
+        html.print("<polyline fill=\"transparent\" points=\"" + points +
+                   "\" stroke=\"" + line_color + "\" stroke-width=\"" + line_width + "\"");
+        if (dasharray != null)
+            html.print(" stroke-dasharray=\"" + dasharray + "\"");
+        html.println("/>");
 	}
 }
