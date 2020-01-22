@@ -28,5 +28,9 @@ public class LedWidget extends BaseLedWidget
 	    attributes.put("data-on-color", on_color);
 	    attributes.put("data-off-color", off_color);
         attributes.put("data-bit", Integer.toString(XMLUtil.getChildInteger(xml, "bit").orElse(-1)));
+        
+        getRuleSupport().handleColorRule(parent, xml, this,
+                "on_color", on_color,
+                "set_svg_background_color");
 	}
 }
