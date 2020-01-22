@@ -20,4 +20,6 @@ button.Widget
     margin: 0px; 
     
     font-family: 'LiberationSans', sans-serif;
+    
+    cursor: pointer;
 }
