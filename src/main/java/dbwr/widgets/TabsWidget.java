@@ -65,22 +65,32 @@ public class TabsWidget extends Widget
 		    }
 		}
 		else
-		{   // Look for legacy *.opi "tab_0_title", "tab_1_title" etc.
+		{
+		    // BOY used a 'tab_count' and then the matching number of .._title etc.
+		    // ITER has generated displays that have more .._title.. entries,
+		    // so limit to tab_count
+	        final int tab_count = XMLUtil.getChildInteger(xml, "tab_count").orElse(Integer.MAX_VALUE);
+
+		    // Look for legacy *.opi "tab_0_title", "tab_1_title" etc.
 		    int i=0;
 		    String label = XMLUtil.getChildString(parent, xml, "tab_" + i + "_title").orElse(null);
 		    while (label != null)
 		    {
 		        labels.add(label);
-		        ++i;
+		        if (++i >= tab_count)
+		            break;
 		        label = XMLUtil.getChildString(parent, xml, "tab_" + i + "_title").orElse(null);
 		    }
 		    // Each tab's content was in a group <widget>'s children
+		    i = 0;
             for (final Element bodies : XMLUtil.getChildElements(xml, "widget"))
             {
                 final List<Widget> tab = new ArrayList<>();
                 for (final Element widget_xml : XMLUtil.getChildElements(bodies, "widget"))
                     tab.add(WidgetFactory.createWidget(this, widget_xml));
                 tabs.add(tab);
+                if (++i >= tab_count)
+                    break;
             }
 		}
 	}
