@@ -217,6 +217,16 @@ public class RuleSupport
             return XMLUtil.getColor(exp, "value").orElseThrow(() -> new Exception("Missing value for color"));
     };
 
+    /** If widget has a rule for a color property, implement it
+     *
+     *  @param macros Parent widget that provides macros
+     *  @param xml XML for this widget
+     *  @param widget The widget
+     *  @param property The color property for which to check
+     *  @param default_color Default color that rule will use as fallback
+     *  @param update_code Javascript function that rule will call with widget and color
+     *  @throws Exception on error
+     */
     public void handleColorRule(final MacroProvider macros, final Element xml,
                                 final Widget widget, final String property, final String default_color,
                                 final String update_code) throws Exception
