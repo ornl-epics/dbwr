@@ -13,11 +13,31 @@ DisplayBuilderWebRuntime.prototype.widget_alarm_methods["multi_state_led"] = upd
 
 DisplayBuilderWebRuntime.prototype.widget_update_methods["led"] = function(widget, data)
 {
-    if (is_bit_set(widget, data))
+    var value = is_bit_set(widget, data);
+    widget.data("value", value);
+    if (value)
         set_svg_background_color(widget, widget.data("on-color"));
     else
         set_svg_background_color(widget, widget.data("off-color"));
 }
+
+//Called by color rules that update the on/off colors
+function set_led_off_color(widget, color)
+{
+    // Update the color
+    widget.data("off-color", color);
+    // Re-draw right away because that's the color for the current state?
+    if (! widget.data("value"))
+        set_svg_background_color(widget, color);
+}
+
+function set_led_on_color(widget, color)
+{
+    widget.data("on-color", color);
+    if (widget.data("value"))
+        set_svg_background_color(widget, color);
+}
+
 
 DisplayBuilderWebRuntime.prototype.widget_update_methods["multi_state_led"] = function(widget, data)
 {
@@ -36,3 +56,4 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["multi_state_led"] = fu
     }
     widget.find("ellipse,rect").attr("fill", color);
 }
+

@@ -465,7 +465,7 @@ function get_min_max(widget, data)
  *  Checks for bits 0, 1, .. or any non-zero value for bit = -1
  *  @param widget Widget with 'data-bit'
  *  @param data PV data
- *  @returns Is addressed bit set?
+ *  @returns Is addressed bit set, 0/1?
  */
 function is_bit_set(widget, data)
 {

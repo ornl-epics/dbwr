@@ -20,14 +20,14 @@ public class LedWidget extends BaseLedWidget
     }
 
     public LedWidget(final ParentWidget parent, final Element xml) throws Exception
-	{
-		super(parent, xml, "led");
+    {
+        super(parent, xml, "led");
 
-		// Legacy BOY *.opi and this should be a multi-state LED?
-		final int state_count = XMLUtil.getChildInteger(xml, "state_count").orElse(-1);
-		if (state_count > 2)
-		{
-		    // Change to multi-state LED
+        // Legacy BOY *.opi and this should be a multi-state LED?
+        final int state_count = XMLUtil.getChildInteger(xml, "state_count").orElse(-1);
+        if (state_count > 2)
+        {
+            // Change to multi-state LED
             attributes.put("data-type", "multi_state_led");
             // Read legacy states
             for (int i=0; i<state_count; ++i)
@@ -39,12 +39,20 @@ public class LedWidget extends BaseLedWidget
             }
             attributes.put("data-fallback-color", XMLUtil.getColor(xml, "state_color_fallback").orElse("#F0F"));
             return;
-		}
+        }
 
-	    final String on_color = XMLUtil.getColor(xml, "on_color").orElse("#3CFF3C");
-	    final String off_color = XMLUtil.getColor(xml, "off_color").orElse("#3C643C");
-	    attributes.put("data-on-color", on_color);
-	    attributes.put("data-off-color", off_color);
+        final String on_color = XMLUtil.getColor(xml, "on_color").orElse("#3CFF3C");
+        final String off_color = XMLUtil.getColor(xml, "off_color").orElse("#3C643C");
+        attributes.put("data-value", "0");
+        attributes.put("data-on-color", on_color);
+        attributes.put("data-off-color", off_color);
         attributes.put("data-bit", Integer.toString(XMLUtil.getChildInteger(xml, "bit").orElse(-1)));
-	}
+
+        getRuleSupport().handleColorRule(parent, xml, this,
+                                         "off_color", off_color,
+                                         "set_led_off_color");
+        getRuleSupport().handleColorRule(parent, xml, this,
+                                         "on_color", on_color,
+                                         "set_led_on_color");
+    }
 }
