@@ -33,38 +33,39 @@ import dbwr.widgets.Widget;
 public class WidgetFactory
 {
     /** Mapping of legacy BOY widget types to current widget types */
-	private static final Map<String, String> BOY_TYPES = new HashMap<>();
+    private static final Map<String, String> BOY_TYPES = new HashMap<>();
 
-	/** Map of widget type like 'label' to {@link Widget} class */
-	private static final Map<String, Class<Widget>> widget_classes = new HashMap<>();
+    /** Map of widget type like 'label' to {@link Widget} class */
+    private static final Map<String, Class<Widget>> widget_classes = new HashMap<>();
 
-	/** Javascript files that are used by the widgets */
-	public static final List<String> js = new ArrayList<>();
+    /** Javascript files that are used by the widgets */
+    public static final List<String> js = new ArrayList<>();
 
-	/** Stylesheet files that are used by the widgets */
-	public static final List<String> css = new ArrayList<>();
+    /** Stylesheet files that are used by the widgets */
+    public static final List<String> css = new ArrayList<>();
 
-	static
-	{
-	    // Load *Widget classes from /widget.properties
-		try
-		{
-			final Properties wp = new Properties();
-			wp.load(WidgetFactory.class.getResourceAsStream("/widget.properties"));
-			for (final Object type : wp.keySet())
-			{
-			    final String clazz = wp.getProperty(type.toString());
-			    widget_classes.put(type.toString(), (Class<Widget>)Class.forName(clazz));
-			}
-		}
-		catch (final Exception ex)
-		{
-			logger.log(Level.SEVERE, "Cannot load widget info", ex);
-		}
+    static
+    {
+        // Load *Widget classes from /widget.properties
+        try
+        {
+            final Properties wp = new Properties();
+            wp.load(WidgetFactory.class.getResourceAsStream("/widget.properties"));
+            for (final Object type : wp.keySet())
+            {
+                final String typename = type.toString().trim();
+                final String clazz = wp.getProperty(typename);
+                widget_classes.put(typename, (Class<Widget>)Class.forName(clazz));
+            }
+        }
+        catch (final Exception ex)
+        {
+            logger.log(Level.SEVERE, "Cannot load widget info", ex);
+        }
 
-		for (final Map.Entry<String, Class<Widget>> entry : widget_classes.entrySet())
-			logger.log(Level.CONFIG, entry.getKey() + " - " + entry.getValue());
-	}
+        for (final Map.Entry<String, Class<Widget>> entry : widget_classes.entrySet())
+            logger.log(Level.CONFIG, entry.getKey() + " - " + entry.getValue());
+    }
 
     /** @param script JavaScript file to add */
     public static void addJavaScript(final String script)
@@ -86,27 +87,27 @@ public class WidgetFactory
         BOY_TYPES.put(legacy, type);
     }
 
-	/** @param parent Parent widget
-	 *  @param xml XML for this widget
-	 *  @return {@link Widget}
-	 *  @throws Exception on error
-	 */
-	public static Widget createWidget(final ParentWidget parent, final Element xml) throws Exception
-	{
-		String type = xml.getAttribute("type");
-		if (type.isEmpty())
-			type = BOY_TYPES.get(xml.getAttribute("typeId"));
-		if (type == null)
+    /** @param parent Parent widget
+     *  @param xml XML for this widget
+     *  @return {@link Widget}
+     *  @throws Exception on error
+     */
+    public static Widget createWidget(final ParentWidget parent, final Element xml) throws Exception
+    {
+        String type = xml.getAttribute("type");
+        if (type.isEmpty())
+            type = BOY_TYPES.get(xml.getAttribute("typeId"));
+        if (type == null)
             type = xml.getAttribute("typeId");
 
-		if (type == null  ||  type.isEmpty())
-		    throw new Exception("Cannot determine widget type for " + XMLUtil.toString(xml));
+        if (type == null  ||  type.isEmpty())
+            throw new Exception("Cannot determine widget type for " + XMLUtil.toString(xml));
 
-		final Class<Widget> clazz = widget_classes.get(type);
-		if (clazz == null)
-			return new UnknownWidget(parent, xml, type);
+        final Class<Widget> clazz = widget_classes.get(type);
+        if (clazz == null)
+            return new UnknownWidget(parent, xml, type);
 
-		final Constructor<Widget> constructor = clazz.getDeclaredConstructor(ParentWidget.class, Element.class);
-		return constructor.newInstance(parent, xml);
-	}
+        final Constructor<Widget> constructor = clazz.getDeclaredConstructor(ParentWidget.class, Element.class);
+        return constructor.newInstance(parent, xml);
+    }
 }
