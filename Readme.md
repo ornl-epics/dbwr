@@ -63,6 +63,9 @@ The following widget types and features have been implemented with basic functio
  * Limited Rule support: Color of rect/circle/label, visibility
  * Caching
 
+In principle, the PV Web Socket supports both Channel Access and PV Access,
+but so far all testing of the display builder web runtime has concentrated
+on Channel Access.
  
 Widget Implementation
 =====================
