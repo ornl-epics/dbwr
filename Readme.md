@@ -20,6 +20,9 @@ on the same Tomcat instance.
 Set the following environment variables, for example in $CATALINA_HOME/bin/setenv.sh:
 
  * `DBWR1`, `DBWR2`, ...: URLs of displays to suggest on the start page.
+ * `WHITELIST1`, `WHITELIST2`, ...: Regular expressions of allowed displays.
+
+When no `WHITELIST1` entries are defined, `.*` will be used.
 
 Place `dbwr.war` in `$CATALINA_HOME/webapps`
 

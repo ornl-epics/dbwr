@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2020 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -29,6 +30,9 @@ public class WebDisplayRepresentation implements ServletContextListener
 
 	public static final List<String> display_options = new ArrayList<>();
 
+	public static final List<Pattern> whitelist_options = new ArrayList<>();
+
+
 	static
 	{
 	    // Load display links for the start page from environment variables "DBWR1", "DBWR2", ...
@@ -46,6 +50,23 @@ public class WebDisplayRepresentation implements ServletContextListener
 	        display_options.add("https://raw.githubusercontent.com/shroffk/phoebus/master/app/display/model/src/main/resources/examples/01_main.bob");
 	        display_options.add("file:/some/local/display.bob");
 	    }
+
+	    // Load whitelist patterns from environment variables "WHITELIST1", "WHITELIST2", ...
+	    i=1;
+	    String whitelist = System.getenv("WHITELIST" + i);
+        while (whitelist != null)
+        {
+            logger.log(Level.INFO, "WHITELIST" + i + " = " + whitelist);
+            whitelist_options.add(Pattern.compile(whitelist));
+            whitelist = System.getenv("WHITELIST" + (++i));
+        }
+
+        // If none are provided, allow everything
+        if (whitelist_options.isEmpty())
+        {
+            logger.log(Level.INFO, "No WHITELIST1 etc., allowing all display links");
+            whitelist_options.add(Pattern.compile(".*"));
+        }
 	}
 
 	@Override

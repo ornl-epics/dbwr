@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2020 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dbwr.WebDisplayRepresentation;
 import dbwr.macros.MacroProvider;
 import dbwr.macros.MacroUtil;
 import dbwr.parser.DisplayParser;
@@ -79,6 +81,21 @@ public class ScreenServlet extends HttpServlet
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing 'display'");
 			return;
 		}
+
+		// Check display against whitelist
+		boolean block = true;
+		for (Pattern ok : WebDisplayRepresentation.whitelist_options)
+		    if (ok.matcher(display_name).matches())
+		    {
+		        block = false;
+		        break;
+		    }
+		if (block)
+        {
+		    logger.log(Level.WARNING, "Block screen/display=" + display_name);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid 'display' link");
+            return;
+        }
 
 		final DisplayKey key = new DisplayKey(display_name, macro_map);
 		try

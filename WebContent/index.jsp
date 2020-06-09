@@ -98,6 +98,7 @@ cache
 <hr>
 
 <div id="versions">
+2020-06-09 Display whitelist.<br>
 2020-01-17 Middle-click copies PV name to clipboard.<br>
 2020-01-07 Use 'flex' display to align label, textupdate.<br>
 2019-12-11 Coloring of buttons w/ custom background color.<br>
