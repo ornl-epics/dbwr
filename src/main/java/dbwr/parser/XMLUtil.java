@@ -49,13 +49,13 @@ public class XMLUtil
     public static Element openXMLDocument(final InputStream stream,
             final String expected_root) throws Exception
     {
-    	// Parse XML
-		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        // Parse XML
+        final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
-		// Disable DTDs to prevent XML entity attacks
+        // Disable DTDs to prevent XML entity attacks
         dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         dbf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-		dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
 
         final Document doc = dbf.newDocumentBuilder().parse(stream);
         doc.getDocumentElement().normalize();
@@ -356,38 +356,38 @@ public class XMLUtil
                                               awt_color.getBlue());
     }
 
-	public static Optional<String> getColor(final Element xml, final String name)
-	{
-	    final Color color = getAWTColor(xml, name);
-	    if (color == null)
-	        return Optional.empty();
-	    return Optional.of(getWebColor(color));
-	}
+    public static Optional<String> getColor(final Element xml, final String name)
+    {
+        final Color color = getAWTColor(xml, name);
+        if (color == null)
+            return Optional.empty();
+        return Optional.of(getWebColor(color));
+    }
 
-	public static Optional<FontInfo> getFont(final Element xml, final String name)
-	{
-		final Element el = getChildElement(xml, name);
-		if (el == null)
-			return Optional.empty();
+    public static Optional<FontInfo> getFont(final Element xml, final String name)
+    {
+        final Element el = getChildElement(xml, name);
+        if (el == null)
+            return Optional.empty();
 
-		Element font_xml = getChildElement(el, "font");
-		if (font_xml == null)
-		{
-		    // Fall back to
-		    // <opifont.name fontName="Liberation Sans" height="14" style="0" pixels="true">Default</opifont.name>
-	        font_xml = getChildElement(el, "opifont.name");
-	        if (font_xml != null)
-	        {
-	            final String attr = font_xml.getAttribute("height");
-	            if (! attr.isEmpty())
-	            {
+        Element font_xml = getChildElement(el, "font");
+        if (font_xml == null)
+        {
+            // Fall back to
+            // <opifont.name fontName="Liberation Sans" height="14" style="0" pixels="true">Default</opifont.name>
+            font_xml = getChildElement(el, "opifont.name");
+            if (font_xml != null)
+            {
+                final String attr = font_xml.getAttribute("height");
+                if (! attr.isEmpty())
+                {
                     final int size = (int) Double.parseDouble(attr);
                     final boolean bold = false;
-        	        return Optional.of(new FontInfo(size, bold));
-	            }
-	        }
-	        // Fall back to <fontdata fontName="Sans" height="11" style="0"/>
-	        font_xml = getChildElement(el, "fontdata");
+                    return Optional.of(new FontInfo(size, bold));
+                }
+            }
+            // Fall back to <fontdata fontName="Sans" height="11" style="0"/>
+            font_xml = getChildElement(el, "fontdata");
             if (font_xml != null)
             {
                 final String attr = font_xml.getAttribute("height");
@@ -400,16 +400,16 @@ public class XMLUtil
             }
             // Give up
             logger.log(Level.WARNING, "Font element <" + name +"> is missing <font>");
-			return Optional.empty();
-		}
+            return Optional.empty();
+        }
 
-		// <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0"></font>
-		final int size = (int) Double.parseDouble(font_xml.getAttribute("size"));
-		final boolean bold = font_xml.getAttribute("style").equals("BOLD");
-		return Optional.of(new FontInfo(size, bold));
-	}
+        // <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0"></font>
+        final int size = (int) Double.parseDouble(font_xml.getAttribute("size"));
+        final boolean bold = font_xml.getAttribute("style").equals("BOLD");
+        return Optional.of(new FontInfo(size, bold));
+    }
 
-	/** Write DOM to stream
+    /** Write DOM to stream
      *  @param node Node from which on to write. May be the complete {@link Document}
      *  @param stream Output stream
      *  @throws Exception on error
