@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2020 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.logging.Level;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -49,7 +50,14 @@ public class XMLUtil
             final String expected_root) throws Exception
     {
     	// Parse XML
-		final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
+		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+		// Disable DTDs to prevent XML entity attacks
+        dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        dbf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+		dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+
+        final Document doc = dbf.newDocumentBuilder().parse(stream);
         doc.getDocumentElement().normalize();
 
         // Check root element

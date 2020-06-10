@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Opening this file via
+   http://localhost:8080/dbwr/view.jsp?display=file:/path/to/dbwr/examples/XMLEntity.bob
+   would potentially expose /etc/passwd.
+   
+  -->
+<!DOCTYPE root [<!ENTITY test SYSTEM 'file:///etc/passwd'>]>
+<display version="2.0.0">
+<name>DTD Test</name>
+<widget type="label" version="2.0.0">
+<text>zzz &test; shrbrk</text>
+<y>41</y>
+<width>181</width>
+</widget>
+</display>
