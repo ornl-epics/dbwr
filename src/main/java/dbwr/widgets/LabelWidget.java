@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2020 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -93,7 +93,6 @@ public class LabelWidget extends Widget
 	    // To support vertical centering with single as well as multi-line text,
 	    // wrap in inner span
 	    html.append("<span class=\"InnerText\">");
-	    HTMLUtil.indent(html, indent);
 	    // Turn '\n' into <br>,
 	    // then escape each line to handle special characters
 	    boolean first = true;

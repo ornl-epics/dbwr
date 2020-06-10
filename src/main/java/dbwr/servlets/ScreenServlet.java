@@ -102,6 +102,7 @@ public class ScreenServlet extends HttpServlet
 		{
 		    final CachedDisplay cached = DisplayCache.getOrCreate(key, this::createHtml);
 			response.setContentType("text/html");
+			response.setCharacterEncoding("UTF-8");
 			final PrintWriter writer = response.getWriter();
 			writer.append(cached.getHTML());
 		}

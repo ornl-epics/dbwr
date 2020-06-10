@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2020 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -65,6 +65,7 @@ public class CacheServlet extends HttpServlet
         g.flush();
 
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         final PrintWriter writer = response.getWriter();
         writer.append(buf.toString());
 	}

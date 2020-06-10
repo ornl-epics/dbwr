@@ -98,7 +98,7 @@ cache
 <hr>
 
 <div id="versions">
-2020-06-10 Disable DTD.<br>
+2020-06-10 Disable DTD. Mark response as UTF-8 to support wider character sets.<br>
 2020-06-09 Display whitelist.<br>
 2020-01-17 Middle-click copies PV name to clipboard.<br>
 2020-01-07 Use 'flex' display to align label, textupdate.<br>
