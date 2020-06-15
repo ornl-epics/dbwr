@@ -47,15 +47,29 @@
 
 <h4>Client URLs</h4>
 
+<p>Serve file that's fetched via http: or https:</p>
+<pre class="example_url">
+view.jsp?display=https%3A//some_host/opi/file.opi
+</pre>
+
 <p>Display a file that's in the file system of the Tomcat host:</p>
 <pre class="example_url">
 view.jsp?display=file:/Path/to/Display+Builder/01_main.bob
 </pre>
 
-<p>Serve file that's fetched via http: or https:</p>
-<pre class="example_url">
-view.jsp?display=https%3A//some_host/opi/file.opi
-</pre>
+<p>Note limitations of <code>file:/..</code> URLs:
+If the display contains links to other resources like images,
+these will be turned URLs relative to the display URL,
+i.e. also 'file:/' URLs.
+The <u>client</u> will then try to resolve them,
+not the server, which can cause two problems.
+For one, the path will not resolve, because it was only
+a valid file on the server, not the client.
+Secondly, most web browsers now block
+local file access for security reasons.
+
+<p>To serve displays which include images, all the files should thus be provided
+via http URLs, not file URLs.
 
 
 <h4>Macros</h4>
