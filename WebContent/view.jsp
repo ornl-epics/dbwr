@@ -58,7 +58,7 @@ for (String js : WidgetFactory.js)
 
 <div id="info_panel">
 <span id="info">INFO</span>
-<img id="status" alt="Status" src="../pvws/img/disconnected.png">
+<img id="status" alt="Status" title="Connect/disconnect" src="../pvws/img/disconnected.png">
 </div>
 
 
