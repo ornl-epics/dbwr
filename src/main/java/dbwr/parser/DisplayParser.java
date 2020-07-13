@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2020 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.w3c.dom.Element;
 
@@ -25,6 +26,9 @@ import dbwr.widgets.Widget;
  */
 public class DisplayParser implements ParentWidget
 {
+    private static final AtomicInteger IDs = new AtomicInteger();
+
+    private final int id;
     private final URL display;
     private final RuleSupport rules = new RuleSupport();
 	public final int width, height;
@@ -50,6 +54,7 @@ public class DisplayParser implements ParentWidget
      */
 	public DisplayParser(final Resolver display, final MacroProvider parent, final PrintWriter html, final String group_name) throws Exception
 	{
+	    id = IDs.incrementAndGet();
 	    this.display = display.getUrl();
 
 		final Element root = XMLUtil.openXMLDocument(display.getStream(), "display");
@@ -57,6 +62,7 @@ public class DisplayParser implements ParentWidget
 		// Fetch macros first to allow use in remaining properties,
 		macros = new HashMap<>();
 		macros.putAll(MacroUtil.fromXML(root));
+		macros.put("DID", "DID" + id);
 		MacroUtil.expand(parent, macros);
 
 		// Combining macros passed in with those defined in the display
