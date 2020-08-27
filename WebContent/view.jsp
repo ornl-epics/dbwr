@@ -13,11 +13,15 @@
 <title>Display Builder Web Runtime</title>
 <link rel="stylesheet" type="text/css" href="css/normalize.css">
 <link rel="stylesheet" type="text/css" href="css/widgets.css">
+<link rel="stylesheet" type="text/css" href="../pvws/css/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="../pvws/css/jquery-ui-timepicker-addon.css">
 <%
 for (String c : WidgetFactory.css)
 	out.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"widgets/" + c + "\">\n");
 %>
 <script type="text/javascript" src="../pvws/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../pvws/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../pvws/js/jquery-ui-timepicker-addon.js"></script>
 <script type="text/javascript" src="../pvws/js/base64.js"></script>
 <script type="text/javascript" src="../pvws/js/pvws.js"></script> 
 <script type="text/javascript" src="js/lib/jquery.event.drag.js"></script>

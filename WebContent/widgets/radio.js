@@ -34,49 +34,56 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["radio"] = function(wid
     }
     
 
-    // (Re)-create buttons?
+    // (Re)-create buttons always to update selected value
     let N = items.length;
-    if (widget.data("itemcount") != N)
+    
+    widget.html("");
+
+    let horizontal = widget.data("horizontal");
+    if (horizontal === undefined)
+        horizontal = true;
+    let width = parseFloat(widget.css("width"));
+    let height = parseFloat(widget.css("height"));
+    
+    selected=data.value
+    
+    for (let i=0; i<N; ++i)
     {
-        widget.html("");
-
-        let horizontal = widget.data("horizontal");
-        if (horizontal === undefined)
-            horizontal = true;
-        let width = parseFloat(widget.css("width"));
-        let height = parseFloat(widget.css("height"));
-        for (let i=0; i<N; ++i)
-        {
-            let radio = jQuery("<input>").attr("type", "radio")
-                                         .attr("name", widget.attr("id"));
-            radio.click(event =>
-            {
-                // Only support clicking left button to toggle
-                // (middle button copies PV name and doesn't toggle)
-                if (event.which != 1)
-                    return false;
-
-                let pv  = widget.data("pv");
-                if (typeof(data.value) == "number")
-                    dbwr.write(pv, i);
-                else
-                    dbwr.write(pv, items[i]);                            
-            });
-            let label = jQuery("<label>");
-            label.append(radio).append(" " + items[i]);
-            label.css("position", "absolute");
-            
-            if (horizontal)
-                label.css("left", i*width/N + "px")
-                     .css("height", height + "px")
-                     .css("line-height", height + "px");
-            else
-                label.css("top", i*height/N + "px");
-            widget.append(label);
-        }
+        let radio = jQuery("<input>")
         
-        widget.data("itemcount", N);
+        if(selected == i)
+          radio.attr("type", "radio").attr("checked", "true").attr("name", widget.attr("id"));
+        else
+          radio.attr("type", "radio").attr("name", widget.attr("id"));
+          
+        radio.click(event =>
+        {
+            // Only support clicking left button to toggle
+            // (middle button copies PV name and doesn't toggle)
+            if (event.which != 1)
+                return false;
+
+            let pv  = widget.data("pv");
+            if (typeof(data.value) == "number")
+                dbwr.write(pv, i);
+            else
+                dbwr.write(pv, items[i]);                            
+        });
+        let label = jQuery("<label>");
+        label.append(radio).append(" " + items[i]);
+        label.css("position", "absolute");
+        
+        if (horizontal)
+            label.css("left", i*width/N + "px")
+                 .css("height", height + "px")
+                 .css("line-height", height + "px");
+        else
+            label.css("top", i*height/N + "px");
+        widget.append(label);
     }
+    
+    widget.data("itemcount", N);
+    
     
     let buttons = widget.find("input");
     showWriteAccess(buttons, data.readonly);

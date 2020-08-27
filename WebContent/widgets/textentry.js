@@ -21,58 +21,101 @@ function __submit_text_entry(widget, val)
 
 DisplayBuilderWebRuntime.prototype.widget_init_methods['textentry'] = function(widget)
 {
-    // On focus, save current value in 'editing',
-    // which flags the widget as being edited and blocks updates
-    widget.focusin(() =>
+    selector=widget.attr("selector_type");
+    
+    if(selector.localeCompare("datetime")==0)
     {
-        // console.log("Focus in...." + widget.val());
+      widget.focusin(() =>
+      {
         widget.data("editing", widget.val());
-    });
-
-    // Handle 'Esc' and (Ctrl) 'Enter' key presses
-    widget.keydown(event =>
-    {
-        // On escape, drop focus, which restores the original value resp. most recent update
-        if (event.keyCode == 27)
-        {
-            if (widget.is("textarea"))
-                __restore_text_entry(widget);
-            widget.blur();
-        }
-            
-        // Submit value to PV on enter
-        else if (event.keyCode == 13)
-        {
-            // For input, submit on enter
-            if (widget.is("input"))
-            {
-                // Get user's value, then blur() to drop focus and restore last known PV value
-                let entered = widget.val();
-                widget.blur();
-                __submit_text_entry(widget, entered);
-            }
-            // For text area, require ctrl-enter.
-            // Submit by simply dropping focus
-            else if (event.ctrlKey)
-                widget.blur();
-        }
-    })
-
-    // When focus is lost, restore current value.
-    // If new value was written ('Enter'), that
-    // will soon trigger a value update
-    widget.focusout(() =>
-    {
-        // console.log("Focus out..." + widget.val());
-        
+        widget.datetimepicker({timeFormat: 'HH:mm:ss.l'});
+      });
+      
+      widget.change(()=>
+      {
         let entered = widget.val();
+        __submit_text_entry(widget, entered);
         
-        // Some text area users are incapable of pressing Ctrl,
-        // so submit on exit.
-        // They need to push Esc to exit widget w/o submitting.
-        if (__restore_text_entry(widget)  &&  widget.is("textarea"))
-            __submit_text_entry(widget, entered);
-    });
+        widget.removeData("editing");
+      });
+      
+      widget.focusout(() =>
+      {
+        widget.removeData("editing");
+      });
+    }
+    else if(selector.localeCompare("file")==0)
+    {
+      widget.focusin(() =>
+      {
+        widget.data("editing", widget.val());
+      });
+      widget.change(()=>
+      {
+        let entered = widget.val();
+        __submit_text_entry(widget, entered);
+      });
+      
+      widget.focusout(() =>
+      {
+        widget.removeData("editing");
+      });
+    }
+    else {//selector none or file
+      // On focus, save current value in 'editing',
+      // which flags the widget as being edited and blocks updates
+      widget.focusin(() =>
+      {
+          widget.data("editing", widget.val());
+          // console.log("Focus in...." + widget.val());
+          
+      });
+
+      // Handle 'Esc' and (Ctrl) 'Enter' key presses
+      widget.keydown(event =>
+      {
+          // On escape, drop focus, which restores the original value resp. most recent update
+          if (event.keyCode == 27)
+          {
+              if (widget.is("textarea"))
+                  __restore_text_entry(widget);
+              widget.blur();
+          }
+              
+          // Submit value to PV on enter
+          else if (event.keyCode == 13)
+          {
+              // For input, submit on enter
+              if (widget.is("input"))
+              {
+                  // Get user's value, then blur() to drop focus and restore last known PV value
+                  let entered = widget.val();
+                  widget.blur();
+                  __submit_text_entry(widget, entered);
+              }
+              // For text area, require ctrl-enter.
+              // Submit by simply dropping focus
+              else if (event.ctrlKey)
+                  widget.blur();
+          }
+      })
+
+      // When focus is lost, restore current value.
+      // If new value was written ('Enter'), that
+      // will soon trigger a value update
+      widget.focusout(() =>
+      {
+          // console.log("Focus out..." + widget.val());
+          
+          let entered = widget.val();
+          
+          // Some text area users are incapable of pressing Ctrl,
+          // so submit on exit.
+          // They need to push Esc to exit widget w/o submitting.
+          if (__restore_text_entry(widget)  &&  widget.is("textarea"))
+              __submit_text_entry(widget, entered);
+      });
+    }
 }
 
 DisplayBuilderWebRuntime.prototype.widget_update_methods['textentry'] = function(widget, data)

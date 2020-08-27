@@ -43,6 +43,21 @@ public class BaseTextWidget extends PVWidget
             break;
         default:
 		}
+		switch (XMLUtil.getChildInteger(xml, "selector_type").orElse(0))
+		{
+        case 0:
+            attributes.put("selector_type", "none");
+            break;
+        case 1:
+            attributes.put("selector_type", "file");
+            break;
+        case 2:
+            attributes.put("selector_type", "datetime");
+            break;
+        default:
+            attributes.put("selector", "none");
+            break;
+    }
 
 		final int precision = XMLUtil.getChildInteger(xml, "precision").orElse(-1);
 		if (precision != -1)

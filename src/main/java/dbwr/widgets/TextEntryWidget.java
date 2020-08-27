@@ -30,7 +30,12 @@ public class TextEntryWidget extends BaseTextWidget
 
 		multiline = XMLUtil.getChildBoolean(xml, "multi_line").orElse(false);
 
-		attributes.put("type", "text");
+		int selector = XMLUtil.getChildInteger(xml, "selector_type").orElse(0);
+
+		if(selector == 1)
+				attributes.put("type", "file");
+		else
+				attributes.put("type", "text");
 		// <input> uses value, multiline uses fillHTML()
 		if (! multiline)
 		    attributes.put("value", "<" + pv_name + ">");
