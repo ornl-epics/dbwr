@@ -64,8 +64,10 @@ public class ComboWidget extends PVWidget
     @Override
     protected void fillHTML(final PrintWriter html, final int indent)
     {
-        //html.append("<span>");
-        //HTMLUtil.escape(html, "" + pv_name + ">");
-        //html.append("</span>");
+        // Initially, show PV name.
+        // Javascript will replace this.
+        html.append("<span>");
+        HTMLUtil.escape(html, "<" + pv_name + ">");
+        html.append("</span>");
     }
 }

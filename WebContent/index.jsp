@@ -112,6 +112,7 @@ cache
 <hr>
 
 <div id="versions">
+2020-08-28 Combo support.<br>
 2020-07-13 '$(DID)'.<br>
 2020-06-11 'Symbol' widget for images. 'Text-Symbol'. Remove 'Disconnect' button. For testing, click on the connection indicator.<br>
 2020-06-10 Disable DTD. Mark response as UTF-8 to support wider character sets.<br>

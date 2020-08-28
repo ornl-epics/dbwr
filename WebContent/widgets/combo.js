@@ -13,8 +13,6 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["combo"] = function(widge
 
     if (items.length > 0)
         widget.data("items", items);
-    
-    widget.data("itemcount", -1);
 }
 
 
@@ -27,7 +25,7 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["combo"] = function(wid
         items = data.labels;
         if (items === undefined)
         {
-            console.log("Radio lacks items: " + widget);
+            console.log("Combo lacks items: " + widget);
             return;
         }
     }
@@ -36,36 +34,32 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["combo"] = function(wid
     // (Re)-create always to update selected item
     let N = items.length;
 
+    // Clear existing HTML, to be replaced by combo
     widget.html("");
 
-    let horizontal = widget.data("horizontal");
-    if (horizontal === undefined)
-        horizontal = true;
     let width = parseFloat(widget.css("width"));
     let height = parseFloat(widget.css("height"));
     
     let combo = jQuery("<select>").attr("type", "combo")
-                                 .attr("name", widget.attr("id"));
-    
+                                  .attr("name", widget.attr("id"));
     
     for (let i=0; i<N; ++i)
     {
-      let option = jQuery("<option>");
-      if(selected == i)
-        option.attr("value",i).attr("selected","selected").text(items[i]);
-      else
-        option.attr("value",i).text(items[i]);
-      combo.append(option)
+        let option = jQuery("<option>");
+        if(selected == i)
+            option.attr("value",i).attr("selected","selected").text(items[i]);
+        else
+            option.attr("value",i).text(items[i]);
+        combo.append(option)
     }
     combo.change(event =>
-        {
-            let pv  = widget.data("pv");
-            let val=parseInt(event.currentTarget.value);
-            dbwr.write(pv,  val);
-        });
-    combo.css("height", height + "px").css("width", width + "px")
+    {
+        let pv  = widget.data("pv");
+        let val=parseInt(event.currentTarget.value);
+        dbwr.write(pv,  val);
+    });
+    combo.css("width",  width + "px")
+         .css("height", height + "px");
     showWriteAccess(combo, data.readonly);
     widget.append(combo);
-    widget.data("itemcount", N);
-
 }
