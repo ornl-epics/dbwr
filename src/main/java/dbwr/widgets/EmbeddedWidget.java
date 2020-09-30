@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2020 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -10,15 +10,10 @@ import static dbwr.WebDisplayRepresentation.logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 
 import org.w3c.dom.Element;
 
-import dbwr.macros.MacroUtil;
 import dbwr.parser.DisplayParser;
 import dbwr.parser.Resolver;
 import dbwr.parser.WidgetFactory;
@@ -31,14 +26,13 @@ import dbwr.parser.XMLUtil;
  *
  *  @author Kay Kasemir
  */
-public class EmbeddedWidget extends Widget
+public class EmbeddedWidget extends BaseMacroWidget
 {
     static
     {
         WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.linkingContainer", "embedded");
     }
 
-	private final Map<String, String> macros;
 	private String file;
     private final String group_name;
 	private final int resize;
@@ -49,10 +43,6 @@ public class EmbeddedWidget extends Widget
 		super(parent, xml, "embedded", 300, 200);
 		// classes.add("Debug");
 
-		// Get macros first in case they're used for the name etc.
-		macros = MacroUtil.fromXML(xml);
-		MacroUtil.expand(parent, macros);
-
 		file = XMLUtil.getChildString(this, xml, "file").orElse("");
 		if (file.isEmpty())
 		    file = XMLUtil.getChildString(this, xml, "opi_file").orElse("");
@@ -61,23 +51,6 @@ public class EmbeddedWidget extends Widget
 
 		resize = XMLUtil.getChildInteger(xml, "resize").orElse(0);
 	}
-
-	@Override
-    public Collection<String> getMacroNames()
-	{
-	    final List<String> names = new ArrayList<>(super.getMacroNames());
-	    names.addAll(macros.keySet());
-        return names;
-    }
-
-    @Override
-    public String getMacroValue(final String name)
-    {
-        final String result = macros.get(name);
-        if (result != null)
-            return result;
-        return super.getMacroValue(name);
-    }
 
     private String parseContent()
     {
