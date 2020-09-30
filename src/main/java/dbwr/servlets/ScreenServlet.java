@@ -57,7 +57,7 @@ public class ScreenServlet extends HttpServlet
 	    }
 	    catch (final Exception ex)
 	    {
-	        throw new Error("Cannot create " + key, ex);
+	        throw new Error("Cannot create display " + key, ex);
 	    }
 	}
 

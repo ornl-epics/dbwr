@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2020 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -8,10 +8,13 @@ package dbwr.widgets;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.w3c.dom.Element;
 
+import dbwr.macros.MacroUtil;
 import dbwr.parser.FontInfo;
 import dbwr.parser.HTMLUtil;
 import dbwr.parser.WidgetFactory;
@@ -32,10 +35,14 @@ public class TabsWidget extends Widget
     private final int active;
     private final List<String> labels = new ArrayList<>();
     private final List<List<Widget>> tabs = new ArrayList<>();
+    private final Map<String, String> macros;
 
     public TabsWidget(final ParentWidget parent, final Element xml) throws Exception
     {
         super(parent, xml, "tabs");
+
+        macros = MacroUtil.fromXML(xml);
+        MacroUtil.expand(parent, macros);
 
         // classes.add("Debug");
 
@@ -93,6 +100,23 @@ public class TabsWidget extends Widget
                     break;
             }
         }
+    }
+
+    @Override
+    public Collection<String> getMacroNames()
+    {
+        final List<String> names = new ArrayList<>(super.getMacroNames());
+        names.addAll(macros.keySet());
+        return names;
+    }
+
+    @Override
+    public String getMacroValue(final String name)
+    {
+        final String result = macros.get(name);
+        if (result != null)
+            return result;
+        return super.getMacroValue(name);
     }
 
     @Override
