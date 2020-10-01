@@ -45,7 +45,7 @@ for (String c : WidgetFactory.css)
 <script type="text/javascript" src="js/flot/jquery.flot.composeImages.js"></script>
 <script type="text/javascript" src="js/flot/jquery.flot.legend.js"></script>
 <script type="text/javascript" src="js/clipboard.js"></script> 
-<script type="text/javascript" src="js/dbwr.js"></script> 
+<script type="text/javascript" src="js/dbwr.js?V=2"></script> 
 <%
 for (String js : WidgetFactory.js)
 	 out.append("<script type=\"text/javascript\" src=\"widgets/" + js + "\"></script>\n");
@@ -64,9 +64,16 @@ for (String js : WidgetFactory.js)
 
 <script type="text/javascript">
 <%
+// Display, default empty
 String display_name = request.getParameter("display");
 if (display_name == null)
 	display_name = "";
+
+// Cache, default "true"
+String cache = request.getParameter("cache");
+if (cache == null)
+    cache = "true";
+
 // Macros are usually passed as "&macros=JSON map"
 String macro_text = request.getParameter("macros");
 if (macro_text == null)
@@ -92,12 +99,12 @@ if (macro_text == null)
 
 // Determine PV Web Socket URL relative to this page
 let wsurl = window.location.pathname;
-wsurl = wsurl.substring(0, wsurl.indexOf("/dbwr"))
-wsurl = window.location.host + wsurl + "/pvws/pv"
+wsurl = wsurl.substring(0, wsurl.indexOf("/dbwr"));
+wsurl = window.location.host + wsurl + "/pvws/pv";
 if (window.location.protocol == "https:")
-    wsurl = "wss://" + wsurl
+    wsurl = "wss://" + wsurl;
 else
-    wsurl = "ws://" + wsurl
+    wsurl = "ws://" + wsurl;
 
 let dbwr = new DisplayBuilderWebRuntime(wsurl);
 
@@ -105,7 +112,7 @@ jQuery("#status").click(() => dbwr.pvws.close() );
 
 jQuery(() =>
 {
-	dbwr.load_content('<%=display_name%>', '<%=macro_text%>');
+	dbwr.load_content('<%=display_name%>', '<%=macro_text%>', '<%=cache%>');
 });
 </script>
 </body>

@@ -41,6 +41,7 @@ public class ScreenServlet extends HttpServlet
 
 	private CachedDisplay createHtml(final DisplayKey key) throws Error
 	{
+	    logger.log(Level.INFO, () -> "Creating HTML for " + key);
 	    try
 	    {
     	    final long start = System.currentTimeMillis();
@@ -66,6 +67,11 @@ public class ScreenServlet extends HttpServlet
 	{
 		final String display_name = request.getParameter("display");
 		logger.log(Level.INFO, "screen/display=" + display_name);
+
+		final String flag = request.getParameter("cache");
+		final boolean use_cache = flag == null  ||  flag.isEmpty()
+		                        ? true
+		                        : Boolean.parseBoolean(flag);
 
 		Map<String, String> macro_map = Collections.emptyMap();
 		String json_macros = request.getParameter("macros");
@@ -100,7 +106,9 @@ public class ScreenServlet extends HttpServlet
 		final DisplayKey key = new DisplayKey(display_name, macro_map);
 		try
 		{
-		    final CachedDisplay cached = DisplayCache.getOrCreate(key, this::createHtml);
+		    final CachedDisplay cached = use_cache
+		                               ? DisplayCache.getOrCreate(key, this::createHtml)
+		                               : createHtml(key);
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
 			final PrintWriter writer = response.getWriter();

@@ -134,13 +134,13 @@ class DisplayBuilderWebRuntime
      *  @param display URL of display to load
      *  @param macros Macros (JSON)
      */
-    load_content(display, macros)
+    load_content(display, macros, cache="true")
     {
         this.display = display;
         this.log("Loading '" + display + "' with " + macros);
         
         jQuery.get("screen",
-                { display: this.display, macros: macros },
+                { display: this.display, macros: macros, cache: cache },
                 data =>
                 {
                     // Place display's HTML into content

@@ -102,6 +102,13 @@ view.jsp?display=https://some_host/opi/file.opi&amp;macros=%7B%22S%22%3A%2206%22
 cache
 </pre>
 
+<p>During display development, caching can be disabled by including  <code>cache=false</code> in the request:</p>
+
+<pre class="example_url">
+view.jsp?cache=false&display=file:/Path/to/Display+Builder/01_main.bob
+</pre>
+
+
 <input type="button" value="Cache Info" onclick="query_cache()">
 <input type="button" value="Clear Cache" onclick="clear_cache()">
 
@@ -112,6 +119,7 @@ cache
 <hr>
 
 <div id="versions">
+2020-10-01 Support 'cache=false'.<br>
 2020-09-30 Support macros for 'Tabs'.<br>
 2020-08-28 Combo support.<br>
 2020-07-13 '$(DID)'.<br>
