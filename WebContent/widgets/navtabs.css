@@ -1,0 +1,8 @@
+.NavTabsButton
+{
+    /* Position via top, left, width, height */
+    position: absolute;
+    
+    /* Include padding and border in width, height */
+    box-sizing: border-box;
+}
