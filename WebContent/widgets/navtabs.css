@@ -5,4 +5,54 @@
     
     /* Include padding and border in width, height */
     box-sizing: border-box;
+    
+    
+    /* When touching the button style in any way,
+     * for example by slightly rounding corner would match JFX button,
+     * this removes all of the default styling,
+     * resulting in a very plane flat gray button.
+     *
+     * -> Either don't modify default button,
+     *    or fully update it with gradient etc.
+     */
+    border-radius: 4px;
+    background-image: linear-gradient(to bottom right, #ACACAC, #BBB);
+    border-style: outset;
+    border-width: 1.5px;
+    border-color: #CCC;
+    
+    /* Maximize space for text, minimize border */
+    padding: 0px;
+    margin: 0px; 
+    
+    font-family: 'LiberationSans', sans-serif;    
+    
+    cursor: pointer;    
+}
+
+.NavTabsButton.horizontal
+{
+    border-radius: 4px 4px 0px 0px;
+    border-bottom-width: 0px;
+}
+
+.NavTabsButton.vertical
+{
+	border-radius: 4px 0px 0px 4px;
+    border-right-width: 0px;
+}
+
+.NavTabsButton.selected
+{
+    background-image: linear-gradient(to bottom right, #ECECEC, #DDD);
+    border-color: #EEE;
+}
+
+.NavTabsBody
+{
+	position: absolute;
+    box-sizing: border-box;
+    
+    border: 1px solid #BBB;
+    border-radius: 2px;    
 }

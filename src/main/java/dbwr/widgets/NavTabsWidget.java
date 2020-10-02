@@ -43,7 +43,7 @@ public class NavTabsWidget extends BaseMacroWidget
     {
         super(parent, xml, "navtabs");
 
-        classes.add("Debug");
+        // classes.add("Debug");
 
         // Locate labels and content links of tabs
         final Element tbs = XMLUtil.getChildElement(xml, "tabs");
@@ -78,6 +78,9 @@ public class NavTabsWidget extends BaseMacroWidget
     @Override
     protected void fillHTML(final PrintWriter html, final int indent)
     {
+        final String classes = horizontal
+                             ? "NavTabsButton horizontal"
+                             : "NavTabsButton vertical";
         int i = 0, bx = 0, by = 0;
         for (String label : labels)
         {
@@ -89,8 +92,9 @@ public class NavTabsWidget extends BaseMacroWidget
                 style.append("width: ").append(tab_width).append("px;");
                 style.append("height: ").append(tab_height).append("px;");
 
-                html.append("<button class=\"NavTabsButton\" style=\"" + style.toString() + "\"");
-
+                html.append("<button class=\"" + classes + "\" style=\"" + style.toString() + "\"");
+                html.append(" data-width=\"" + tab_width + "\";");
+                html.append(" data-height= \"" + tab_height + "\";");
                 html.append(" data-linked-file=\"" + HTMLUtil.escape(files.get(i)) + "\"");
                 if (! macros.get(i).isEmpty())
                     try
@@ -114,5 +118,29 @@ public class NavTabsWidget extends BaseMacroWidget
 
             ++i;
         }
+
+        final int bw, bh;
+        if (horizontal)
+        {
+            bx = 0;
+            by = tab_height;
+            bw = width;
+            bh = height - by;
+        }
+        else
+        {
+            bx = tab_width;
+            by = 0;
+            bw = width - bx;
+            bh = height;
+        }
+
+        html.append("<div class=\"NavTabsBody\" style=\"");
+        html.append("left: " + bx + "px;");
+        html.append("top: " + by + "px;");
+        html.append("width: " + bw + "px;");
+        html.append("height: " + bh + "px;");
+        html.append("\">");
+        html.append("</div>");
     }
 }
