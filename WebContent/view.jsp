@@ -12,7 +12,7 @@
 <meta charset="UTF-8">
 <title>Display Builder Web Runtime</title>
 <link rel="stylesheet" type="text/css" href="css/normalize.css">
-<link rel="stylesheet" type="text/css" href="css/widgets.css">
+<link rel="stylesheet" type="text/css" href="css/widgets.css?V=2">
 <%
 for (String c : WidgetFactory.css)
 	out.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"widgets/" + c + "\">\n");

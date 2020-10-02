@@ -51,6 +51,12 @@ class XYTrace
             this.x = value;
         else
             return;
+
+        // Normalize data
+        if (this.x === undefined)
+            this.x = [];
+        if (this.y === undefined)
+            this.y = [];
         
         // Recompute plot data
         this.plotobj.data = [];

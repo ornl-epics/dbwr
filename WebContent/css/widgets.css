@@ -109,6 +109,13 @@ svg.Widget
 {
 }
 
+.Error
+{
+	color: red;
+	font-size: smaller;
+	font-style: italic;
+}
+
 .ContextMenu
 {
     border: 1px solid black;

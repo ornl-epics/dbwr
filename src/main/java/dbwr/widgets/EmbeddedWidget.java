@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import org.w3c.dom.Element;
 
 import dbwr.parser.DisplayParser;
+import dbwr.parser.HTMLUtil;
 import dbwr.parser.Resolver;
 import dbwr.parser.WidgetFactory;
 import dbwr.parser.XMLUtil;
@@ -72,7 +73,9 @@ public class EmbeddedWidget extends BaseMacroWidget
         catch (final Exception ex)
         {
             logger.log(Level.WARNING, "Cannot read embedded display " + file, ex);
-            return "";
+            classes.add("Error");
+            classes.add("BorderDisconnected");
+            return "Cannot embed '" + HTMLUtil.escape(file) + "'";
         }
 
         // 0: No resize, scrollbars as needed
