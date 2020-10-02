@@ -95,11 +95,11 @@ public class NavTabsWidget extends BaseMacroWidget
                 html.append("<button class=\"" + classes + "\" style=\"" + style.toString() + "\"");
                 html.append(" data-width=\"" + tab_width + "\";");
                 html.append(" data-height= \"" + tab_height + "\";");
-                html.append(" data-linked-file=\"" + HTMLUtil.escape(files.get(i)) + "\"");
+                html.append(" data-file=\"" + HTMLUtil.escape(files.get(i)) + "\"");
                 if (! macros.get(i).isEmpty())
                     try
                     {
-                        html.append(" data-linked-macros=\"" + HTMLUtil.escape(MacroUtil.toJSON(macros.get(i))) + "\"");
+                        html.append(" data-macros=\"" + HTMLUtil.escape(MacroUtil.toJSON(macros.get(i))) + "\"");
                     }
                     catch (Exception ex)
                     {
