@@ -33,13 +33,13 @@ public class DisplayCache
         CachedDisplay cached = ref.get();
         if (cached == null)
         {   // Expired
-            logger.log(Level.INFO, "Cache expired for " + key);
+            logger.log(Level.FINE, "Cache expired for " + key);
             cached = creator.create(key);
             cache.put(key, new SoftReference<>(cached));
         }
         else
         {
-            logger.log(Level.INFO, "Cached " + cached);
+            logger.log(Level.FINE, "Cached " + cached);
             cached.registerAccess();
         }
         return cached;

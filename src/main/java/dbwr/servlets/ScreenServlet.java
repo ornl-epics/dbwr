@@ -41,7 +41,7 @@ public class ScreenServlet extends HttpServlet
 
 	private CachedDisplay createHtml(final DisplayKey key) throws Error
 	{
-	    logger.log(Level.INFO, () -> "Creating HTML for " + key);
+	    logger.log(Level.FINE, () -> "Creating HTML for " + key);
 	    try
 	    {
     	    final long start = System.currentTimeMillis();
@@ -53,7 +53,6 @@ public class ScreenServlet extends HttpServlet
             html_writer.close();
             final long ms = System.currentTimeMillis() - start;
             final CachedDisplay cached = new CachedDisplay(key, html_buf.toString(), ms);
-            logger.log(Level.INFO, cached.toString());
             return cached;
 	    }
 	    catch (final Exception ex)
@@ -66,7 +65,7 @@ public class ScreenServlet extends HttpServlet
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException
 	{
 		final String display_name = request.getParameter("display");
-		logger.log(Level.INFO, "screen/display=" + display_name);
+		logger.log(Level.FINE, "screen/display=" + display_name);
 
 		final String flag = request.getParameter("cache");
 		final boolean use_cache = flag == null  ||  flag.isEmpty()
@@ -79,7 +78,7 @@ public class ScreenServlet extends HttpServlet
 		{
             json_macros = HTMLUtil.unescape(request.getParameter("macros"));
 		    macro_map = MacroUtil.fromJSON(json_macros);
-            logger.log(Level.INFO, ".. and macros " + macro_map);
+            logger.log(Level.FINE, ".. and macros " + macro_map);
 		}
 
 		if (display_name == null)
