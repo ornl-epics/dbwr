@@ -119,6 +119,7 @@ view.jsp?cache=false&display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
+2020-10-05 Support 'navtabs' widgets.
 2020-10-02 Embedded display indicates name of failed/missing file.<br>
 2020-10-01 Support 'cache=false'.<br>
 2020-09-30 Support macros for 'Tabs'.<br>

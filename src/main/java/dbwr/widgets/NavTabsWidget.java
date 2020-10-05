@@ -92,8 +92,10 @@ public class NavTabsWidget extends BaseMacroWidget
                 style.append("width: ").append(tab_width).append("px;");
                 style.append("height: ").append(tab_height).append("px;");
 
+                // Mark 'active' tab via a 'selected' button
                 html.append("<button class=\"" + classes +
                             (active_tab == i ? " selected" : "") + "\" style=\"" + style.toString() + "\"");
+                // Note original size, used by script to resize selected/not-selected
                 html.append(" data-width=\"" + tab_width + "\";");
                 html.append(" data-height= \"" + tab_height + "\";");
                 html.append(" data-file=\"" + HTMLUtil.escape(files.get(i)) + "\"");

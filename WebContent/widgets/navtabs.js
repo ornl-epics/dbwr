@@ -35,12 +35,13 @@ function _handleNavtabSelection(navtab, button)
     
     let body = button.siblings(".NavTabsBody");
     
-    // Stop widgets that are currently in body
+    // Stop widgets that are currently in body by
+    // clearing all its PVs, which stops
+    // updates to widget and associated rules.
     body.find(".Widget").each( (index, w) =>
     {
         let wdg = jQuery(w);
         dbwr.unsubscribe(wdg);
-        // TODO Rules??
     });
     
     // Indicate what's loading to help debug issues if it never loads
