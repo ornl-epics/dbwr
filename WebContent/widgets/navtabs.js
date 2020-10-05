@@ -1,7 +1,4 @@
 
-let __navbody = undefined;
-let __navdata = undefined;
-
 function _handleNavtabSelection(navtab, button)
 {
     // console.log("Click: ")
@@ -24,26 +21,36 @@ function _handleNavtabSelection(navtab, button)
     
     let body = button.siblings(".NavTabsBody");
     
-    // TODO Stop widgets that are currently in body
-
+    // Stop widgets that are currently in body
+    body.find(".Widget").each( (index, w) =>
+    {
+        let wdg = jQuery(w);
+        dbwr.unsubscribe(wdg);
+        // TODO Rules??
+    });
     
     // Indicate what's loading to help debug issues if it never loads
     body.text("Loading " + button.text() + "...");
     
-    // Load content
+    // Load content TODO Allow caching
     jQuery.get("screen",
-            { display: button.data("file"), macros: JSON.stringify(button.data("macros")) },
+            { display: button.data("file"), macros: JSON.stringify(button.data("macros")), cache: "false" },
             data =>
             {
-                __navbody = body;
-                __navdata = data;
+                console.log("Loaded nav tab " + button.text());
 
                 // Add the <div class="Screen"> ... </div>  <script>  Rules... </script>
                 body.html(data);
                 // Remove the 'Screen' since it's already nested within the top-level screen
                 body.find(".Screen").removeClass("Screen");
                 
-                // TODO Start widgets
+                // Start widgets
+                body.find(".Widget").each( (index, w) =>
+                {
+                    let wdg = jQuery(w);
+                    // console.log("NavTabs starts " + wdg.attr("id") + " - " + wdg.data("type"));
+                    dbwr._initWidget(wdg);
+                });
             })
             .fail( (xhr, status, error) =>
             {

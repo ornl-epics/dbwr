@@ -77,6 +77,18 @@ function update_alarm_div(widget, severity, pad, round)
     }
 }
         
+/** Info for one subscription */
+class Subscription
+{
+    constructor(wid, callback)
+    {
+        // Widget ID
+        this.wid = wid;
+
+        // Function to invoke with received PV data
+        this.callback = callback;
+    }
+}
 
 /** Info for one PV */
 class PVInfo
@@ -88,11 +100,10 @@ class PVInfo
         // Most recent data
         this.data = { severity: Severity.UNDEFINED };
         
-        // Functions to invoke with this info when it changes
-        this.callbacks = [];
+        // Subscriptions, i.e. callbacks to invoke with received PV data
+        this.subscriptions = [];
     }
 }
-
 
 /** Each page has one DisplayBuilderWebRuntime
  *  that handles the web socket,
@@ -112,6 +123,7 @@ class DisplayBuilderWebRuntime
         this.pvws = new PVWS(pvws_url,
                              connected => this._handle_connection(connected),
                              message   => this._handle_message(message));
+        // Map of PV name to PVInfo
         this.pv_infos = {}
     }
     
@@ -195,9 +207,9 @@ class DisplayBuilderWebRuntime
             {
                 let info = this.pv_infos[pv_name];
                 info.data.severity = Severity.UNDEFINED;
-                let cb;
-                for (cb of info.callbacks)
-                    cb(info.data);
+                let sub;
+                for (sub of info.subscriptions)
+                    sub.callback(info.data);
             }
             
             // Need to re-subscribe when we reconnect
@@ -275,21 +287,23 @@ class DisplayBuilderWebRuntime
                 apply_alarm_outline(widget, Severity.UNDEFINED);
         }
         
-        this._subscribe(pv_name, data => this._handle_widget_pv_update(widget, type, data));
+        this._subscribe(widget, pv_name, data => this._handle_widget_pv_update(widget, type, data));
     }
 
     /** Step 4: Subscribe to PV updates
      * 
+     *  @param widget jQuery widget object
      *  @param pv_name PV name
-     *  callback callback Will be invoked with PV data
+     *  @param callback Will be invoked with PV data
      */
-    _subscribe(pv_name, callback)
+    _subscribe(widget, pv_name, callback)
     {
+        let wid = widget.attr("id");
         let info = this.pv_infos[pv_name];
         let new_pv = info === undefined;
         if (new_pv)
             this.pv_infos[pv_name] = info = new PVInfo(pv_name);
-        info.callbacks.push(callback);
+        info.subscriptions.push(new Subscription(wid, callback));
         if (new_pv)
         {
             this.pvws.subscribe(pv_name);
@@ -297,9 +311,12 @@ class DisplayBuilderWebRuntime
             // console.log(info);
             // console.log("Callbacks: " + info.callbacks.length);
         }
-        else
+        else if (info.data !== undefined)
         {
-            // TODO Invoke callback with the known data
+            // Invoke callback with the known data
+            // console.log("Performing initial update for known PV:");
+            // console.log(info.data);
+            callback(info.data);                
         }
     }
     
@@ -321,9 +338,9 @@ class DisplayBuilderWebRuntime
             else
             {
                 info.data = message;
-                let cb;
-                for (cb of info.callbacks)
-                    cb(message);
+                let sub;
+                for (sub of info.subscriptions)
+                    sub.callback(message);
             }
         }
         else if (message.type == 'error')
@@ -384,6 +401,39 @@ class DisplayBuilderWebRuntime
         }
         
         this.pvws.write(pv, value);
+    }
+    
+    /** Remove all subscriptions of a widget
+     *  @param widget jQuery widget object
+     */
+    unsubscribe(widget)
+    {
+        let wid = widget.attr("id");
+        // console.log("unsubscribe " + wid);
+
+        // For each PV..
+        let pv_name;
+        for (pv_name in this.pv_infos)
+        {
+            let info = this.pv_infos[pv_name];
+            let i;
+            // .. check subscription for this widget
+            for (i = info.subscriptions.length-1;  i >= 0;  --i)
+            {
+                let sub = info.subscriptions[i];
+                if (sub.wid == wid)
+                    info.subscriptions.splice(i);
+            }
+            
+            // Clear PV if there is no remaining subscription
+            if (info.subscriptions.length <= 0)
+            {
+                // console.log("Cancelling PV " + pv_name);
+                // console.log(info);
+                this.pvws.clear(pv_name);                
+                delete this.pv_infos[pv_name];
+            }
+        }
     }
     
     /** List info about all PVs */
@@ -523,7 +573,7 @@ class WidgetRule
     {
         // console.log("Starting rule for PVs " + this.pvs);
         for (let pv of this.pvs)
-            dbwr._subscribe(pv, data =>
+            dbwr._subscribe(this.widget, pv, data =>
             {
                 this.value[pv] = data.value;
                 this.valueStr[pv] = get_data_string(data);
