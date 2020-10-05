@@ -5,15 +5,29 @@ function _handleNavtabSelection(navtab, button)
     // console.log(button.data("file"));
     // console.log(button.data("macros"));
     
-    // De-select all other buttons
-    button.parent()
-          .find(".NavTabsButton")
-          .removeClass("selected");
+    if (button.hasClass("horizontal"))
+    {
+        // De-select all other buttons
+        // Shrink non-selected buttons to keep from touching body
+        button.parent()
+              .find(".NavTabsButton")
+              .removeClass("selected")
+              .height( button.data("height")-5 );
 
-    // Shrink non-selected buttons to keep from touching body
-    button.parent()
-          .find(".NavTabsButton")
-          .width( button.data("width")-8 );
+        // Select this button
+        button.addClass("selected");
+        button.height( button.data("height") );
+    }
+    else
+    {
+        button.parent()
+              .find(".NavTabsButton")
+              .removeClass("selected")
+              .width( button.data("width")-8 );
+    
+        button.addClass("selected");
+        button.width( button.data("width") );
+    }
 
     // Select this button
     button.addClass("selected");
@@ -32,9 +46,11 @@ function _handleNavtabSelection(navtab, button)
     // Indicate what's loading to help debug issues if it never loads
     body.text("Loading " + button.text() + "...");
     
-    // Load content TODO Allow caching
+    // Load content
+    let cache = window.location.search.indexOf("cache=false") > 0 ? "false" : "true";
+    console.log("Load navtab with cache = " + cache);
     jQuery.get("screen",
-            { display: button.data("file"), macros: JSON.stringify(button.data("macros")), cache: "false" },
+            { display: button.data("file"), macros: JSON.stringify(button.data("macros")), cache: cache },
             data =>
             {
                 console.log("Loaded nav tab " + button.text());
@@ -67,6 +83,10 @@ function _initNavtabButton(navtab, button)
 
 DisplayBuilderWebRuntime.prototype.widget_init_methods['navtabs'] = function(widget)
 {
+    // Instrument the navigation buttons
     widget.find(".NavTabsButton")
           .each( (index, button) => _initNavtabButton(widget, jQuery(button)) );
+    
+    // Trigger the 'selected' button
+    widget.find(".NavTabsButton.selected").click();
 }

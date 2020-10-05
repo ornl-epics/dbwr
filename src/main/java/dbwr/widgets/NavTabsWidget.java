@@ -37,7 +37,7 @@ public class NavTabsWidget extends BaseMacroWidget
     private final List<String> files = new ArrayList<>();
     private final List<Map<String, String>> macros = new ArrayList<>();
     private final boolean horizontal;
-    private final int tab_width, tab_height, tab_spacing;
+    private final int tab_width, tab_height, tab_spacing, active_tab;
 
     public NavTabsWidget(final ParentWidget parent, final Element xml) throws Exception
     {
@@ -72,7 +72,7 @@ public class NavTabsWidget extends BaseMacroWidget
         tab_width = XMLUtil.getChildInteger(xml, "tab_width").orElse(100);
         tab_height = XMLUtil.getChildInteger(xml, "tab_height").orElse(30);
         tab_spacing = XMLUtil.getChildInteger(xml, "tab_spacing").orElse(2);
-        // active_tab
+        active_tab = XMLUtil.getChildInteger(xml, "active_tab").orElse(0);
     }
 
     @Override
@@ -92,7 +92,8 @@ public class NavTabsWidget extends BaseMacroWidget
                 style.append("width: ").append(tab_width).append("px;");
                 style.append("height: ").append(tab_height).append("px;");
 
-                html.append("<button class=\"" + classes + "\" style=\"" + style.toString() + "\"");
+                html.append("<button class=\"" + classes +
+                            (active_tab == i ? " selected" : "") + "\" style=\"" + style.toString() + "\"");
                 html.append(" data-width=\"" + tab_width + "\";");
                 html.append(" data-height= \"" + tab_height + "\";");
                 html.append(" data-file=\"" + HTMLUtil.escape(files.get(i)) + "\"");
