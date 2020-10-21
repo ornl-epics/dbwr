@@ -551,7 +551,11 @@ function __redraw_image_with_data(widget, data)
 
     // Data width, height, range
     let wid = widget.data("width"), min = widget.data("min"), max = widget.data("max");
-    let hei = Math.floor(data.value.length / wid);
+    let hei;
+    if (data === undefined  ||  data.value == undefined)
+        hei = 0;
+    else
+        hei = Math.floor(data.value.length / wid);
     
     // Screen width, height
     let scr_wid = canvas.width, scr_hei = canvas.height;
