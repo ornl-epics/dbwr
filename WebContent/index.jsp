@@ -119,6 +119,7 @@ view.jsp?cache=false&display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
+2020-10-21 Defer initial update for known PV to next cycle (avoids update while widget still initializes).
 2020-10-05 Support 'navtabs' widgets.
 2020-10-02 Embedded display indicates name of failed/missing file.<br>
 2020-10-01 Support 'cache=false'.<br>
