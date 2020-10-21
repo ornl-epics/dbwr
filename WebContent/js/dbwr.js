@@ -316,7 +316,9 @@ class DisplayBuilderWebRuntime
             // Invoke callback with the known data
             // console.log("Performing initial update for known PV:");
             // console.log(info.data);
-            callback(info.data);                
+            // ... on the next cycle, so function calling 'subscribe'
+            // can finish before receiving first update
+            setTimeout( () => callback(info.data), 0);
         }
     }
     
