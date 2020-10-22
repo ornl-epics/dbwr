@@ -1,3 +1,4 @@
+<%@page import="java.time.Instant"%>
 <%@page trimDirectiveWhitespaces="true" %>
 <%@page import="java.util.Enumeration"%>
 <%@page import="java.util.Map"%>
@@ -10,16 +11,24 @@
 
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-store" />
 <title>Display Builder Web Runtime</title>
+<%
+// Pseudo-unique value to prevent caching of the CSS and JS
+final Instant now = Instant.now();
+final String UNIQUE=Long.toString(now.getEpochSecond());
+
+out.append("<!--  Generated " + now + " -->\n");
+%>
 <link rel="stylesheet" type="text/css" href="css/normalize.css">
-<link rel="stylesheet" type="text/css" href="css/widgets.css?V=2">
+<link rel="stylesheet" type="text/css" href="css/widgets.css?V=<%=UNIQUE%>">
 <%
 for (String c : WidgetFactory.css)
-	out.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"widgets/" + c + "\">\n");
+	out.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"widgets/" + c + "?V=" + UNIQUE + "\">\n");
 %>
 <script type="text/javascript" src="../pvws/js/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="../pvws/js/base64.js"></script>
-<script type="text/javascript" src="../pvws/js/pvws.js"></script> 
+<script type="text/javascript" src="../pvws/js/pvws.js?V=<%=UNIQUE%>"></script> 
 <script type="text/javascript" src="js/lib/jquery.event.drag.js"></script>
 <script type="text/javascript" src="js/lib/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="js/flot/jquery.canvaswrapper.js"></script>
@@ -45,10 +54,10 @@ for (String c : WidgetFactory.css)
 <script type="text/javascript" src="js/flot/jquery.flot.composeImages.js"></script>
 <script type="text/javascript" src="js/flot/jquery.flot.legend.js"></script>
 <script type="text/javascript" src="js/clipboard.js"></script> 
-<script type="text/javascript" src="js/dbwr.js?V=2"></script> 
+<script type="text/javascript" src="js/dbwr.js?V=<%=UNIQUE%>"></script> 
 <%
 for (String js : WidgetFactory.js)
-	 out.append("<script type=\"text/javascript\" src=\"widgets/" + js + "\"></script>\n");
+	 out.append("<script type=\"text/javascript\" src=\"widgets/" + js + "?V=" + UNIQUE + "\"></script>\n");
 %>
 </head>
 
