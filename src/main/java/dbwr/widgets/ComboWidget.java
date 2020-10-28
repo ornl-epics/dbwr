@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2020 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -46,18 +46,25 @@ public class ComboWidget extends PVWidget
 		// Are items set on the widget?
 		if (! XMLUtil.getChildBoolean(xml, "items_from_pv").orElse(true))
 		{
+			int i = 0;
 		    final Element ie = XMLUtil.getChildElement(xml, "items");
-		    if (ie == null)
-		        logger.log(Level.WARNING, "Combo " + getWID() + " without <items>");
-		    else
+		    if (ie != null)
 		    {
-    		    int i = 0;
     		    for (final Element item : XMLUtil.getChildElements(ie, "item"))
     		    {
     		        attributes.put("data-item-" + i, XMLUtil.getString(item));
     		        ++i;
     		    }
+    		    // Legacy used <s> per item?!
+    		    if (i == 0)
+        		    for (final Element item : XMLUtil.getChildElements(ie, "s"))
+        		    {
+        		        attributes.put("data-item-" + i, XMLUtil.getString(item));
+        		        ++i;
+        		    }
 		    }
+		    if (i <= 0)
+		    	logger.log(Level.WARNING, "Combo " + getWID() + " without <items>");
 		}
 	}
 
