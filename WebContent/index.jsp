@@ -61,7 +61,7 @@ view.jsp?display=file:/Path/to/Display+Builder/01_main.bob
 If the display contains links to other resources like images,
 these will be turned URLs relative to the display URL,
 i.e. also 'file:/' URLs.
-The <u>client</u> will then try to resolve them,
+The <span style="text-decoration: underline">client</span> will then try to resolve them,
 not the server, which can cause two problems.
 For one, the path will not resolve, because it was only
 a valid file on the server, not the client.
@@ -105,7 +105,7 @@ cache
 <p>During display development, caching can be disabled by including  <code>cache=false</code> in the request:</p>
 
 <pre class="example_url">
-view.jsp?cache=false&display=file:/Path/to/Display+Builder/01_main.bob
+view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 </pre>
 
 
