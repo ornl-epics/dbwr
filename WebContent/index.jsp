@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Display Builder Web Runtime</title>
+<link rel="shortcut icon" href="favicon.png">
 <link rel="stylesheet" type="text/css" href="css/widgets.css">
 <script type="text/javascript" src="../pvws/js/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="../pvws/js/tablesort.js"></script>
@@ -119,6 +120,7 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
+2020-11-02 favicon.<br>
 2020-10-28 Handle legacy Combo with items not-from-PV.<br>
 2020-10-21 Defer initial update for known PV to next cycle (avoids update while widget still initializes).<br>
 2020-10-05 Support 'navtabs' widgets.<br>

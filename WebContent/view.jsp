@@ -20,6 +20,7 @@ final String UNIQUE=Long.toString(now.getEpochSecond());
 
 out.append("<!--  Generated " + now + " -->\n");
 %>
+<link rel="shortcut icon" href="favicon.png">
 <link rel="stylesheet" type="text/css" href="css/normalize.css">
 <link rel="stylesheet" type="text/css" href="css/widgets.css?V=<%=UNIQUE%>">
 <%
