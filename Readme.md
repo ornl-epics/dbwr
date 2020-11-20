@@ -37,6 +37,18 @@ Assuming Tomcat on `localhost:8080`, open
     http://localhost:8080/dbwr
     
 
+
+When you then open a display, you'll note that the resulting URL has the general format
+
+    http://localhost:8080/dbwr/view.jsp?display=URL_OF_THE_DISPLAY.bob
+
+Note that the display information is cached, so when you edit a display file
+and would like to force an update to the web version right away,
+circumventing the cache, add `cache=false` to the request:
+
+    http://localhost:8080/dbwr/view.jsp?cache=false&display=URL_OF_THE_DISPLAY.bob
+
+
 Development Status
 ==================
 
