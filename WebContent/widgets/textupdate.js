@@ -89,7 +89,10 @@ function format_pv_data_as_text(widget, data)
                 if (data.precision === undefined)
                     text = data.value.toString();
                 else
-                    text = data.value.toFixed(precision);
+                    if (typeof data.value.toFixed == 'function')
+                        text = data.value.toFixed(precision);
+                    else
+                        text = data.value.toString();
             }
         }
         // show-units is by default undefined, or false to suppress units
