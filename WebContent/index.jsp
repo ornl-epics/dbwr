@@ -120,6 +120,7 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
+2020-11-20 Suppress '{fileselector}'.<br>
 2020-11-02 favicon.<br>
 2020-10-28 Handle legacy Combo with items not-from-PV.<br>
 2020-10-21 Defer initial update for known PV to next cycle (avoids update while widget still initializes).<br>

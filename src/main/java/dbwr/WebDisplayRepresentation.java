@@ -47,7 +47,7 @@ public class WebDisplayRepresentation implements ServletContextListener
 	    // If none are provided, add some defaults
 	    if (display_options.isEmpty())
 	    {
-	        display_options.add("https://raw.githubusercontent.com/shroffk/phoebus/master/app/display/model/src/main/resources/examples/01_main.bob");
+	        display_options.add("https://raw.githubusercontent.com/ControlSystemStudio/phoebus/master/app/display/model/src/main/resources/examples/01_main.bob");
 	        display_options.add("file:/some/local/display.bob");
 	    }
 
