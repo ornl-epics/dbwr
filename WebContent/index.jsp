@@ -120,6 +120,7 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
+2021-01-28 Simple 'spinner'.<br>
 2020-11-20 Suppress '{fileselector}'.<br>
 2020-11-02 favicon.<br>
 2020-10-28 Handle legacy Combo with items not-from-PV.<br>

@@ -16,7 +16,7 @@ function __submit_text_entry(widget, val)
     let pv = widget.data("pv")
     console.log("Text entry writes " + pv + " = " + val);
     // console.log("For now back to " + widget.val());
-    dbwr.write(pv, val)
+    dbwr.write(pv, val);
 }
 
 DisplayBuilderWebRuntime.prototype.widget_init_methods['textentry'] = function(widget)
