@@ -31,4 +31,10 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["scrollbar"] = function
     // Show value in tool-tip
     let info = widget.data("pv") + " = " + format_pv_data_as_text(widget, data);
     widget.attr("title", info);
+    
+    showWriteAccess(widget, data.readonly);
+    if (data.readonly)
+        widget.children().css("cursor", "inherit");
+    else
+        widget.children().css("cursor", "auto");
 }

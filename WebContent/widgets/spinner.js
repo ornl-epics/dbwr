@@ -2,6 +2,7 @@
 DisplayBuilderWebRuntime.prototype.widget_update_methods["spinner"] = function(widget, data)
 {
     widget.val(data.value);
+    showWriteAccess(widget, data.readonly);
 }
 
 DisplayBuilderWebRuntime.prototype.widget_init_methods['spinner'] = function(widget)

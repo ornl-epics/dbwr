@@ -23,4 +23,11 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["slider"] = function(wi
     // Update label
     let label = widget.children("label");
     label.text(format_pv_data_as_text(widget, data));
+    
+    // When read-only, inner input, label should use the disabled cursor
+    showWriteAccess(widget, data.readonly);
+    if (data.readonly)
+        widget.children().css("cursor", "inherit");
+    else
+        widget.children().css("cursor", "auto");
 }

@@ -714,7 +714,7 @@ function showWriteAccess(widget, readonly)
 {
     // Indicate read/write access via cursor
     if (readonly)
-        widget.css("cursor", "not-allowed");
+        widget.css("cursor", "url('icons/blocked_cursor.png'), not-allowed");
     else
         widget.css("cursor", "auto");
     // TODO When disabled, cannot click at all, i.e. not copy PV name
