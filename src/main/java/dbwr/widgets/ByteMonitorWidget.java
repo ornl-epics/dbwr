@@ -87,15 +87,23 @@ public class ByteMonitorWidget extends SvgPVWidget
         {
             if (horizontal)
             {
-                final int size = width/bits, rx = size/2, ry = height/2;
+                final int size = width/bits, r = size/2;
                 for (int i=0; i<bits; ++i)
-                    html.append("<ellipse cx=\"" + (i*size + rx) + "\" cy=\"" +  ry + "\" rx=\"" + rx + "\" ry=\"" + ry + "\" fill=\"grey\"></ellipse>");
+                {
+                    html.append("<ellipse cx=\"" + (i*size + r) + "\" cy=\"" +  r + "\" rx=\"" + r + "\" ry=\"" + r + "\" fill=\"grey\"></ellipse>");
+                    if (i < labels.size())
+                        html.append("<text text-anchor=\"end\" dominant-baseline=\"middle\" transform=\"rotate(-90) translate(" + (-size-2) + "," + (i*size + size/2) + ")\">" + labels.get(reversed ? i : bits-i-1) + "</text>");
+                }
             }
             else
             {
-                final int size = height/bits, rx = width/2, ry = size/2;
+                final int size = height/bits, r = size/2;
                 for (int i=0; i<bits; ++i)
-                    html.append("<ellipse cx=\"" + rx + "\" cy=\"" + (i*size + ry) + "\" rx=\"" + rx + "\" ry=\"" + ry + "\" fill=\"grey\"></ellipse>");
+                {
+                    html.append("<ellipse cx=\"" + r + "\" cy=\"" + (i*size + r) + "\" rx=\"" + r + "\" ry=\"" + r + "\" fill=\"grey\"></ellipse>");
+                    if (i < labels.size())
+                        html.append("<text dominant-baseline=\"middle\" x=\"" + (2+size) + "\" y=\"" + (i*size + size/2) + "\">" + labels.get(reversed ? i : bits-i-1) + "</text>");
+                }
             }
         }
     }

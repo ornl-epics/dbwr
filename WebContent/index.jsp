@@ -120,6 +120,7 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
+2021-02-04 Support 'byte monitor' labels.<br>
 2021-01-29 Indicate read-only via same cursor as in CS-Studio.<br>
 2021-01-28 Simple 'spinner'.<br>
 2020-11-20 Suppress '{fileselector}'.<br>
