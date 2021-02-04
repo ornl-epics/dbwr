@@ -383,7 +383,8 @@ public class XMLUtil
                 {
                     final int size = (int) Double.parseDouble(attr);
                     final boolean bold = false;
-                    return Optional.of(new FontInfo(size, bold));
+                    final boolean italic = false;
+                    return Optional.of(new FontInfo(size, bold, italic));
                 }
             }
             // Fall back to <fontdata fontName="Sans" height="11" style="0"/>
@@ -395,7 +396,8 @@ public class XMLUtil
                 {
                     final int size = (int) Double.parseDouble(attr);
                     final boolean bold = false;
-                    return Optional.of(new FontInfo(size, bold));
+                    final boolean italic = false;
+                    return Optional.of(new FontInfo(size, bold, italic));
                 }
             }
             // Give up
@@ -406,7 +408,8 @@ public class XMLUtil
         // <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0"></font>
         final int size = (int) Double.parseDouble(font_xml.getAttribute("size"));
         final boolean bold = font_xml.getAttribute("style").equals("BOLD");
-        return Optional.of(new FontInfo(size, bold));
+        final boolean italic = font_xml.getAttribute("style").equals("ITALIC");
+        return Optional.of(new FontInfo(size, bold, italic));
     }
 
     /** Write DOM to stream

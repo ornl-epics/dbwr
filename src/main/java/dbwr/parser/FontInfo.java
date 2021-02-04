@@ -12,11 +12,13 @@ public class FontInfo
 {
 	private final int size;
     private final boolean bold;
+    private final boolean italic;
 
-	public FontInfo(final int size, final boolean bold)
+	public FontInfo(final int size, final boolean bold, final boolean italic)
 	{
 		this.size = size;
 		this.bold = bold;
+		this.italic = italic;
 	}
 
 	public int getSize()
@@ -29,6 +31,8 @@ public class FontInfo
 		styles.put("font-size", size + "px");
 		if (bold)
 	        styles.put("font-weight", "bold");
+		if (italic)
+            styles.put("font-style", "italic");
 	}
 
 	@Override
@@ -38,6 +42,8 @@ public class FontInfo
 	    buf.append("font-size: ").append(size).append("px;");
 	    if (bold)
 	        buf.append("font-weight: bold;");
+        if (italic)
+            buf.append("font-style: italic;");
 	    return buf.toString();
 	}
 }

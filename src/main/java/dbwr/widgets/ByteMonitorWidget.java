@@ -13,6 +13,7 @@ import java.util.List;
 import org.w3c.dom.Element;
 
 import dbwr.macros.MacroUtil;
+import dbwr.parser.FontInfo;
 import dbwr.parser.WidgetFactory;
 import dbwr.parser.XMLUtil;
 
@@ -54,7 +55,10 @@ public class ByteMonitorWidget extends SvgPVWidget
 		if (el != null)
 		    for (Element text : XMLUtil.getChildElements(el, "text"))
 		        labels.add(MacroUtil.expand(parent, XMLUtil.getString(text)));
-	}
+		
+		final FontInfo font = XMLUtil.getFont(xml, "font").orElse(LabelWidget.DEFAULT_FONT);
+		font.addToStyles(styles);
+    }
 
     @Override
     protected void fillHTML(final PrintWriter html, final int indent)

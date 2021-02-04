@@ -25,7 +25,7 @@ public class LabelWidget extends Widget
         WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.Label", "label");
     }
 
-    static final FontInfo DEFAULT_FONT = new FontInfo(14, false);
+    static final FontInfo DEFAULT_FONT = new FontInfo(14, false, false);
 	private final String text;
 
 	public LabelWidget(final ParentWidget parent, final Element xml) throws Exception
