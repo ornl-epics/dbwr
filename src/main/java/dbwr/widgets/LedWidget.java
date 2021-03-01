@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2021 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -46,6 +46,8 @@ public class LedWidget extends BaseLedWidget
         attributes.put("data-value", "0");
         attributes.put("data-on-color", on_color);
         attributes.put("data-off-color", off_color);
+        attributes.put("data-on-label", XMLUtil.getChildString(this, xml, "on_label").orElse(""));
+        attributes.put("data-off-label", XMLUtil.getChildString(this, xml, "off_label").orElse(""));
         attributes.put("data-bit", Integer.toString(XMLUtil.getChildInteger(xml, "bit").orElse(-1)));
 
         getRuleSupport().handleColorRule(parent, xml, this,

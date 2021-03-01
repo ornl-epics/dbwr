@@ -15,10 +15,20 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["led"] = function(widge
 {
     var value = is_bit_set(widget, data);
     widget.data("value", value);
+    var label;
     if (value)
+    {
         set_svg_background_color(widget, widget.data("on-color"));
+        label = widget.data("on-label");
+    }
     else
+    {
         set_svg_background_color(widget, widget.data("off-color"));
+        label = widget.data("off-label");
+    }
+    if (label == undefined)
+        label = "";
+    widget.find("text").html(label);
 }
 
 //Called by color rules that update the on/off colors
@@ -42,6 +52,7 @@ function set_led_on_color(widget, color)
 DisplayBuilderWebRuntime.prototype.widget_update_methods["multi_state_led"] = function(widget, data)
 {
     let color = widget.data("fallback-color");
+    let label = widget.data("fallback_label");
     let index = 0;
     let value = widget.data("state-value-" + index);
     while (value !== undefined)
@@ -49,11 +60,18 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["multi_state_led"] = fu
         if (data.value == value)
         {
             color = widget.data("state-color-" + index);
+            label = widget.data("state-label-" + index);
             break;
         }
         ++index;
         value = widget.data("state-value-" + index);
     }
+    if (label == undefined)
+       label = "Err";
+
     widget.find("ellipse,rect").attr("fill", color);
+
+    // console.log("Multi state LED index " + index + ", label: " + label);
+    widget.find("text").html(label);    
 }
 
