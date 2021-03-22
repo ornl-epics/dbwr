@@ -90,7 +90,7 @@ display_name = display_name.replaceAll("[(){};',\"]", "");
 
 // Cache, default "true"
 String cache = request.getParameter("cache");
-if (cache == null)
+if (! ("true".equals(cache) || "false".equals(cache)))
     cache = "true";
 
 // Macros are usually passed as "&macros=JSON map"
@@ -113,7 +113,10 @@ if (macro_text == null)
     }
     macro_text = MacroUtil.toJSON(macros);
 }
-// Use single quotes when passing macro_text on because the JSON contains double quotes
+// Use single quotes when passing macro_text on because the JSON contains double quotes.
+// Don't allow single quote inside macro_text since that would 'end' the string prematurely
+// and allow Javascript injection.
+macro_text.replaceAll("'", "");
 %>
 
 // Determine PV Web Socket URL relative to this page
