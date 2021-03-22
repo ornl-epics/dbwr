@@ -79,6 +79,15 @@ String display_name = request.getParameter("display");
 if (display_name == null)
 	display_name = "";
 
+// Sanitize display name
+// The display name is passed to Javascript like this:
+//  dbwr.load_content('display_name'...
+//
+// Filter out text like "','{}','true');});" that would close
+// a call like load_content(); and can then be followed by
+// JavaScript like alert(..).
+display_name = display_name.replaceAll("[(){};',\"]", "");
+
 // Cache, default "true"
 String cache = request.getParameter("cache");
 if (cache == null)

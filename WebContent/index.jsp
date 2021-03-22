@@ -120,6 +120,7 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
+2021-03-22 Filter 'display'.<br>
 2021-03-01 Support 'led' and 'multi_state_led' labels.<br>
 2021-02-04 Support 'byte monitor' labels.<br>
 2021-01-29 Indicate read-only via same cursor as in CS-Studio.<br>
