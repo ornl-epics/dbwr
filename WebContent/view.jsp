@@ -1,3 +1,4 @@
+<%@page import="jdk.internal.misc.FileSystemOption"%>
 <%@page import="java.time.Instant"%>
 <%@page trimDirectiveWhitespaces="true" %>
 <%@page import="java.util.Enumeration"%>
@@ -75,9 +76,9 @@ for (String js : WidgetFactory.js)
 <script type="text/javascript">
 <%
 // Display, default empty
-String display_name = request.getParameter("display");
-if (display_name == null)
-	display_name = "";
+String orig_display_name = request.getParameter("display");
+if (orig_display_name == null)
+    orig_display_name = "";
 
 // Sanitize display name
 // The display name is passed to Javascript like this:
@@ -86,7 +87,8 @@ if (display_name == null)
 // Filter out text like "','{}','true');});" that would close
 // a call like load_content(); and can then be followed by
 // JavaScript like alert(..).
-display_name = display_name.replaceAll("[(){};',\"]", "");
+final String display_name = orig_display_name.replaceAll("[]<>(){};',\"]", "");
+// System.out.println("   " + orig_display_name + "\n-> " + display_name);
 
 // Cache, default "true"
 String cache = request.getParameter("cache");
@@ -116,7 +118,7 @@ if (macro_text == null)
 // Use single quotes when passing macro_text on because the JSON contains double quotes.
 // Don't allow single quote inside macro_text since that would 'end' the string prematurely
 // and allow Javascript injection.
-macro_text.replaceAll("'", "");
+macro_text.replaceAll("['<>{},;/]", "");
 %>
 
 // Determine PV Web Socket URL relative to this page
