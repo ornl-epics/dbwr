@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2020 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2021 UT-Battelle, LLC.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -32,7 +32,9 @@ public class WebDisplayRepresentation implements ServletContextListener
 
 	public static final List<Pattern> whitelist_options = new ArrayList<>();
 
-
+	/** Custom ws://some_host.org:8081/pvws URL or <code>null</code> */
+    public static final String pvws_url;
+	
 	static
 	{
 	    // Load display links for the start page from environment variables "DBWR1", "DBWR2", ...
@@ -67,6 +69,12 @@ public class WebDisplayRepresentation implements ServletContextListener
             logger.log(Level.INFO, "No WHITELIST1 etc., allowing all display links");
             whitelist_options.add(Pattern.compile(".*"));
         }
+        
+        final String wsurl = System.getenv("PVWS_URL");
+        if (wsurl == null  || wsurl.trim().isEmpty())
+            pvws_url = null;
+        else
+            pvws_url = wsurl.trim();
 	}
 
 	@Override

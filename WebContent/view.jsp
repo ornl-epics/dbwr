@@ -6,6 +6,7 @@
 <%@page import="dbwr.macros.MacroUtil"%>
 <%@page import="dbwr.parser.HTMLUtil"%>
 <%@page import="dbwr.parser.WidgetFactory"%>
+<%@page import="dbwr.WebDisplayRepresentation"%>
 <!DOCTYPE html>
 <html>
 
@@ -118,8 +119,15 @@ if (macro_text == null)
 // Don't allow single quote inside macro_text since that would 'end' the string prematurely
 // and allow Javascript injection.
 macro_text.replaceAll("['<>{},;/]", "");
-%>
 
+if (WebDisplayRepresentation.pvws_url != null)
+{
+    out.println("// Web Socket URL");
+    out.println("let wsurl = \"" + WebDisplayRepresentation.pvws_url + "/pv\";");
+}
+else
+{
+%>
 // Determine PV Web Socket URL relative to this page
 let wsurl = window.location.pathname;
 wsurl = wsurl.substring(0, wsurl.indexOf("/dbwr"));
@@ -128,7 +136,9 @@ if (window.location.protocol == "https:")
     wsurl = "wss://" + wsurl;
 else
     wsurl = "ws://" + wsurl;
-
+<%
+}
+%>
 let dbwr = new DisplayBuilderWebRuntime(wsurl);
 
 jQuery("#status").click(() => dbwr.pvws.close() );

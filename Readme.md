@@ -26,6 +26,16 @@ When no `WHITELIST1` entries are defined, `.*` will be used.
 
 Place `dbwr.war` in `$CATALINA_HOME/webapps`
 
+If you placed the `pvws.war` in the same Tomcat instance as the `dbwr.war`, there is nothing to configure.
+By default, the display runtime will connect to the PV Web Socket under the same base URL.
+When you access the displays via `http://some_host:8080/dbwr/...`, it will connect to PVs via `ws://some_host:8080/pvws`.
+
+If you want to connect to the PV Web Socket on a different URL, for example on a different host,
+you need to configure this via the environment variable
+
+ * `PVWS_URL`: URL of PV Web Socket when not co-located with `dbwr.jar`,
+   for example `ws://some.other.host.org:8081/pvws`
+
 
 Client URLs
 -----------
