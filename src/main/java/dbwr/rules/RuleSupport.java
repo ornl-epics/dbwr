@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2021 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -264,8 +264,11 @@ public class RuleSupport
 
     public void addScripts(final PrintWriter html)
     {
+        final String text = scripts.toString();
+        if (text.isBlank())
+            return;
         html.println("<script>");
-        html.println(scripts.toString());
+        html.println(text);
         html.println("</script>");
     }
 }

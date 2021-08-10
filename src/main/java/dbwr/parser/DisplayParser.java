@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2020 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2021 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -52,7 +52,23 @@ public class DisplayParser implements ParentWidget
      *  @param group_name Parse only this group?
      *  @throws Exception on error
      */
-	public DisplayParser(final Resolver display, final MacroProvider parent, final PrintWriter html, final String group_name) throws Exception
+    public DisplayParser(final Resolver display, final MacroProvider parent, final PrintWriter html, final String group_name) throws Exception
+    {
+        this(display, parent, html, group_name, -1, -1);
+    }
+    
+    /** Parse display into HTML
+     *  @param display Resolved display
+     *  @param parent Macros
+     *  @param html HTML is appended to this writer
+     *  @param group_name Parse only this group?
+     *  @param x X offset and ..
+     *  @param y .. Y offset for absolute positioning
+     *  @throws Exception on error
+     */
+	public DisplayParser(final Resolver display, final MacroProvider parent,
+	                     final PrintWriter html, final String group_name,
+	                     final int x, final int y) throws Exception
 	{
 	    id = IDs.incrementAndGet();
 	    this.display = display.getUrl();
@@ -96,7 +112,16 @@ public class DisplayParser implements ParentWidget
 		final String background = XMLUtil.getColor(root, "background_color").orElse("#FFF");
 
 		// Create HTML for the screen and all its widgets
-		html.println("<div class=\"Screen\" data-name=\"" + HTMLUtil.escape(name) + "\" style=\"width: " + width + "px; height: " + height + "px; background-color: " + background + ";\">");
+		html.println("<div class=\"Screen\" data-name=\"" + HTMLUtil.escape(name) + "\" ");
+		html.print("style=\"");
+		if (x >= 0  &&  y >= 0)
+		{
+		    html.println("position: absolute; ");
+		    html.println("top: " + y + "px; ");
+		    html.println("left: " + x + "px; ");
+		}
+		html.print("width: " + width + "px; height: " + height + "px; ");
+		html.println("background-color: " + background + ";\">");
 		for (final Element xml : XMLUtil.getChildElements(top, "widget"))
 		{
 			final Widget widget = WidgetFactory.createWidget(this, xml);
