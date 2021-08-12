@@ -36,7 +36,7 @@ public class TemplateInstanceWidget extends Widget
     private final String file;
     private final List<Map<String, String>> instances = new ArrayList<>();
     private final boolean horizontal;
-    private final int gap;
+    private final int gap, wrap_count;
     private String embedded_html;
     
     public TemplateInstanceWidget(final ParentWidget parent, final Element xml) throws Exception
@@ -50,11 +50,12 @@ public class TemplateInstanceWidget extends Widget
             for (Element inst : XMLUtil.getChildElements(insts_xml, "instance"))
             {
                 final Map<String, String> macros = MacroUtil.fromXML(inst);
-                System.out.println("Instance: " + macros);
+                // System.out.println("Instance: " + macros);
                 instances.add(macros);
             }
         horizontal = XMLUtil.getChildBoolean(xml, "horizontal").orElse(false);
         gap = XMLUtil.getChildInteger(xml, "gap").orElse(10);
+        wrap_count = XMLUtil.getChildInteger(xml, "wrap_count").orElse(0);
     }
 
     private String parseContent()
@@ -68,7 +69,7 @@ public class TemplateInstanceWidget extends Widget
         int total_width = 0, total_height = 0;
         
         // Loop over instances
-        int x = 0, y = 0;
+        int i = 0, x = 0, y = 0;
         for (Map<String, String> instance : instances)
         {
             final MacroProvider macros = MacroProvider.forMap(instance);
@@ -87,18 +88,27 @@ public class TemplateInstanceWidget extends Widget
                 return "Cannot embed '" + HTMLUtil.escape(file) + "'";
             }
     
+            total_width  = Math.max(total_width,  x + embedded_display.width);
+            total_height = Math.max(total_height, y + embedded_display.height);
+            
             if (horizontal)
-            {
                 x += embedded_display.width + gap;
-                total_width += embedded_display.width + gap;
-                total_height = embedded_display.height;
-            }
             else
-            {
                 y += embedded_display.height + gap;
-                total_width = embedded_display.width;
-                total_height += embedded_display.height + gap;
-            }
+            
+            // Wrap to next row/col?
+            ++i;
+            if (i > 0  &&  wrap_count > 0  &&  (i % wrap_count == 0))
+                if (horizontal)
+                {
+                    x = 0;
+                    y += embedded_display.height + gap;
+                }
+                else
+                {
+                    x += embedded_display.width + gap;
+                    y = 0;
+                }
         }
         // Update container to overall content size
         styles.put("width",  Integer.toString(total_width) +"px");
