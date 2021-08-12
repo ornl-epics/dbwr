@@ -265,7 +265,7 @@ public class RuleSupport
     public void addScripts(final PrintWriter html)
     {
         final String text = scripts.toString();
-        if (text.isBlank())
+        if (text.trim().isEmpty())
             return;
         html.println("<script>");
         html.println(text);
