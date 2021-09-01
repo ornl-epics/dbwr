@@ -81,6 +81,8 @@ The following widget types and features have been implemented with basic functio
  * Group with group border
  * Embedded Displays
  * Tabs
+ * Navigation Tabs
+ * Template/Instances
  * XYPlot
  * Image, runtime options to change scaling and color map
  * Macro support
@@ -103,6 +105,8 @@ Static Widget
 
 A static widget implements `Widget.fillHTML()` to create the static HTML content.
 
+For an example, see `LabelWidget.java` or `EllipseWidget.java`.
+
 Dynamic Widget
 --------------
 
@@ -111,11 +115,13 @@ That Javascript can then register `init` or `update` methods via
 `DisplayBuilderWebRuntime.prototype.widget_init_methods` and
 `DisplayBuilderWebRuntime.prototype.widget_update_methods`.
 
-PV Widgets
-----------
-
+'Dynamic' widgets are usually based on a single PV and use the `PVWidget` base class
+to place the PV name into a `data-pv` attribute.
 Any widget with a `data-pv` attribute in its widget HTML will automatically
 subscribe to that PV. It should register a java script method in
 `DisplayBuilderWebRuntime.prototype.widget_update_methods` to handle the received PV updates.
 
+For an example, see `ProgressBarWidget.java`.
+
 PVs with multiple PVs can subscribe to additional PVs in their `widget_init_methods`.
+

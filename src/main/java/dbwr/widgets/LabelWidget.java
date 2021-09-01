@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2020 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2021 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -20,6 +20,14 @@ import dbwr.parser.XMLUtil;
  */
 public class LabelWidget extends Widget
 {
+    // Conceptually, this is a very simple widget.
+    // The constructor reads the XML <text>.
+    // The parent Widget code creates a <div>,
+    // which fillHTML() populates with that text.
+    //
+    // The remaining code handles the various formatting options
+    // for the text, dealing with both the current XML format
+    // and options used by older XML file versions.
     static
     {
         WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.Label", "label");

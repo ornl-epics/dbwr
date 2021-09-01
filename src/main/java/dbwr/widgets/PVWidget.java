@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2021 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -13,6 +13,15 @@ import org.w3c.dom.Element;
 import dbwr.parser.HTMLUtil;
 import dbwr.parser.XMLUtil;
 
+/** Base class for all widgets that have a "pv_name"
+ * 
+ *  Adds a "data-pv" property to the generated HTML widget.
+ *  Javascript in dbwr.js detects that attribute,
+ *  connects PV and invokes widget_update_methods[type]
+ *  for each received value.
+ *  
+ *  @author Kay Kasemir
+ */
 public class PVWidget extends Widget
 {
 	protected final String pv_name;

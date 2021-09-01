@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2021 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -67,19 +67,28 @@ public class WidgetFactory
             logger.log(Level.CONFIG, entry.getKey() + " - " + entry.getValue());
     }
 
-    /** @param script JavaScript file to add */
+    /** Register a JavaScript file to be included by the generated web page.
+     *  @param script JavaScript file to add
+     */
     public static void addJavaScript(final String script)
     {
         js.add(script);
     }
 
-    /** @param stylesheet CSS file to add */
+    /** Register a stype sheet to be included in the generated web page
+     *  @param stylesheet CSS file to add
+     */
     public static void addCSS(final String stylesheet)
     {
         css.add(stylesheet);
     }
 
-    /** @param legacy 'BOY' widget type
+    /** Register a legacy widget type
+     *  
+     *  Called by widgets which implement not just a current 'type'
+     *  but also a different 'legacy' type.
+     *  
+     *  @param legacy 'BOY' widget type
      *  @param type Current widget type
      */
     public static void registerLegacy(final String legacy, final String type)
