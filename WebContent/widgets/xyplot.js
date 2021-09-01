@@ -1,5 +1,8 @@
+// Uses 'flot' library (jQuery.plot) to
+// display X/Y waveform data.
+
 // Information for one trace:
-// PV names, most recent value for each PV, plot data
+// PV names, most recent value for each PV, plotobj as needed by plot
 class XYTrace
 {
     /** @param pvx Name of 'X' PV

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2021 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -11,8 +11,18 @@ import org.w3c.dom.Element;
 import dbwr.parser.WidgetFactory;
 import dbwr.parser.XMLUtil;
 
+/** XY Plot widget
+ *  @author Kay Kasemir
+ */
 public class XYPlotWidget extends Widget
 {
+    // Reads information for all the traces,
+    // their X and Y PV etc.,
+    // and places that information into "data-..." attributes.
+    // In the HTML, base class then creates a plain <div> with those
+    // attributes.
+    // xyplot.js in client then connects to the PVs and
+    // creates/updates plot with received samples.
     static
     {
         WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.xyGraph", "xyplot");
