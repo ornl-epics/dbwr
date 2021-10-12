@@ -4,17 +4,18 @@ Display Builder Web Runtime
 Building
 --------
 
-    export ANT_HOME=/path/to/apache-ant
-    export CATALINA_HOME=/path/to/apache-tomcat
-    export JAVA_HOME=/path/to/jdk8
-    export PATH=$ANT_HOME/bin:$JAVA_HOME/bin:$PATH
-    
-    ant clean war
+To build with maven:
+
+    mvn clean package
+
+Project can also be imported into Eclipse JEE IDE
+via File, Import, Maven, Existing Maven Projects.
+
 
 Running under Tomcat
 --------------------
 
-First, install the [PV Web Socket](https://github.com/kasemir/pvws), which must be available
+First, install the [PV Web Socket](https://github.com/ornl-epics/pvws), which must be available
 on the same Tomcat instance.
 
 Set the following environment variables, for example in $CATALINA_HOME/bin/setenv.sh:
@@ -61,6 +62,10 @@ circumventing the cache, add `cache=false` to the request:
 
 Development Status
 ==================
+
+Maven layout is based on
+
+    mvn archetype:generate -DgroupId=gov.ornl -DartifactId=dbwr -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMode=false
 
 The following widget types and features have been implemented with basic functionality:
 
