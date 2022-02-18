@@ -42,5 +42,15 @@
   </dependencies>
   <build>
     <finalName>dbwr</finalName>
+    <!-- Required to fix maven error, see https://github.com/ornl-epics/dbwr/issues/8 -->
+    <pluginManagement>
+      <plugins>
+       <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-war-plugin</artifactId>
+           <version>3.3.1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 </project>
