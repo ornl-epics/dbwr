@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2021 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2022 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -54,7 +54,7 @@ public class DisplayParser implements ParentWidget
      */
     public DisplayParser(final Resolver display, final MacroProvider parent, final PrintWriter html, final String group_name) throws Exception
     {
-        this(display, parent, html, group_name, -1, -1);
+        this(display, parent, html, group_name, -1, -1, false);
     }
     
     /** Parse display into HTML
@@ -64,11 +64,13 @@ public class DisplayParser implements ParentWidget
      *  @param group_name Parse only this group?
      *  @param x X offset and ..
      *  @param y .. Y offset for absolute positioning
+     *  @param transparent Force transparent background?
      *  @throws Exception on error
      */
 	public DisplayParser(final Resolver display, final MacroProvider parent,
 	                     final PrintWriter html, final String group_name,
-	                     final int x, final int y) throws Exception
+	                     final int x, final int y,
+	                     final boolean transparent) throws Exception
 	{
 	    id = IDs.incrementAndGet();
 	    this.display = display.getUrl();
@@ -114,14 +116,19 @@ public class DisplayParser implements ParentWidget
 		// Create HTML for the screen and all its widgets
 		html.println("<div class=\"Screen\" data-name=\"" + HTMLUtil.escape(name) + "\" ");
 		html.print("style=\"");
-		if (x >= 0  &&  y >= 0)
 		{
-		    html.println("position: absolute; ");
-		    html.println("top: " + y + "px; ");
-		    html.println("left: " + x + "px; ");
+    		if (x >= 0  &&  y >= 0)
+    		{
+    		    html.println("position: absolute; ");
+    		    html.println("top: " + y + "px; ");
+    		    html.println("left: " + x + "px; ");
+    		}
+    		html.print("width: " + width + "px; height: " + height + "px;");
+    		// Could use explicit "background-color: transparent;" but leaving it off gives same result 
+    		if (! transparent)
+    		    html.print(" background-color: " + background + ";");
 		}
-		html.print("width: " + width + "px; height: " + height + "px; ");
-		html.println("background-color: " + background + ";\">");
+		html.println("\">");
 		for (final Element xml : XMLUtil.getChildElements(top, "widget"))
 		{
 			final Widget widget = WidgetFactory.createWidget(this, xml);

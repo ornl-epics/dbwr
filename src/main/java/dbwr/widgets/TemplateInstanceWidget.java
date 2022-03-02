@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 UT-Battelle, LLC.
+ * Copyright (c) 2021-2022 UT-Battelle, LLC.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -37,6 +37,7 @@ public class TemplateInstanceWidget extends Widget
     private final List<Map<String, String>> instances = new ArrayList<>();
     private final boolean horizontal;
     private final int gap, wrap_count;
+    private final boolean transparent;
     private String embedded_html;
     
     public TemplateInstanceWidget(final ParentWidget parent, final Element xml) throws Exception
@@ -56,6 +57,7 @@ public class TemplateInstanceWidget extends Widget
         horizontal = XMLUtil.getChildBoolean(xml, "horizontal").orElse(false);
         gap = XMLUtil.getChildInteger(xml, "gap").orElse(10);
         wrap_count = XMLUtil.getChildInteger(xml, "wrap_count").orElse(0);
+        transparent = XMLUtil.getChildBoolean(xml, "transparent").orElse(false);
     }
 
     private String parseContent()
@@ -78,7 +80,7 @@ public class TemplateInstanceWidget extends Widget
             {
                 final String resolved = Resolver.resolve(this, file);
                 final Resolver display = new Resolver(resolved);
-                embedded_display = new DisplayParser(display, macros, buf_writer, "", x, y);
+                embedded_display = new DisplayParser(display, macros, buf_writer, "", x, y, transparent);
             }
             catch (final Exception ex)
             {
