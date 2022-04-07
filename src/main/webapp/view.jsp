@@ -28,7 +28,7 @@ out.append("<!--  Generated " + now + " -->\n");
 for (String c : WidgetFactory.css)
 	out.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"widgets/" + c + "?V=" + UNIQUE + "\">\n");
 %>
-<script type="text/javascript" src="../pvws/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../pvws/js/jquery.js"></script>
 <script type="text/javascript" src="../pvws/js/base64.js"></script>
 <script type="text/javascript" src="../pvws/js/pvws.js?V=<%=UNIQUE%>"></script> 
 <script type="text/javascript" src="js/lib/jquery.event.drag.js"></script>

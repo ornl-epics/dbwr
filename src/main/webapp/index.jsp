@@ -8,7 +8,7 @@
 <title>Display Builder Web Runtime</title>
 <link rel="shortcut icon" href="favicon.png">
 <link rel="stylesheet" type="text/css" href="css/widgets.css">
-<script type="text/javascript" src="../pvws/js/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../pvws/js/jquery.js"></script>
 <script type="text/javascript" src="../pvws/js/tablesort.js"></script>
 </head>
 
@@ -120,6 +120,7 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
+2022-04-07 jQuery 3.6.0.<br>
 2021-08-13 Support 'template' widget.<br>
 2021-03-23 Filter 'display'.<br>
 2021-03-01 Support 'led' and 'multi_state_led' labels.<br>
