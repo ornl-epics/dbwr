@@ -120,7 +120,7 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
-2022-04-07 jQuery 3.6.0.<br>
+2022-04-07 "R0" jQuery 3.6.0.<br>
 2021-08-13 Support 'template' widget.<br>
 2021-03-23 Filter 'display'.<br>
 2021-03-01 Support 'led' and 'multi_state_led' labels.<br>
