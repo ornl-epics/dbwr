@@ -8,6 +8,7 @@ let _db_plot_options =
         timeBase: "milliseconds",
         timezone: "browser"
     },
+    /*
     zoom:
     {
         interactive: true
@@ -16,10 +17,15 @@ let _db_plot_options =
     {
         interactive: true
     },
+    */
     legend:
     {
         show: true,
         position: "nw"
+    },
+    grid:
+    {
+        clickable: true
     }    
 };
 
@@ -110,6 +116,36 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["databrowser"] = widget =
     widget.data("traces", traces);
     
     __scroll(widget, traces);
+    
+    let spantext = jQuery("<input>").attr("type", "text");
+    spantext.change(event =>
+    {
+        widget.data("timespan", parseFloat(spantext.val()));
+    });    
+    
+    let checkbox = jQuery("<input>").attr("type", "checkbox");
+    checkbox.click(event =>
+    {
+        widget.data("autospan", checkbox.prop('checked'));
+    });
+    
+    create_contextmenu(widget,
+                       [
+                           jQuery("<div class=\"Header\">").append("Plot Settings"),
+                           jQuery("<label>").append("Time span [sec]: ").append(spantext),
+                           jQuery("<label>").append(checkbox).append("&nbsp; Autoscale")                          
+                       ]);
+  
+    widget.on('plotclick', (event, pos, item) =>
+    {
+        // Update menu UI from widget
+        spantext.val(widget.data("timespan"));
+        checkbox.prop('checked',
+                      widget.data("timespan") <= 0  ||
+                      widget.data("autospan"));
+        
+        toggle_contextmenu(event);
+    }); 
 };
 
 DisplayBuilderWebRuntime.prototype.widget_update_methods["databrowser"] = function(widget, data)
@@ -132,7 +168,7 @@ function __scroll(widget, traces)
    
     // Set time axis range
     let sec = widget.data("timespan");
-    if (sec <= 0)
+    if (sec <= 0  ||  widget.data("autospan"))
     {   // Autoscale
         _db_plot_options.xaxis.autoScale = "loose"
     }

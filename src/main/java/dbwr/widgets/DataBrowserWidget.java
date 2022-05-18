@@ -89,6 +89,7 @@ public class DataBrowserWidget extends Widget
         final String start_spec = XMLUtil.getChildString(parent, plt, "start").orElse("-60 sec").toLowerCase();
         final String end_spec = XMLUtil.getChildString(parent, plt, "end").orElse("now").toLowerCase();
         attributes.put("data-timespan", Long.toString(decodeTimespan(start_spec, end_spec)));
+        attributes.put("data-autospan", "false");
 
         final Element pvlist = XMLUtil.getChildElement(plt, "pvlist");
         int i = 0;
