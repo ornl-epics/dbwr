@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2022 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -11,6 +11,8 @@ import static dbwr.WebDisplayRepresentation.logger;
 import java.net.URL;
 import java.util.Optional;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.w3c.dom.Element;
 
@@ -25,6 +27,44 @@ public class DataBrowserWidget extends Widget
         WidgetFactory.registerLegacy("org.csstudio.trends.databrowser.opiwidget", "databrowser");
         WidgetFactory.addJavaScript("databrowser.js");
         WidgetFactory.addCSS("databrowser.css");
+    }
+
+    /** Decode start..end time
+     *  @param start_spec "-52 sec", minutes, hours, days with a little flexibility
+     *  @param end_spec Expected to be "end"
+     *  @return time span of plot in seconds
+     */
+    private static long decodeTimespan(final String start_spec, final String end_spec)
+    {
+        logger.log(Level.FINE, "Data browser time range from '" + start_spec + "' to '" + end_spec + "'");
+        if (!"now".equalsIgnoreCase(end_spec))
+        {
+            logger.log(Level.WARNING, "Cannot decode data browser time range from '" + start_spec + "' to '" + end_spec + "'");
+            return 5*60;
+        }
+
+        Pattern p = Pattern.compile("\\s*-?([0-9.]+)\\s*day.*");
+        Matcher matcher = p.matcher(start_spec);
+        if (matcher.matches())
+            return Math.round(Double.parseDouble(matcher.group(1)) * 24*60*60);
+
+        p = Pattern.compile("\\s*-?([0-9.]+)\\s*hour.*");
+        matcher = p.matcher(start_spec);
+        if (matcher.matches())
+            return Math.round(Double.parseDouble(matcher.group(1)) * 60*60);
+
+        p = Pattern.compile("\\s*-?([0-9.]+)\\s*min.*");
+        matcher = p.matcher(start_spec);
+        if (matcher.matches())
+            return Math.round(Double.parseDouble(matcher.group(1)) * 60);
+
+        p = Pattern.compile("\\s*-?([0-9.]+)\\s*sec.*");
+        matcher = p.matcher(start_spec);
+        if (matcher.matches())
+            return Math.round(Double.parseDouble(matcher.group(1)));
+
+        logger.log(Level.WARNING, "Cannot parse data browser time range from '" + start_spec + "' to '" + end_spec + "'");
+        return -1;
     }
 
 	public DataBrowserWidget(final ParentWidget parent, final Element xml) throws Exception
@@ -45,6 +85,11 @@ public class DataBrowserWidget extends Widget
         final String resolved = Resolver.resolve(this, file);
         final URL url = new URL(resolved);
         final Element plt = XMLUtil.openXMLDocument(url.openStream(), "databrowser");
+
+        final String start_spec = XMLUtil.getChildString(parent, plt, "start").orElse("-60 sec").toLowerCase();
+        final String end_spec = XMLUtil.getChildString(parent, plt, "end").orElse("now").toLowerCase();
+        attributes.put("data-timespan", Long.toString(decodeTimespan(start_spec, end_spec)));
+
         final Element pvlist = XMLUtil.getChildElement(plt, "pvlist");
         int i = 0;
         if (pvlist != null)

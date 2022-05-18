@@ -63,6 +63,7 @@ class DBTrace
     /** @param now Time Stamp */
     scroll(now)
     {
+        // Replace last sample with one that uses 'now' for time
         let last = this.plotobj.data.pop();
         if (last == null)
             this.plotobj.data.push(null);
@@ -79,9 +80,10 @@ class DBTrace
         if (pv != this.pv)
             return;
         
-        // Add to plot data
+        // Add to plot data, see above regarding the duplicate
+        // which can be updated in scroll() or update()
         this.plotobj.data.pop();
-        this.plotobj.data.push( [ time, value ] );        
+        this.plotobj.data.push( [ time, value ] );
         this.plotobj.data.push( [ time, value ] );        
     }
 }
@@ -127,6 +129,20 @@ function __scroll(widget, traces)
     let trace;
     for (trace of traces)
         trace.scroll(time);
+   
+    // Set time axis range
+    let sec = widget.data("timespan");
+    if (sec <= 0)
+    {   // Autoscale
+        _db_plot_options.xaxis.autoScale = "loose"
+    }
+    else
+    {   // Use time span (seconds)
+        _db_plot_options.xaxis.autoScale = "none"
+        _db_plot_options.xaxis.min = time - sec*1000 
+        _db_plot_options.xaxis.max = time 
+    }
+    
     __replot(widget, traces);
     // Scroll every 3 seconds
     setTimeout(() => __scroll(widget, traces), 3000);
