@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2020 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2022 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -105,9 +105,9 @@ public class ScreenServlet extends HttpServlet
 		final DisplayKey key = new DisplayKey(display_name, macro_map);
 		try
 		{
-		    final CachedDisplay cached = use_cache
-		                               ? DisplayCache.getOrCreate(key, this::createHtml)
-		                               : createHtml(key);
+		    if (!use_cache)
+		        DisplayCache.remove(key);
+		    final CachedDisplay cached = DisplayCache.getOrCreate(key, this::createHtml);
 			response.setContentType("text/html");
 			response.setCharacterEncoding("UTF-8");
 			final PrintWriter writer = response.getWriter();

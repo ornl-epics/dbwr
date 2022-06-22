@@ -59,6 +59,11 @@ circumventing the cache, add `cache=false` to the request:
 
     http://localhost:8080/dbwr/view.jsp?cache=false&display=URL_OF_THE_DISPLAY.bob
 
+Each time the display is fetched with `cache=false`, the entry in the cache
+is replaced with a newly parsed display, replacing the cached version.
+Following calls without `cache` or with `cache=true` will then again fetch
+the cached display.
+
 
 Development Status
 ==================
