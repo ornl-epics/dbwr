@@ -1,6 +1,13 @@
 Display Builder Web Runtime
 ===========================
 
+Create displays in the [desktop version of the CS-Studio Display Builder](https://github.com/ControlSystemStudio/phoebus)
+and use them in the control room.
+This web runtime then provides convenient remote access.
+
+ * Use any web browser with zero client-side installation, including smart phones
+ * Supports most widgets and their key features
+
 Building
 --------
 
@@ -49,11 +56,36 @@ Assuming Tomcat on `localhost:8080`, open
     
 
 
-When you then open a display, you'll note that the resulting URL has the general format
+When you then open a display, you'll find that the resulting URL has the general format
 
     http://localhost:8080/dbwr/view.jsp?display=URL_OF_THE_DISPLAY.bob
 
-Note that the display information is cached, so when you edit a display file
+
+To access display files that you also use in the control room, you have two basic options.
+You can make them available in the web server's file system, for example via a network file system mount
+or by periodically fetching a copy of the current displays from a version control system. In that case,
+use URLs like `...view.jsp?display=file:/path/to/display.bob`, where the file path refers to the
+file system of the web server.
+Alternatively, you may expose the display files themselves via a web server. For example, assume that
+`http://my_control_system_host/displays/path/to/display.bob` serves a display file, then a URL like
+`...view.jsp?display=http://my_control_system_host/displays/path/to/display.bob` will
+instruct the display web runtime to fetch that display file and render it.
+
+You might be concerned that the web runtime could be misused to probe the file
+system of the tomcast host via for example `...view.jsp?display=file:/etc/password`.
+To prevent this, refer to the `WHITELIST..` settings mentioned above and use them to limit
+access to only the `file:/path/to/.*` or `http://my_control_system_host/displays/path/to/.*` paths
+that you intent to expose.
+
+While the web runtime can fundamentally read the same display files as the desktop version of the display builder,
+note that it is a separate implementation that can't be 100% compatible.
+While most widgets and their key features are supported, even including some rules, scripts are not,
+and plots are also simplified.
+In addition, displays created for desktop usage in the control room are often to big to be useful on a smaller device like a phone.
+It might thus be necessary to optimize desktop displays,
+for example to split one large desktop display into smaller displays meant for remote access.
+
+The display information is cached, so when you edit a display file
 and would like to force an update to the web version right away,
 circumventing the cache, add `cache=false` to the request:
 
