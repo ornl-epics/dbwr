@@ -8,8 +8,17 @@
 <title>Display Builder Web Runtime</title>
 <link rel="shortcut icon" href="favicon.png">
 <link rel="stylesheet" type="text/css" href="css/widgets.css">
-<script type="text/javascript" src="../pvws/js/jquery.js"></script>
-<script type="text/javascript" src="../pvws/js/tablesort.js"></script>
+<%
+if (WebDisplayRepresentation.pvws_http_url != null)
+{
+  out.append("<script type=\"text/javascript\" src=\"" + WebDisplayRepresentation.pvws_http_url + "/js/tablesort.js\"></script>\n");
+  out.append("<script type=\"text/javascript\" src=\"" + WebDisplayRepresentation.pvws_http_url + "/js/jquery.js\"></script>\n");
+}
+else {
+  out.append("<script type=\"text/javascript\" src=\"../pvws/js/jquery.js\"></script>\n");
+  out.append("<script type=\"text/javascript\" src=\"../pvws/js/tablesort.js\"></script>\n");
+}
+%>
 </head>
 
 <body>

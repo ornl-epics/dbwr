@@ -28,9 +28,21 @@ out.append("<!--  Generated " + now + " -->\n");
 for (String c : WidgetFactory.css)
 	out.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"widgets/" + c + "?V=" + UNIQUE + "\">\n");
 %>
-<script type="text/javascript" src="../pvws/js/jquery.js"></script>
-<script type="text/javascript" src="../pvws/js/base64.js"></script>
-<script type="text/javascript" src="../pvws/js/pvws.js?V=<%=UNIQUE%>"></script> 
+
+<%
+if (WebDisplayRepresentation.pvws_http_url != null)
+{
+  out.append("<script type=\"text/javascript\" src=\"" + WebDisplayRepresentation.pvws_http_url + "/js/jquery.js\"></script>\n");
+  out.append("<script type=\"text/javascript\" src=\"" + WebDisplayRepresentation.pvws_http_url + "/js/base64.js\"></script>\n");
+  out.append("<script type=\"text/javascript\" src=\"" + WebDisplayRepresentation.pvws_http_url + "/js/pvws.js?V=" + UNIQUE + "\"></script>\n");
+}
+else
+{
+  out.append("<script type=\"text/javascript\" src=\"../pvws/js/jquery.js\"></script>\n");
+  out.append("<script type=\"text/javascript\" src=\"../pvws/js/base64.js\"></script>\n");
+  out.append("<script type=\"text/javascript\" src=\"../pvws/js/pvws.js?V=" + UNIQUE + "\"></script>\n");
+}
+%>
 <script type="text/javascript" src="js/lib/jquery.event.drag.js"></script>
 <script type="text/javascript" src="js/lib/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="js/flot/jquery.canvaswrapper.js"></script>
@@ -69,7 +81,16 @@ for (String js : WidgetFactory.js)
 
 <div id="info_panel">
 <span id="info">INFO</span>
-<img id="status" alt="Status" title="Connect/disconnect" src="../pvws/img/disconnected.png">
+<%
+if (WebDisplayRepresentation.pvws_http_url != null)
+{
+  out.append("<img id=\"status\" alt=\"Status\" title=\"Connect/disconnect\" src=\"" + WebDisplayRepresentation.pvws_http_url + "/img/disconnected.png\">\n");
+}
+else
+{
+  out.append("<img id=\"status\" alt=\"Status\" title=\"Connect/disconnect\" src=\"../pvws/img/disconnected.png\">\n");
+}
+%>
 </div>
 
 
@@ -139,7 +160,11 @@ else
 <%
 }
 %>
-let dbwr = new DisplayBuilderWebRuntime(wsurl);
+<%
+out.println("// Web Socket HTTP Base URL");
+out.println("let wsHttp = \"" + WebDisplayRepresentation.pvws_http_url + "\";");
+%>
+let dbwr = new DisplayBuilderWebRuntime(wsurl, wsHttp);
 
 jQuery("#status").click(() => dbwr.pvws.close() );
 

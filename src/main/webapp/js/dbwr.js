@@ -116,7 +116,7 @@ class DisplayBuilderWebRuntime
     /** Construct data browser web runtime for a PV Web Socket
      *  @param pvws_url PV Web Socket URL
      */
-    constructor(pvws_url)
+    constructor(pvws_url, pvws_http_url)
     {
         this.display = "";
         this.info = jQuery("#info");
@@ -125,6 +125,7 @@ class DisplayBuilderWebRuntime
                              message   => this._handle_message(message));
         // Map of PV name to PVInfo
         this.pv_infos = {}
+        this.pvws_http_url = pvws_http_url;
     }
     
     /** @param message Message to log in 'info' span and console */
@@ -192,7 +193,14 @@ class DisplayBuilderWebRuntime
      */
     _handle_connection(connected)
     {
-        jQuery("#status").attr("src", connected ? "../pvws/img/connected.png" : "../pvws/img/disconnected.png");
+        if (this.pvws_http_url !== null && this.pvws_http_url !== "null") 
+        {
+          jQuery("#status").attr("src", connected ? this.pvws_http_url + "/img/connected.png" : this.pvws_http_url + "/img/disconnected.png");
+        }
+        else 
+        {
+          jQuery("#status").attr("src", connected ? "../pvws/img/connected.png" : "../pvws/img/disconnected.png");
+        }
         if (connected)
         {
             this.log("Initialize Widgets");

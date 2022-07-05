@@ -35,6 +35,9 @@ public class WebDisplayRepresentation implements ServletContextListener
 	/** Custom ws://some_host.org:8081/pvws URL or <code>null</code> */
     public static final String pvws_url;
 	
+	/** Custom http://some_host.org:8081/pvws URL or <code>null</code> */
+    public static final String pvws_http_url;
+
 	static
 	{
 	    // Load display links for the start page from environment variables "DBWR1", "DBWR2", ...
@@ -75,6 +78,12 @@ public class WebDisplayRepresentation implements ServletContextListener
             pvws_url = null;
         else
             pvws_url = wsurl.trim();
+
+        final String http_url = System.getenv("PVWS_HTTP_URL");
+        if (http_url == null || http_url.trim().isEmpty())
+            pvws_http_url = null;
+        else
+            pvws_http_url = http_url.trim();
 	}
 
 	@Override

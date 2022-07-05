@@ -43,6 +43,8 @@ you need to configure this via the environment variable
 
  * `PVWS_URL`: URL of PV Web Socket when not co-located with `dbwr.jar`,
    for example `ws://some.other.host.org:8081/pvws`
+ * `PVWS_HTTP_URL`: HTTP base URL of PV Web Socket when not co-located with `dbwr.jar`,
+   for example `http://some.other.host.org:8081/pvws`
 
 
 Client URLs
