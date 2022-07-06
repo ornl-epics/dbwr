@@ -192,7 +192,7 @@ class DisplayBuilderWebRuntime
      */
     _handle_connection(connected)
     {
-        jQuery("#status").attr("src", connected ? "../pvws/img/connected.png" : "../pvws/img/disconnected.png");
+        jQuery("#status").attr("src", connected ? "img/connected.png" : "img/disconnected.png");
         if (connected)
         {
             this.log("Initialize Widgets");

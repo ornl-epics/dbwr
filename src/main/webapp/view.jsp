@@ -28,9 +28,9 @@ out.append("<!--  Generated " + now + " -->\n");
 for (String c : WidgetFactory.css)
 	out.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"widgets/" + c + "?V=" + UNIQUE + "\">\n");
 %>
-<script type="text/javascript" src="../pvws/js/jquery.js"></script>
 <script type="text/javascript" src="../pvws/js/base64.js"></script>
 <script type="text/javascript" src="../pvws/js/pvws.js?V=<%=UNIQUE%>"></script> 
+<script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/lib/jquery.event.drag.js"></script>
 <script type="text/javascript" src="js/lib/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="js/flot/jquery.canvaswrapper.js"></script>
@@ -69,7 +69,7 @@ for (String js : WidgetFactory.js)
 
 <div id="info_panel">
 <span id="info">INFO</span>
-<img id="status" alt="Status" title="Connect/disconnect" src="../pvws/img/disconnected.png">
+<img id="status" alt="Status" title="Connect/disconnect" src="img/disconnected.png">
 </div>
 
 
