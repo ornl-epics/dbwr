@@ -41,7 +41,7 @@ When you access the displays via `http://some_host:8080/dbwr/...`, it will conne
 If you want to connect to the PV Web Socket on a different URL, for example on a different host,
 you need to configure this via the following environment variables
 
- * `PVWS_HOST`: Hostname and port of PV Web Socket when not co-located with `dbwr.jar`,
+ * `PVWS_HOST`: Hostname and port of PV Web Socket when not co-located with `dbwr.war`,
    for example `some.other.host.org:8081`
  * `PVWS_HTTP_PROTOCOL`: `http` or `https` based on what pvws uses (default is http)
  * `PVWS_WS_PROTOCOL`: Web socket protocol of PV Web Socket, either `ws` or `wss` (default is ws)
