@@ -74,8 +74,8 @@ public class WebDisplayRepresentation implements ServletContextListener
         }
         
         final String pvws_host = System.getenv("PVWS_HOST");
-        final String pvws_ws_protocol = System.getenv("PVWS_WS_PROTOCOL");
-        final String pvws_http_protocol = System.getenv("PVWS_HTTP_PROTOCOL");
+        final String pvws_ws_protocol = System.getenv().getOrDefault("PVWS_WS_PROTOCOL", "ws");
+        final String pvws_http_protocol = System.getenv().getOrDefault("PVWS_HTTP_PROTOCOL", "http");
 
         if (pvws_host == null  || pvws_host.trim().isEmpty())
         {
@@ -84,11 +84,6 @@ public class WebDisplayRepresentation implements ServletContextListener
         }
         else
         {
-            if (pvws_ws_protocol == null  || pvws_ws_protocol.trim().isEmpty())
-                pvws_ws_protocol = "ws";
-            if (pvws_http_protocol == null  || pvws_http_protocol.trim().isEmpty())
-                pvws_http_protocol = "http";
-
             pvws_ws_url = pvws_ws_protocol.trim() + "://" + pvws_host.trim() + "/pvws";
             pvws_http_url = pvws_http_protocol.trim() + "://" + pvws_host.trim() + "/pvws";
         }
