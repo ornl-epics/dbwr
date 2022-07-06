@@ -33,7 +33,10 @@ public class WebDisplayRepresentation implements ServletContextListener
 	public static final List<Pattern> whitelist_options = new ArrayList<>();
 
 	/** Custom ws://some_host.org:8081/pvws URL or <code>null</code> */
-    public static final String pvws_url;
+    public static final String pvws_ws_url;
+
+	/** Custom http://some_host.org:8081/pvws URL or <code>null</code> */
+    public static final String pvws_http_url;
 	
 	static
 	{
@@ -70,11 +73,25 @@ public class WebDisplayRepresentation implements ServletContextListener
             whitelist_options.add(Pattern.compile(".*"));
         }
         
-        final String wsurl = System.getenv("PVWS_URL");
-        if (wsurl == null  || wsurl.trim().isEmpty())
-            pvws_url = null;
+        final String pvws_host = System.getenv("PVWS_HOST");
+        final String pvws_ws_protocol = System.getenv("PVWS_WS_PROTOCOL");
+        final String pvws_http_protocol = System.getenv("PVWS_HTTP_PROTOCOL");
+
+        if (pvws_host == null  || pvws_host.trim().isEmpty())
+        {
+            pvws_ws_url = null;
+            pvws_http_url = null;
+        }
         else
-            pvws_url = wsurl.trim();
+        {
+            if (pvws_ws_protocol == null  || pvws_ws_protocol.trim().isEmpty())
+                pvws_ws_protocol = "ws";
+            if (pvws_http_protocol == null  || pvws_http_protocol.trim().isEmpty())
+                pvws_http_protocol = "http";
+
+            pvws_ws_url = pvws_ws_protocol.trim() + "://" + pvws_host.trim() + "/pvws";
+            pvws_http_url = pvws_http_protocol.trim() + "://" + pvws_host.trim() + "/pvws";
+        }
 	}
 
 	@Override
