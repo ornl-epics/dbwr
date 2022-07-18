@@ -8,8 +8,8 @@
 <title>Display Builder Web Runtime</title>
 <link rel="shortcut icon" href="favicon.png">
 <link rel="stylesheet" type="text/css" href="css/widgets.css">
-<script type="text/javascript" src="../pvws/js/jquery.js"></script>
-<script type="text/javascript" src="../pvws/js/tablesort.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/tablesort.js"></script>
 </head>
 
 <body>
