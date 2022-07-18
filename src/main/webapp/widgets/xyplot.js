@@ -91,6 +91,8 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["xyplot"] = widget =>
 {
     let i=0, xpv = widget.data("pvx" + i), ypv = widget.data("pvy" + i);
     let traces = [];
+
+
     let options =
     {
         zoom:
@@ -105,8 +107,23 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["xyplot"] = widget =>
         {
             show: false,
             position: "nw"
-        }    
+        },
+		xaxis:
+		{
+			axisLabel: 'X Axis',
+			show: true
+		}
     };
+
+	let x_axis_title = widget.data("x_axis_title");
+	// console.log("xaxis title: " + x_axis_title)
+	if (x_axis_title !== undefined)
+		options.xaxis.axisLabel = x_axis_title;
+		
+	let x_axis_visible = widget.data("x_axis_visible");
+	// console.log("xaxis visible: " + x_axis_visible)
+	options.xaxis.show = widget.data("x_axis_visible");
+		
     while (xpv  ||  ypv)
     {
         // console.log("Should connect to X/Y " + i + ": " + xpv + ", " + ypv);
@@ -116,7 +133,8 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["xyplot"] = widget =>
             dbwr.subscribe(widget, "xyplot", xpv);
         let name = widget.data("name" + i);
         if (name !== undefined)
-            options.legend.show = true; 
+            options.legend.show = true;
+
         let color = widget.data("color" + i);
         let linewidth = widget.data("linewidth" + i);
         let pointsize = widget.data("pointsize" + i);

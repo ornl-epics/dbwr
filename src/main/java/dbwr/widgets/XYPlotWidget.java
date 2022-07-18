@@ -32,6 +32,23 @@ public class XYPlotWidget extends Widget
     public XYPlotWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
 		super(parent, xml, "xyplot", 400, 300);
+		
+		final Element x_axis = XMLUtil.getChildElement(xml, "x_axis");
+		if(x_axis != null) {
+		    final String x_axis_title = XMLUtil.getChildString(parent, x_axis, "title").orElse("");
+		    attributes.put("data-x_axis_title", x_axis_title);
+
+		    final String x_axis_visible = XMLUtil.getChildString(parent, x_axis, "visible").orElse("");
+		    if(x_axis_visible.isEmpty())
+		    	attributes.put("data-x_axis_visible", "true");
+		    else 
+		    	attributes.put("data-x_axis_visible", x_axis_visible);
+		}
+		else
+		{
+            attributes.put("data-x_axis_visible", "true");
+		    attributes.put("data-x_axis_title", "");
+		}
 
 		final Element traces = XMLUtil.getChildElement(xml, "traces");
 		if (traces == null)
