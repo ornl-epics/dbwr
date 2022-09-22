@@ -8,6 +8,12 @@ This web runtime then provides convenient remote access.
  * Use any web browser with zero client-side installation, including smart phones
  * Supports most widgets and their key features
 
+Binary
+------
+
+.. is available as https://controlssoftware.sns.ornl.gov/css_phoebus/nightly/dbwr.war
+
+
 Building
 --------
 
