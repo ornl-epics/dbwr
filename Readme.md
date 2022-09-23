@@ -91,7 +91,7 @@ While the web runtime can fundamentally read the same display files as the deskt
 note that it is a separate implementation that can't be 100% compatible.
 While most widgets and their key features are supported, even including some rules, scripts are not,
 and plots are also simplified.
-In addition, displays created for desktop usage in the control room are often to big to be useful on a smaller device like a phone.
+In addition, displays created for desktop usage in the control room are often too big to be useful on a smaller device like a phone.
 It might thus be necessary to optimize desktop displays,
 for example to split one large desktop display into smaller displays meant for remote access.
 
