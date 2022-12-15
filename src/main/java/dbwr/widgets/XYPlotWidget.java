@@ -52,19 +52,19 @@ public class XYPlotWidget extends Widget
 
 		final Element y_axes = XMLUtil.getChildElement(xml, "y_axes");
 		// We currently only support 2 Y Axis, 0 being the primary and 1 being the secondary
-		int axis_count = 0;
+		int axis_index = 0;
 		if (y_axes != null) 
 		{
 			for (final Element y_axis : XMLUtil.getChildElements(y_axes, "y_axis"))
 			{
-				if(axis_count == 0)
+				if(axis_index == 0)
 				{
 				    final String y_axis_title = XMLUtil.getChildString(parent, y_axis, "title").orElse("");
 					attributes.put("data-y_axis_0_title", y_axis_title);
 					final Boolean y_axis_log_scale = XMLUtil.getChildBoolean(y_axis, "log_scale").orElse(false);
 					attributes.put("data-y_axis_0_mode", y_axis_log_scale ? "log" : "null");
 				} 
-				else if (axis_count == 1) 
+				else if (axis_index == 1) 
 				{
 					attributes.put("data-y_axis_1_visible", "true");
 				    final String y_axis_title = XMLUtil.getChildString(parent, y_axis, "title").orElse("");
@@ -76,7 +76,7 @@ public class XYPlotWidget extends Widget
 				}
 				else
 					break;
-				++axis_count;
+				++axis_index;
 			}
 		}
 		
@@ -95,7 +95,7 @@ public class XYPlotWidget extends Widget
     		    attributes.put("data-pvx" + i, x_pv);
                 attributes.put("data-pvy" + i, y_pv);
                 attributes.put("data-color" + i, XMLUtil.getColor(xml, "trace_" + i + "_trace_color").orElse(Integer.toString(0)));
-                attributes.put("data-y_axis" + i, XMLUtil.getChildInteger(xml, "trace_" + i + "_y_axis").orElse(0).toString());
+                attributes.put("data-y_axis" + i, XMLUtil.getChildInteger(xml, "trace_" + i + "_axis").orElse(0).toString());
                 final String name = XMLUtil.getChildString(parent, xml, "trace_" + i + "_name").orElse("");
                 if (!name.isEmpty())
                     attributes.put("data-name" + i, name);
@@ -113,7 +113,7 @@ public class XYPlotWidget extends Widget
             attributes.put("data-pvx" + i, x_pv);
             attributes.put("data-pvy" + i, y_pv);
             attributes.put("data-color" + i, XMLUtil.getColor(trace, "color").orElse(Integer.toString(0)));
-            attributes.put("data-y_axis" + i, XMLUtil.getChildInteger(xml, "trace_" + i + "_y_axis").orElse(0).toString());
+            attributes.put("data-y_axis" + i, XMLUtil.getChildInteger(trace, "axis").orElse(0).toString());
             final String name = XMLUtil.getChildString(parent, trace, "name").orElse("");
             if (!name.isEmpty())
                 attributes.put("data-name" + i, name);
