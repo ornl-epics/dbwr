@@ -13,7 +13,7 @@ class XYTrace
      *  @param pointsize Use points instead of lines?
      *  @param bars Use bars instead of lines, points?
      */
-    constructor(pvx, pvy, label, color, linewidth, pointsize, bars)
+    constructor(pvx, pvy, yaxis, label, color, linewidth, pointsize, bars)
     {
         this.pvx = pvx;
         this.pvy = pvy;
@@ -30,7 +30,8 @@ class XYTrace
             color: color,   
             clickable: true,
             hoverable: true,
-            data: []
+            data: [],
+			yaxis: yaxis
         };
         if (bars)
             this.plotobj.bars = { show: true };
@@ -110,23 +111,56 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["xyplot"] = widget =>
         },
 		xaxis:
 		{
+			mode: null,
 			axisLabel: 'X Axis',
 			show: true
-		}
+		},
+		yaxes:
+		[
+			{show: true, axisLabel: 'Y Axis', mode: null},
+			{show: false, axisLabel: 'Y2 Axis', mode: null, position: "right"}
+		]
     };
 
 	let x_axis_title = widget.data("x_axis_title");
 	// console.log("xaxis title: " + x_axis_title)
 	if (x_axis_title !== undefined)
 		options.xaxis.axisLabel = x_axis_title;
-		
+
 	let x_axis_visible = widget.data("x_axis_visible");
 	// console.log("xaxis visible: " + x_axis_visible)
 	options.xaxis.show = widget.data("x_axis_visible");
+	
+	let y_axis_0_title = widget.data("y_axis_0_title");
+	// console.log("xaxis title: " + y_axis_0_title)
+	if (y_axis_0_title !== undefined)
+		options.yaxes[0].axisLabel = y_axis_0_title
+	let y_axis_0_mode = widget.data("y_axis_0_mode");
+	// console.log("xaxis title: " + y_axis_0_mode)
+	if (y_axis_0_mode !== undefined)
+		options.yaxes[0].mode = y_axis_0_mode
+			
+	let y_axis_1_title = widget.data("y_axis_1_title");
+	// console.log("xaxis title: " + y_axis_1_title)
+	if (y_axis_1_title !== undefined)
+		options.yaxes[1].axisLabel = y_axis_1_title
+	let y_axis_1_mode = widget.data("y_axis_1_mode");
+	// console.log("xaxis title: " + y_axis_1_mode)
+	if (y_axis_1_mode !== undefined)
+		options.yaxes[1].mode = y_axis_1_mode
 		
+	let y_axis_1_on_right = widget.data("y_axis_1_on_right");
+	// console.log("yaxis location: " + y_axis_1_on_right)
+	if (y_axis_1_on_right !== undefined)
+		options.yaxes[1].position = y_axis_1_on_right
+		
+	let y_axis_1_visible = widget.data("y_axis_1_visible");
+	// console.log("xaxis visible: " + y_axis_1_visible)
+	options.yaxes[1].show = widget.data("y_axis_1_visible");
+			
     while (xpv  ||  ypv)
     {
-        // console.log("Should connect to X/Y " + i + ": " + xpv + ", " + ypv);
+        console.log("Should connect to X/Y " + i + ": " + xpv + ", " + ypv);
         if (ypv)
             dbwr.subscribe(widget, "xyplot", ypv);
         if (xpv)
@@ -139,7 +173,9 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["xyplot"] = widget =>
         let linewidth = widget.data("linewidth" + i);
         let pointsize = widget.data("pointsize" + i);
         let bars = widget.data("bars" + i);
-        traces.push(new XYTrace(xpv, ypv, name, color, linewidth, pointsize, bars));
+		// .bob files the axis index starts from 0 while flot axis index starts from 1
+		let axis = widget.data("y_axis"+i) + 1
+        traces.push(new XYTrace(xpv, ypv, axis, name, color, linewidth, pointsize, bars));
         
         ++i;
         xpv = widget.data("pvx" + i);
