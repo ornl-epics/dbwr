@@ -27,6 +27,13 @@ To build with maven:
 Project can also be imported into Eclipse JEE IDE
 via File, Import, Maven, Existing Maven Projects.
 
+**Docker**
+
+Edit .env file with settings for git version and port number and docker/setenv.sh with your local site settings for Display/web socket settings. Then:
+
+```
+docker-compose build
+```
 
 Running under Tomcat
 --------------------
@@ -54,6 +61,19 @@ you need to configure this via the following environment variables
    for example `some.other.host.org:8081`
  * `PVWS_HTTP_PROTOCOL`: `http` or `https` based on what pvws uses (default is http)
  * `PVWS_WS_PROTOCOL`: Web socket protocol of PV Web Socket, either `ws` or `wss` (default is ws)
+
+**Docker**
+
+To run docker container (use -d option to run in detached mode):
+
+```
+docker-compose up
+```
+
+The status can be seen with docker ps. The status will be healthy if the dbwr index page loads
+```
+docker ps
+```
 
 Client URLs
 -----------
