@@ -75,7 +75,8 @@ public class ActionButtonWidget extends Widget
                 if ("open_webpage".equals(action_type))
                 {
                     final String url = XMLUtil.getChildString(parent, ae, "url").orElse("");
-                    attributes.put("data-linked-url-" + index, HTMLUtil.escape(url));
+                    //attributes.put("data-linked-url-" + index, HTMLUtil.escape(url));
+                    attributes.put("data-linked-url-" + index, url);
                 }
                 else if ("open_display".equalsIgnoreCase(action_type))
                 {
