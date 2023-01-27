@@ -56,6 +56,9 @@ public class BaseTextWidget extends PVWidget
 			final String background_color = XMLUtil.getColor(xml, "background_color").orElse(default_background);
 			styles.put("background-color", background_color);
 
+			final String foreground_color = XMLUtil.getColor(xml, "foreground_color").orElse("#000000");
+			styles.put("color", foreground_color);
+
 			getRuleSupport().handleColorRule(parent, xml, this,
                                              "background_color", background_color,
                                              "set_text_background_color");
