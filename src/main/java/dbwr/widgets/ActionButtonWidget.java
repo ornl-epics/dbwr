@@ -48,8 +48,17 @@ public class ActionButtonWidget extends Widget
         XMLUtil.getColor(xml, "foreground_color").ifPresent(color -> styles.put("color", color));
 
         final String background_color;
+        final Element transparency = XMLUtil.getChildElement(xml, "transparent");
         final Color bg = XMLUtil.getAWTColor(xml, "background_color");
-        if (bg != null  &&  ! DEFAULT_BACKGROUND.equals(bg))
+        
+        if (transparency != null && transparency.getTextContent().equals("true"))
+        {
+        	background_color = "#0000";
+        	styles.put("background-image", "linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0))");
+        	styles.put("background-color", background_color);
+        	styles.put("border-width", "0");
+        }
+        else if (bg != null  &&  ! DEFAULT_BACKGROUND.equals(bg))
         {
             background_color = XMLUtil.getWebColor(bg);
             final String highlight = XMLUtil.getWebColor(bg.brighter());
