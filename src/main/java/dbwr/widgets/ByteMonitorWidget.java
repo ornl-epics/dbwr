@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2021 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2023 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -50,11 +50,19 @@ public class ByteMonitorWidget extends SvgPVWidget
 
 		if (XMLUtil.getChildBoolean(xml, "bitReverse").orElse(false))
 	        attributes.put("data-reverse", "true");
-		
-		final Element el = XMLUtil.getChildElement(xml, "labels");
+
+        // Check for <labels> <text>Label1</text>... but also handle
+        // legacy    <label>  <s>Label1</s>...       plus permutations
+		Element el = XMLUtil.getChildElement(xml, "labels");
+        if (el == null)
+            el = XMLUtil.getChildElement(xml, "label");
 		if (el != null)
+        {
 		    for (Element text : XMLUtil.getChildElements(el, "text"))
 		        labels.add(MacroUtil.expand(parent, XMLUtil.getString(text)));
+    	    for (Element text : XMLUtil.getChildElements(el, "s"))
+		        labels.add(MacroUtil.expand(parent, XMLUtil.getString(text)));
+        }
 		
 		final FontInfo font = XMLUtil.getFont(xml, "font").orElse(LabelWidget.DEFAULT_FONT);
 		font.addToStyles(styles);

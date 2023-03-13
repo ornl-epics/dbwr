@@ -120,6 +120,7 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
+2023-03-13 Byte monitor: Read labels from legacy files
 2022-06-22 'cache=false' replaces cached entry instead of circumventing cache.<br>
 2022-05-18 'databrowser' reads time span, context menu to change.<br>
 2022-04-07 "R0" jQuery 3.6.0.<br>

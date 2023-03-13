@@ -11,6 +11,11 @@ This web runtime then provides convenient remote access.
 For more, see [DisplayBuilderWebRuntime.pdf](https://indico.cern.ch/event/766611/contributions/3438289/attachments/1855426/3047296/DisplayBuilderWebRuntime.pdf) 
 presentation from [2019 EPICS Meeting at ITER](https://indico.cern.ch/event/766611/)
 
+Version Info
+------------
+
+See bottom of `src/main/webapp/index.jsp`
+
 Binary
 ------
 
@@ -147,6 +152,7 @@ The following widget types and features have been implemented with basic functio
  * Text formatting (precision, units, enum labels)
  * LED
  * Multi-State LED
+ * Byte monitor
  * Action Button to open display or web link
  * Action Button to write value to PV
  * Combo
