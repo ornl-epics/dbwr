@@ -41,8 +41,15 @@ public class ByteMonitorWidget extends SvgPVWidget
 		square = XMLUtil.getChildBoolean(xml, "square")
 		                .orElse(XMLUtil.getChildBoolean(xml, "square_led").orElse(false));
 
-		attributes.put("data-off-color", XMLUtil.getColor(xml, "off_color").orElse("#3C643C"));
-		attributes.put("data-on-color", XMLUtil.getColor(xml, "on_color").orElse("#3CFF3C"));
+        String color = XMLUtil.getColor(xml, "off_color").orElse("#3C643C");
+        String lbl_color = Brightness.of(color) > Brightness.BRIGHT_THRESHOLD ? "#000000" : "#FFFFFF";
+        attributes.put("data-off-color", color);
+        attributes.put("data-label-off-color", lbl_color);
+
+        color = XMLUtil.getColor(xml, "on_color").orElse("#3CFF3C");
+        lbl_color = Brightness.of(color) > Brightness.BRIGHT_THRESHOLD ? "#000000" : "#FFFFFF";
+		attributes.put("data-on-color", color);
+        attributes.put("data-label-on-color", lbl_color);
 
 		final int start = XMLUtil.getChildInteger(xml, "startBit").orElse(0);
 		if (start > 0)
