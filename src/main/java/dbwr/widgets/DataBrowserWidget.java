@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2022 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2023 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -34,7 +34,7 @@ public class DataBrowserWidget extends Widget
      *  @param end_spec Expected to be "end"
      *  @return time span of plot in seconds
      */
-    private static long decodeTimespan(final String start_spec, final String end_spec)
+    public static long decodeTimespan(final String start_spec, final String end_spec)
     {
         logger.log(Level.FINE, "Data browser time range from '" + start_spec + "' to '" + end_spec + "'");
         if (!"now".equalsIgnoreCase(end_spec))
