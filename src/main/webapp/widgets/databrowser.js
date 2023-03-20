@@ -1,6 +1,9 @@
 
-// Flot plot options
-let _db_plot_options =
+// Default 'flot' library plot options
+//
+// For each widget, widget.data("plot_options") starts with a copy of these
+// and then adds the widget-specific xaxis.autoScale, xaxis.min, xaxis.max settings
+let _default_plot_options =
 {
     xaxis:
     {
@@ -30,7 +33,8 @@ let _db_plot_options =
 };
 
 // Information for one trace:
-// PV, label, plot data
+// PV, label, color, plot data
+// Most properties are packaged in a `plotobj` suitable for the flot library
 //
 // The last sample, plotobj.data[N], is used for scrolling.
 // It carries the same value as plotobj.data[N-1] with a time stamp of 'now'.
@@ -96,6 +100,7 @@ class DBTrace
 
 DisplayBuilderWebRuntime.prototype.widget_init_methods["databrowser"] = widget =>
 {
+    // Create a DBTrace for each PV
     let i=0, pv = widget.data("pv" + i);
     let traces = [];
     while (pv)
@@ -114,9 +119,14 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["databrowser"] = widget =
         pv = widget.data("pv" + i);
     }
     widget.data("traces", traces);
+
+    // Start plot options with a deep copy of the default settings
+    widget.data("plot_options", JSON.parse(JSON.stringify(_default_plot_options)))
     
+    // Start scrolling
     __scroll(widget, traces);
     
+    // Context menu for adjusting time axis
     let spantext = jQuery("<input>").attr("type", "text");
     spantext.change(event =>
     {
@@ -156,6 +166,7 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["databrowser"] = functi
     let trace, traces = widget.data("traces");
     for (trace of traces)
         trace.update(data.pv, time, data.value);
+    __replot(widget, traces);
 }
 
 function __scroll(widget, traces)
@@ -167,15 +178,16 @@ function __scroll(widget, traces)
    
     // Set time axis range
     let sec = widget.data("timespan");
+    plot_options = widget.data("plot_options")
     if (sec <= 0  ||  widget.data("autospan"))
     {   // Autoscale
-        _db_plot_options.xaxis.autoScale = "loose"
+        plot_options.xaxis.autoScale = "loose"
     }
     else
     {   // Use time span (seconds)
-        _db_plot_options.xaxis.autoScale = "none"
-        _db_plot_options.xaxis.min = time - sec*1000 
-        _db_plot_options.xaxis.max = time 
+        plot_options.xaxis.autoScale = "none"
+        plot_options.xaxis.min = time - sec*1000 
+        plot_options.xaxis.max = time 
     }
     
     __replot(widget, traces);
@@ -188,5 +200,5 @@ function __replot(widget, traces)
     let trace, plots = [];
     for (trace of traces)
         plots.push( trace.plotobj );
-    jQuery.plot(widget, plots, _db_plot_options);    
+    jQuery.plot(widget, plots, widget.data("plot_options"));    
 }

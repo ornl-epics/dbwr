@@ -120,6 +120,7 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
+2023-03-10 Data Browser: Per-widget plot options allow widgets with differnet time scale in same display
 2023-03-13 Byte monitor: Read labels from legacy files; black/white labels based on contrast
 2022-06-22 'cache=false' replaces cached entry instead of circumventing cache.<br>
 2022-05-18 'databrowser' reads time span, context menu to change.<br>
