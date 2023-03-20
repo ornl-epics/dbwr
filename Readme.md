@@ -161,7 +161,7 @@ The following widget types and features have been implemented with basic functio
  * Tabs
  * Navigation Tabs
  * Template/Instances
- * XYPlot
+ * Basic XYPlot, Data Browser, Stripchart representation
  * Image, runtime options to change scaling and color map
  * Macro support
  * Alarm-sensitive border based on PV
