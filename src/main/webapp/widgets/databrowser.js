@@ -156,7 +156,6 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["databrowser"] = functi
     let trace, traces = widget.data("traces");
     for (trace of traces)
         trace.update(data.pv, time, data.value);
-    __replot(widget, traces);
 }
 
 function __scroll(widget, traces)
