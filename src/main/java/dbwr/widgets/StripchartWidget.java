@@ -47,6 +47,7 @@ public class StripchartWidget extends Widget
                 }
                 attributes.put("data-linewidth" + i, XMLUtil.getChildInteger(trace, "line_width").orElse(1).toString());
                 attributes.put("data-color" + i, getColor(trace, "color").orElse("rgb(0,0,255)"));
+                attributes.put("data-ringsize" + i, Integer.toString(DataBrowserWidget.DEFAULT_PLOT_RING_SIZE));
                 ++i;
             }
 	}

@@ -51,10 +51,12 @@ class DBTrace
      *  @param label Label to use
      *  @param color Color of the trace
      *  @param linewidth Line width
+     *  @param ringsize Live data buffer ring size
      */
-    constructor(pv, label, color, linewidth)
+    constructor(pv, label, color, linewidth, ringsize)
     {
         this.pv = pv;
+        this.ringsize = ringsize
         
         // Flot plot object with
         // data: [ [ x0, y0 ], [ x1, y1 ], ..., [ xn, yn ] ],
@@ -94,7 +96,11 @@ class DBTrace
         // which can be updated in scroll() or update()
         this.plotobj.data.pop();
         this.plotobj.data.push( [ time, value ] );
-        this.plotobj.data.push( [ time, value ] );        
+        this.plotobj.data.push( [ time, value ] );
+
+        // Limit live samples to ring size
+        if (this.plotobj.data.length > this.ringsize)
+            this.plotobj.data.shift();
     }
 }
 
@@ -113,8 +119,10 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["databrowser"] = widget =
         let label = widget.data("label" + i);
         if (label == undefined)
             label = pv;
-        traces.push(new DBTrace(pv, label, color, linewidth));
-        
+        let ringsize = widget.data("ringsize" + i);
+        if (ringsize == undefined)
+            ringsize = 5000;
+        traces.push(new DBTrace(pv, label, color, linewidth, ringsize));
         ++i;
         pv = widget.data("pv" + i);
     }

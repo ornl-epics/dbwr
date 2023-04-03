@@ -40,13 +40,13 @@ Edit .env file with settings for git version and port number and docker/setenv.s
 docker-compose build
 ```
 
-Running under Tomcat
---------------------
+Basic Configuration and Running under Tomcat
+--------------------------------------------
 
 First, install the [PV Web Socket](https://github.com/ornl-epics/pvws), which must be available
 on the same Tomcat instance.
 
-Set the following environment variables, for example in $CATALINA_HOME/bin/setenv.sh:
+Set the following environment variables, for example in `$CATALINA_HOME/bin/setenv.sh`:
 
  * `DBWR1`, `DBWR2`, ...: URLs of displays to suggest on the start page.
  * `WHITELIST1`, `WHITELIST2`, ...: Regular expressions of allowed displays.
@@ -66,6 +66,13 @@ you need to configure this via the following environment variables
    for example `some.other.host.org:8081`
  * `PVWS_HTTP_PROTOCOL`: `http` or `https` based on what pvws uses (default is http)
  * `PVWS_WS_PROTOCOL`: Web socket protocol of PV Web Socket, either `ws` or `wss` (default is ws)
+
+
+Additional Configuration Options
+--------------------------------
+
+ * `DEFAULT_PLOT_RING_SIZE`: Size of live data ring buffer for DataBrowser and Stripchart widget, defaults to 5000.
+
 
 **Docker**
 

@@ -22,11 +22,17 @@ import dbwr.parser.XMLUtil;
 
 public class DataBrowserWidget extends Widget
 {
+    /** Number of live data samples kept in ring buffer */
+    static final int DEFAULT_PLOT_RING_SIZE;
+
     static
     {
         WidgetFactory.registerLegacy("org.csstudio.trends.databrowser.opiwidget", "databrowser");
         WidgetFactory.addJavaScript("databrowser.js");
         WidgetFactory.addCSS("databrowser.css");
+
+        DEFAULT_PLOT_RING_SIZE = Integer.parseInt(System.getenv().getOrDefault("DEFAULT_PLOT_RING_SIZE", "5000"));
+        logger.log(Level.INFO, "DEFAULT_PLOT_RING_SIZE = " + DEFAULT_PLOT_RING_SIZE);
     }
 
     /** Decode start..end time
@@ -107,6 +113,7 @@ public class DataBrowserWidget extends Widget
                     attributes.put("data-label" + i, label);
                 attributes.put("data-linewidth" + i, XMLUtil.getChildInteger(pv, "linewidth").orElse(1).toString());
                 attributes.put("data-color" + i, getColor(pv, "color").orElse(Integer.toString(i)));
+                attributes.put("data-ringsize" + i, XMLUtil.getChildInteger(pv, "ring_size").orElse(DEFAULT_PLOT_RING_SIZE).toString());
                 ++i;
             }
 	}
