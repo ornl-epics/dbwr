@@ -35,7 +35,7 @@ formatters and transformers to and from logarithmic representation.
             val, range, vals = [];
 
         for (var power = log10Start; power <= log10End; power++) {
-            range = Math.pow(10, power);
+            range = parseFloat('1e' + power);
             for (var mult = 1; mult < 9; mult += rangeStep) {
                 val = range * mult;
                 vals.push(val);
@@ -169,13 +169,13 @@ formatters and transformers to and from logarithmic representation.
         var tenExponent = value > 0 ? Math.floor(Math.log(value) / Math.LN10) : 0;
 
         if (precision) {
-            if ((tenExponent >= -2) && (tenExponent <= 3)) {
+            if ((tenExponent >= -4) && (tenExponent <= 7)) {
                 return $.plot.defaultTickFormatter(value, axis, precision);
             } else {
                 return $.plot.expRepTickFormatter(value, axis, precision);
             }
         }
-        if ((tenExponent >= -2) && (tenExponent <= 3)) {
+        if ((tenExponent >= -4) && (tenExponent <= 7)) {
             //if we have float numbers, return a limited length string(ex: 0.0009 is represented as 0.000900001)
             var formattedValue = tenExponent < 0 ? value.toFixed(-tenExponent) : value.toFixed(tenExponent + 2);
             if (formattedValue.indexOf('.') !== -1) {
@@ -249,7 +249,9 @@ formatters and transformers to and from logarithmic representation.
                 .map(function(series) {
                     return plot.computeRangeForDataSeries(series, null, isValid);
                 }),
-            min = axis.direction === 'x' ? Math.min(0.1, range[0].xmin) : Math.min(0.1, range[0].ymin);
+            min = axis.direction === 'x'
+                ? Math.min(0.1, range && range[0] ? range[0].xmin : 0.1)
+                : Math.min(0.1, range && range[0] ? range[0].ymin : 0.1);
 
         axis.min = min;
 
