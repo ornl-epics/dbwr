@@ -10,7 +10,7 @@ This plugin is used by flot for drawing lines, plots, bars or area.
     "use strict";
 
     function DrawSeries() {
-        function plotLine(datapoints, xoffset, yoffset, axisx, axisy, ctx) {
+        function plotLine(datapoints, xoffset, yoffset, axisx, axisy, ctx, steps) {
             var points = datapoints.points,
                 ps = datapoints.pointsize,
                 prevx = null,
@@ -19,88 +19,114 @@ This plugin is used by flot for drawing lines, plots, bars or area.
                 y1 = 0.0,
                 x2 = 0.0,
                 y2 = 0.0,
+                mx = null,
+                my = null,
                 i = 0;
 
-            ctx.beginPath();
-            for (i = ps; i < points.length; i += ps) {
+            var initPoints = function (i) {
                 x1 = points[i - ps];
                 y1 = points[i - ps + 1];
                 x2 = points[i];
                 y2 = points[i + 1];
+            };
 
-                if (x1 === null || x2 === null) {
-                    continue;
+            var handleSteps = function () {
+                if (mx !== null && my !== null) {
+                    // if middle point exists, transfer p2 -> p1 and p1 -> mp
+                    x2 = x1;
+                    y2 = y1;
+                    x1 = mx;
+                    y1 = my;
+
+                    // 'remove' middle point
+                    mx = null;
+                    my = null;
+
+                    return true;
+                } else if (y1 !== y2 && x1 !== x2) {
+                    // create a middle point
+                    y2 = y1;
+                    mx = x2;
+                    my = y1;
                 }
 
-                // clip with ymin
+                return false;
+            };
+
+            var handleYMinClipping = function () {
                 if (y1 <= y2 && y1 < axisy.min) {
                     if (y2 < axisy.min) {
                         // line segment is outside
-                        continue;
+                        return true;
                     }
                     // compute new intersection point
                     x1 = (axisy.min - y1) / (y2 - y1) * (x2 - x1) + x1;
                     y1 = axisy.min;
                 } else if (y2 <= y1 && y2 < axisy.min) {
                     if (y1 < axisy.min) {
-                        continue;
+                        return true;
                     }
 
                     x2 = (axisy.min - y1) / (y2 - y1) * (x2 - x1) + x1;
                     y2 = axisy.min;
                 }
+            };
 
-                // clip with ymax
+            var handleYMaxClipping = function () {
                 if (y1 >= y2 && y1 > axisy.max) {
                     if (y2 > axisy.max) {
-                        continue;
+                        return true;
                     }
 
                     x1 = (axisy.max - y1) / (y2 - y1) * (x2 - x1) + x1;
                     y1 = axisy.max;
                 } else if (y2 >= y1 && y2 > axisy.max) {
                     if (y1 > axisy.max) {
-                        continue;
+                        return true;
                     }
 
                     x2 = (axisy.max - y1) / (y2 - y1) * (x2 - x1) + x1;
                     y2 = axisy.max;
                 }
+            };
 
-                // clip with xmin
+            var handleXMinClipping = function () {
                 if (x1 <= x2 && x1 < axisx.min) {
                     if (x2 < axisx.min) {
-                        continue;
+                        return true;
                     }
 
                     y1 = (axisx.min - x1) / (x2 - x1) * (y2 - y1) + y1;
                     x1 = axisx.min;
                 } else if (x2 <= x1 && x2 < axisx.min) {
                     if (x1 < axisx.min) {
-                        continue;
+                        return true;
                     }
 
                     y2 = (axisx.min - x1) / (x2 - x1) * (y2 - y1) + y1;
                     x2 = axisx.min;
                 }
+            };
 
-                // clip with xmax
+            var handleXMaxClipping = function () {
                 if (x1 >= x2 && x1 > axisx.max) {
                     if (x2 > axisx.max) {
-                        continue;
+                        return true;
                     }
 
                     y1 = (axisx.max - x1) / (x2 - x1) * (y2 - y1) + y1;
                     x1 = axisx.max;
                 } else if (x2 >= x1 && x2 > axisx.max) {
                     if (x1 > axisx.max) {
-                        continue;
+                        return true;
                     }
 
                     y2 = (axisx.max - x1) / (x2 - x1) * (y2 - y1) + y1;
                     x2 = axisx.max;
                 }
+            };
 
+            var drawLine = function () {
                 if (x1 !== prevx || y1 !== prevy) {
                     ctx.moveTo(axisx.p2c(x1) + xoffset, axisy.p2c(y1) + yoffset);
                 }
@@ -108,11 +134,56 @@ This plugin is used by flot for drawing lines, plots, bars or area.
                 prevx = x2;
                 prevy = y2;
                 ctx.lineTo(axisx.p2c(x2) + xoffset, axisy.p2c(y2) + yoffset);
+            };
+
+            ctx.beginPath();
+            for (i = ps; i < points.length; i += ps) {
+                initPoints(i);
+
+                if (x1 === null || x2 === null) {
+                    mx = null;
+                    my = null;
+                    continue;
+                }
+
+                if (isNaN(x1) || isNaN(x2) || isNaN(y1) || isNaN(y2)) {
+                    prevx = null;
+                    prevy = null;
+                    continue;
+                }
+
+                if (steps) {
+                    var hadMiddlePoint = handleSteps();
+                    if (hadMiddlePoint) {         
+                        // Subtract pointsize from i to have current point p1 handled again.
+                        i -= ps;
+                    }
+                }
+                if (handleYMinClipping()) continue;
+                if (handleYMaxClipping()) continue;
+                if (handleXMinClipping()) continue;
+                if (handleXMaxClipping()) continue;
+
+                drawLine();
             }
+
+            // Connects last two points in case middle point exists after the loop.
+            if (mx !== null && my !== null) {
+                initPoints(i);
+                handleSteps();
+
+                if (!handleYMinClipping() &&
+                    !handleYMaxClipping() &&
+                    !handleXMinClipping() &&
+                    !handleXMaxClipping()) {
+                    drawLine();
+                }
+            }
+
             ctx.stroke();
         }
 
-        function plotLineArea(datapoints, axisx, axisy, fillTowards, ctx) {
+        function plotLineArea(datapoints, axisx, axisy, fillTowards, ctx, steps) {
             var points = datapoints.points,
                 ps = datapoints.pointsize,
                 bottom = fillTowards > axisy.min ? Math.min(axisy.max, fillTowards) : axisy.min,
@@ -120,7 +191,9 @@ This plugin is used by flot for drawing lines, plots, bars or area.
                 ypos = 1,
                 areaOpen = false,
                 segmentStart = 0,
-                segmentEnd = 0;
+                segmentEnd = 0,
+                mx = null,
+                my = null;
 
             // we process each segment in two turns, first forward
             // direction to sketch out top, then once we hit the
@@ -156,13 +229,38 @@ This plugin is used by flot for drawing lines, plots, bars or area.
                         ctx.fill();
                         areaOpen = false;
                         ps = -ps;
+                        ypos = 1;
                         i = segmentStart = segmentEnd + ps;
                         continue;
                     }
                 }
 
                 if (x1 == null || x2 == null) {
+                    mx = null;
+                    my = null;
                     continue;
+                }
+
+                if (steps) {
+                    if (mx !== null && my !== null) {
+                        // if middle point exists, transfer p2 -> p1 and p1 -> mp
+                        x2 = x1;
+                        y2 = y1;
+                        x1 = mx;
+                        y1 = my;
+
+                        // 'remove' middle point
+                        mx = null;
+                        my = null;
+
+                        // subtract pointsize from i to have current point p1 handled again
+                        i -= ps;
+                    } else if (y1 !== y2 && x1 !== x2) {
+                        // create a middle point
+                        y2 = y1;
+                        mx = x2;
+                        my = y1;
+                    }
                 }
 
                 // clip x values
@@ -304,11 +402,11 @@ This plugin is used by flot for drawing lines, plots, bars or area.
             var fillStyle = getFillStyle(series.lines, series.color, 0, plotHeight, getColorOrGradient);
             if (fillStyle) {
                 ctx.fillStyle = fillStyle;
-                plotLineArea(datapoints, series.xaxis, series.yaxis, series.lines.fillTowards || 0, ctx);
+                plotLineArea(datapoints, series.xaxis, series.yaxis, series.lines.fillTowards || 0, ctx, series.lines.steps);
             }
 
             if (lw > 0) {
-                plotLine(datapoints, 0, 0, series.xaxis, series.yaxis, ctx);
+                plotLine(datapoints, 0, 0, series.xaxis, series.yaxis, ctx, series.lines.steps);
             }
 
             ctx.restore();
@@ -423,8 +521,7 @@ This plugin is used by flot for drawing lines, plots, bars or area.
                     drawLeft = true;
                     drawRight = false;
                 }
-            }
-            else {
+            } else {
                 drawLeft = drawRight = drawTop = true;
                 drawBottom = false;
                 left = x + barLeft;
@@ -528,7 +625,7 @@ This plugin is used by flot for drawing lines, plots, bars or area.
                 var points = datapoints.points,
                     ps = datapoints.pointsize,
                     fillTowards = series.bars.fillTowards || 0,
-                    calculatedBottom = fillTowards > axisy.min ? Math.min(axisy.max, fillTowards) : axisy.min;
+                    defaultBottom = fillTowards > axisy.min ? Math.min(axisy.max, fillTowards) : axisy.min;
 
                 for (var i = 0; i < points.length; i += ps) {
                     if (points[i] == null) {
@@ -536,7 +633,7 @@ This plugin is used by flot for drawing lines, plots, bars or area.
                     }
 
                     // Use third point as bottom if pointsize is 3
-                    var bottom = ps === 3 ? points[i + 2] : calculatedBottom;
+                    var bottom = ps === 3 ? points[i + 2] : defaultBottom;
                     drawBar(points[i], points[i + 1], bottom, barLeft, barRight, fillStyleCallback, axisx, axisy, ctx, series.bars.horizontal, series.bars.lineWidth);
                 }
             }
