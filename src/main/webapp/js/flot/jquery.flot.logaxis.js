@@ -169,13 +169,13 @@ formatters and transformers to and from logarithmic representation.
         var tenExponent = value > 0 ? Math.floor(Math.log(value) / Math.LN10) : 0;
 
         if (precision) {
-            if ((tenExponent >= -4) && (tenExponent <= 7)) {
+            if ((tenExponent >= -2) && (tenExponent <= 3)) {
                 return $.plot.defaultTickFormatter(value, axis, precision);
             } else {
                 return $.plot.expRepTickFormatter(value, axis, precision);
             }
         }
-        if ((tenExponent >= -4) && (tenExponent <= 7)) {
+        if ((tenExponent >= -2) && (tenExponent <= 3)) {
             //if we have float numbers, return a limited length string(ex: 0.0009 is represented as 0.000900001)
             var formattedValue = tenExponent < 0 ? value.toFixed(-tenExponent) : value.toFixed(tenExponent + 2);
             if (formattedValue.indexOf('.') !== -1) {
