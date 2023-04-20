@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021-2022 UT-Battelle, LLC.
+ * Copyright (c) 2021-2023 UT-Battelle, LLC.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -45,6 +45,7 @@ public class TemplateInstanceWidget extends Widget
         super(parent, xml, "template", 300, 200);
         // classes.add("Debug");
 
+        // One template "file", then N "instance" elements with macros
         file = XMLUtil.getChildString(this, xml, "file").orElse("");
         final Element insts_xml = XMLUtil.getChildElement(xml, "instances");
         if (insts_xml != null)
@@ -54,6 +55,7 @@ public class TemplateInstanceWidget extends Widget
                 // System.out.println("Instance: " + macros);
                 instances.add(macros);
             }
+        // More setting details
         horizontal = XMLUtil.getChildBoolean(xml, "horizontal").orElse(false);
         gap = XMLUtil.getChildInteger(xml, "gap").orElse(10);
         wrap_count = XMLUtil.getChildInteger(xml, "wrap_count").orElse(0);
@@ -74,7 +76,11 @@ public class TemplateInstanceWidget extends Widget
         int i = 0, x = 0, y = 0;
         for (Map<String, String> instance : instances)
         {
-            final MacroProvider macros = MacroProvider.forMap(instance);
+            // Combine macros for this instance with parent macros
+            final MacroProvider macros = MacroProvider.combine(MacroProvider.forMap(instance), this);
+            // System.out.print("Instance " + i + " macros: " + 
+            //                  macros.getMacroNames().stream().collect(Collectors.joining(", ")) + "\n");
+
             final DisplayParser embedded_display;
             try
             {
