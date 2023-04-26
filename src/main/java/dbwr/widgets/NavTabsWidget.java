@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Oak Ridge National Laboratory.
+ * Copyright (c) 2020-2023 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -10,6 +10,7 @@ import static dbwr.WebDisplayRepresentation.logger;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -101,8 +102,13 @@ public class NavTabsWidget extends BaseMacroWidget
                 html.append(" data-file=\"" + HTMLUtil.escape(files.get(i)) + "\"");
                 if (! macros.get(i).isEmpty())
                     try
-                    {
-                        html.append(" data-macros=\"" + HTMLUtil.escape(MacroUtil.toJSON(macros.get(i))) + "\"");
+                    {   // Use macros from this widget..
+                        final Map<String, String> combined = new HashMap<>();
+                        for (String name : getMacroNames())
+                            combined.put(name, getMacroValue(name));
+                        // .. then add macros for the tab
+                        combined.putAll(macros.get(i));
+                        html.append(" data-macros=\"" + HTMLUtil.escape(MacroUtil.toJSON(combined)) + "\"");
                     }
                     catch (Exception ex)
                     {

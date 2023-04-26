@@ -120,41 +120,42 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
-2023-04-20 Template/Instances: Use both instance and parent macros<br>
-2023-03-20 Strip chart widget: Basic PV display via Data Browser widget<br>
-2023-03-20 Data Browser: Per-widget plot options allow widgets with differnet time scale in same display<br>
-2023-03-13 Byte monitor: Read labels from legacy files; black/white labels based on contrast<br>
-2022-06-22 'cache=false' replaces cached entry instead of circumventing cache.<br>
-2022-05-18 'databrowser' reads time span, context menu to change.<br>
-2022-04-07 "R0" jQuery 3.6.0.<br>
-2021-08-13 Support 'template' widget.<br>
-2021-03-23 Filter 'display'.<br>
-2021-03-01 Support 'led' and 'multi_state_led' labels.<br>
-2021-02-04 Support 'byte monitor' labels.<br>
-2021-01-29 Indicate read-only via same cursor as in CS-Studio.<br>
-2021-01-28 Simple 'spinner'.<br>
-2020-11-20 Suppress '{fileselector}'.<br>
-2020-11-02 favicon.<br>
-2020-10-28 Handle legacy Combo with items not-from-PV.<br>
-2020-10-21 Defer initial update for known PV to next cycle (avoids update while widget still initializes).<br>
-2020-10-05 Support 'navtabs' widgets.<br>
-2020-10-02 Embedded display indicates name of failed/missing file.<br>
-2020-10-01 Support 'cache=false'.<br>
-2020-09-30 Support macros for 'Tabs'.<br>
-2020-08-28 Combo support.<br>
-2020-07-13 '$(DID)'.<br>
-2020-06-11 'Symbol' widget for images. 'Text-Symbol'. Remove 'Disconnect' button. For testing, click on the connection indicator.<br>
-2020-06-10 Disable DTD. Mark response as UTF-8 to support wider character sets.<br>
-2020-06-09 Display whitelist.<br>
-2020-01-17 Middle-click copies PV name to clipboard.<br>
-2020-01-07 Use 'flex' display to align label, textupdate.<br>
-2019-12-11 Coloring of buttons w/ custom background color.<br>
-2019-12-10 Patch legacy 'longString' PV names.<br>
-2019-10-28 Fix alarm border location for LED and ByteMonior. Check if action button 'enabled'.<br>
-2019-09-30 More lenient rule 'expression' vs. 'value' lookup. Slider and scrollbar widgets.<br>
-2019-09-19 Support simple 'out_exp' in visibility rules. Image plot supports rules on 'maximum'. XYPlot plots what's available when some PVs are NaN.<br>
-2019-08-05 Several widgets support writing<br>
-2019-07-04 Initial version presented at EPICS Meeting<br>
+  2023-04-26 Navigation Tabs: Use both instance and parent macros<br>
+  2023-04-20 Template/Instances: Use both instance and parent macros<br>
+  2023-03-20 Strip chart widget: Basic PV display via Data Browser widget<br>
+  2023-03-20 Data Browser: Per-widget plot options allow widgets with differnet time scale in same display<br>
+  2023-03-13 Byte monitor: Read labels from legacy files; black/white labels based on contrast<br>
+  2022-06-22 'cache=false' replaces cached entry instead of circumventing cache.<br>
+  2022-05-18 'databrowser' reads time span, context menu to change.<br>
+  2022-04-07 "R0" jQuery 3.6.0.<br>
+  2021-08-13 Support 'template' widget.<br>
+  2021-03-23 Filter 'display'.<br>
+  2021-03-01 Support 'led' and 'multi_state_led' labels.<br>
+  2021-02-04 Support 'byte monitor' labels.<br>
+  2021-01-29 Indicate read-only via same cursor as in CS-Studio.<br>
+  2021-01-28 Simple 'spinner'.<br>
+  2020-11-20 Suppress '{fileselector}'.<br>
+  2020-11-02 favicon.<br>
+  2020-10-28 Handle legacy Combo with items not-from-PV.<br>
+  2020-10-21 Defer initial update for known PV to next cycle (avoids update while widget still initializes).<br>
+  2020-10-05 Support 'navtabs' widgets.<br>
+  2020-10-02 Embedded display indicates name of failed/missing file.<br>
+  2020-10-01 Support 'cache=false'.<br>
+  2020-09-30 Support macros for 'Tabs'.<br>
+  2020-08-28 Combo support.<br>
+  2020-07-13 '$(DID)'.<br>
+  2020-06-11 'Symbol' widget for images. 'Text-Symbol'. Remove 'Disconnect' button. For testing, click on the connection indicator.<br>
+  2020-06-10 Disable DTD. Mark response as UTF-8 to support wider character sets.<br>
+  2020-06-09 Display whitelist.<br>
+  2020-01-17 Middle-click copies PV name to clipboard.<br>
+  2020-01-07 Use 'flex' display to align label, textupdate.<br>
+  2019-12-11 Coloring of buttons w/ custom background color.<br>
+  2019-12-10 Patch legacy 'longString' PV names.<br>
+  2019-10-28 Fix alarm border location for LED and ByteMonior. Check if action button 'enabled'.<br>
+  2019-09-30 More lenient rule 'expression' vs. 'value' lookup. Slider and scrollbar widgets.<br>
+  2019-09-19 Support simple 'out_exp' in visibility rules. Image plot supports rules on 'maximum'. XYPlot plots what's available when some PVs are NaN.<br>
+  2019-08-05 Several widgets support writing<br>
+  2019-07-04 Initial version presented at EPICS Meeting<br>
 </div>
 
 <script type="text/javascript" src="js/index.js"></script> 
