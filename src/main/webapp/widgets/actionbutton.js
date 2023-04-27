@@ -28,8 +28,11 @@ function __handleAction(widget, index)
     else
         new_link = widget.data("linked-url-" + index);
     
-    if (new_link)
-        window.location.href = new_link;
+    if (new_link) {
+		let target = widget.data("target-" + index);
+        if (target=="replace") window.location.href = new_link;
+        else window.open(new_link, "_blank");
+	}
     else
     {
         console.log("ActionButton with unknown action");
