@@ -92,6 +92,7 @@ public class ActionButtonWidget extends Widget
                     final String file = XMLUtil.getChildString(parent, ae, "file").orElse(XMLUtil.getChildString(parent, ae, "path").orElse(null));
                     if (file == null)
                         continue;
+                    final String target = XMLUtil.getChildString(parent, ae, "target").orElse("");
 
                     // Read macros into map
                     final Map<String, String> macros = MacroUtil.fromXML(ae);
@@ -104,6 +105,7 @@ public class ActionButtonWidget extends Widget
                     // TODO Escape file
                     final String resolved = Resolver.resolve(this, file);
                     attributes.put("data-linked-file-" + index, resolved);
+                    attributes.put("data-target-" + index, target);
                     if (! macros.isEmpty())
                         attributes.put("data-linked-macros-" + index, HTMLUtil.escape(MacroUtil.toJSON(macros)));
 
