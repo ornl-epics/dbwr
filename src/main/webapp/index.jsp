@@ -120,7 +120,7 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
-  2023-04-27 Action Button: replace vs. new tab<br>
+  2023-04-28 Action Button: replace vs. new tab, also using ctrl key<br>
   2023-04-26 Navigation Tabs: Use both instance and parent macros<br>
   2023-04-20 Template/Instances: Use both instance and parent macros<br>
   2023-03-20 Strip chart widget: Basic PV display via Data Browser widget<br>
