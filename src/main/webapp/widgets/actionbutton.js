@@ -1,7 +1,7 @@
 /** @param widget Action button widget
  *  @param index  Index 0, 1, .. of action to invoke
  */
-function __handleAction(widget, index)
+function __handleAction(widget, index, event)
 {
     let pv  = widget.data("pv-" + index);
     let val = widget.data("value-" + index);
@@ -30,8 +30,8 @@ function __handleAction(widget, index)
     
     if (new_link) {
 		let target = widget.data("target-" + index);
-        if (target=="replace") window.location.href = new_link;
-        else window.open(new_link, "_blank");
+        if (target=="tab" || target=="window" || event.ctrlKey) window.open(new_link, "_blank");
+        else window.location.href = new_link;
 	}
     else
     {
@@ -72,7 +72,7 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods['action_button'] = functi
 
     // Just one action?
     if (widget.data("linked-label-1") === undefined)
-        widget.click(() => __handleAction(widget, 0));
+        widget.click((e) => __handleAction(widget, 0, e));
     else
     {
         // Build menu to list all options
@@ -83,10 +83,10 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods['action_button'] = functi
         {
             let current_index = index;
             let item = jQuery("<a>").attr("href", "#").text(label);
-            item.click(() =>
+            item.click((e) =>
             {
                 hide_contextmenu(widget);
-                __handleAction(widget, current_index);
+                __handleAction(widget, current_index, e);
             });
             
             actions.push(item);
