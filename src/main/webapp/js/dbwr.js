@@ -320,6 +320,8 @@ class DisplayBuilderWebRuntime
             // can finish before receiving first update
             setTimeout( () => callback(info.data), 0);
         }
+
+        // console.log("Subscribed " + wid +  " to '"  + pv_name + "', " + info.subscriptions.length + " subscriptions total");
     }
     
     /** Step 5: Message from web socket
@@ -576,12 +578,15 @@ class WidgetRule
     {
         // console.log("Starting rule for PVs " + this.pvs);
         for (let pv of this.pvs)
+        {
+            // console.log("Rule subscribing to " + this.wid + " PV " + pv);
             dbwr._subscribe(this.widget, pv, data =>
             {
                 this.value[pv] = data.value;
                 this.valueStr[pv] = get_data_string(data);
                 this._trigger(pv);
             });
+        }
     }
     
     _trigger(pv)

@@ -35,18 +35,24 @@ function _handleNavtabSelection(navtab, button)
     
     let body = button.siblings(".NavTabsBody");
     
-    // Stop widgets that are currently in body by
-    // clearing all its PVs, which stops
-    // updates to widget and associated rules.
+    // Stop widgets that are currently in body
     body.find(".Widget").each( (index, w) =>
     {
+        // Clear all PVs used by the widget,
+        // which stops update to widget as well as rules
         let wdg = jQuery(w);
         dbwr.unsubscribe(wdg);
+        wid = wdg.attr("id");
+        // Delete rules
+        delete DisplayBuilderWebRuntime.prototype.widget_rules[wid];
+        // If same tab is loaded again,
+        // initialization will re-add the PVs and rules,
+        // but removing them ^^ avoids running them multiple times
     });
     
     // Indicate what's loading to help debug issues if it never loads
     body.text("Loading " + button.text() + "...");
-    
+
     // Load content
     let cache = window.location.search.indexOf("cache=false") > 0 ? "false" : "true";
     console.log("Load navtab with cache = " + cache);
