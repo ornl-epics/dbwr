@@ -551,6 +551,7 @@ class WidgetRule
      */
     constructor(wid, property, pvs)
     {
+        console.log("New rule for " + wid + " '" + property + "'");
         this.wid = wid;
         this.widget = jQuery("#" + wid);
         this.property = property;

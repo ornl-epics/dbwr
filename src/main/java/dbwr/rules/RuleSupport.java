@@ -111,41 +111,54 @@ public class RuleSupport
                 }
 
                 // Created <script>:
-                // let rule1 = new WidgetRule('w9180', 'property', ['sim://ramp', 'sim://sine' ]);
-                // rule1.eval = function()
                 // {
-                //   let pv0 = this.value['sim://ramp'];
-                //   let pv1 = this.value['sim://sine'];
-                //   if (pv0>2) return 24;
-                //   return 42;
+                //   let rule1 = new WidgetRule('w9180', 'property', ['sim://ramp', 'sim://sine' ]);
+                //   rule1.eval = function()
+                //   {
+                //     let pv0 = this.value['sim://ramp'];
+                //     let pv1 = this.value['sim://sine'];
+                //     if (pv0>2) return 24;
+                //     return 42;
+                //   }
+                //   rule1.update = set_svg_background_color
                 // }
-                // rule1.update = set_svg_background_color
+                // Using a sub-block to keep "rule1" out of the global namespace.
+                // The WidgetRule constructor registers with
+                //   DisplayBuilderWebRuntime.prototype.widget_rules,
+                // so no global name is necessary.
+                // The unique ID aids in debugging rules, but "rule1"
+                // may be re-used if for example a navigation tab re-loads
+                // some tab over time because the same cached screen will
+                // be opened by re-selecting a tab, and we cannot
+                // "let"-assign the same variable more than once.
                 final String rule = "rule" + id.incrementAndGet();
 
                 // Create script for this rule
                 final StringBuilder buf = new StringBuilder();
-                buf.append("// Rule '").append(re.getAttribute("name")).append("'\n");
-                buf.append("let " + rule +
+                buf.append("{\n");
+                buf.append("  // Rule '").append(re.getAttribute("name")).append("'\n");
+                buf.append("  let " + rule +
                                " = new WidgetRule('" + widget.getWID() + "', '" + property + "', [" +
                                pvs.stream().map(pv -> "'" + pv + "'").collect(Collectors.joining(",")) +
                                "]);\n");
-                buf.append(rule + ".eval = function()\n");
-                buf.append("{\n");
+                buf.append("  " + rule + ".eval = function()\n");
+                buf.append("  {\n");
 
                 int N = pvs.size();
                 for (int i=0; i<N; ++i)
                 {
-                    buf.append("  let pv" + i + " = this.value['" + pvs.get(i) + "'];\n");
-                    buf.append("  let pvStr" + i + " = this.valueStr['" + pvs.get(i) + "'];\n");
+                    buf.append("    let pv" + i + " = this.value['" + pvs.get(i) + "'];\n");
+                    buf.append("    let pvStr" + i + " = this.valueStr['" + pvs.get(i) + "'];\n");
                 }
 
                 N = expr.size();
                 for (int i=0; i<N; ++i)
-                    buf.append("  if (" + expr.get(i) + ") return " + value_format.apply(values.get(i)) + ";\n");
-                buf.append("  return " + value_format.apply(default_value) + ";\n");
+                    buf.append("    if (" + expr.get(i) + ") return " + value_format.apply(values.get(i)) + ";\n");
+                buf.append("    return " + value_format.apply(default_value) + ";\n");
 
+                buf.append("  }\n");
+                buf.append("  " + rule + ".update = " + update_code + "\n");
                 buf.append("}\n");
-                buf.append(rule + ".update = " + update_code + "\n");
 
                 final String script = buf.toString();
                 if (logger.isLoggable(Level.INFO))
