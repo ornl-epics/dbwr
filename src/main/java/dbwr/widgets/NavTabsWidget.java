@@ -100,20 +100,19 @@ public class NavTabsWidget extends BaseMacroWidget
                 html.append(" data-width=\"" + tab_width + "\";");
                 html.append(" data-height= \"" + tab_height + "\";");
                 html.append(" data-file=\"" + HTMLUtil.escape(files.get(i)) + "\"");
-                if (! macros.get(i).isEmpty())
-                    try
-                    {   // Use macros from this widget..
-                        final Map<String, String> combined = new HashMap<>();
-                        for (String name : getMacroNames())
-                            combined.put(name, getMacroValue(name));
-                        // .. then add macros for the tab
-                        combined.putAll(macros.get(i));
-                        html.append(" data-macros=\"" + HTMLUtil.escape(MacroUtil.toJSON(combined)) + "\"");
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.log(Level.WARNING, "Cannot add navtab button macros", ex);
-                    }
+                try
+                {   // Use macros from this widget..
+                    final Map<String, String> combined = new HashMap<>();
+                    for (String name : getMacroNames())
+                        combined.put(name, getMacroValue(name));
+                    // .. then add macros for the tab
+                    combined.putAll(macros.get(i));
+                    html.append(" data-macros=\"" + HTMLUtil.escape(MacroUtil.toJSON(combined)) + "\"");
+                }
+                catch (Exception ex)
+                {
+                    logger.log(Level.WARNING, "Cannot add navtab button macros to " + getWID(), ex);
+                }
 
                 html.append(">");
                 HTMLUtil.escape(html, label);
