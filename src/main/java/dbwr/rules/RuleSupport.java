@@ -167,11 +167,12 @@ public class RuleSupport
                     final String rule_xml = Arrays.stream(XMLUtil.toString(re).split("\\n"))
                                                    .filter(line -> !line.startsWith("<?xml"))
                                                    .map(String::trim)
+                                                   .filter(line -> !line.isBlank())
                                                    .collect(Collectors.joining("\n"));
                     logger.log(Level.INFO,
                                widget + " rule:\n" +
                                rule_xml +
-                               "\n" +
+                               "\n.. turned into ..\n" +
                                script);
                 }
 
