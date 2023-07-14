@@ -56,6 +56,8 @@ public class BoolButtonWidget extends PVWidget
 		attributes.put("data-bit", Integer.toString(XMLUtil.getChildInteger(xml, "bit").orElse(-1)));
 
 		XMLUtil.getColor(xml, "foreground_color").ifPresent(color -> styles.put("color", color));
+		
+		ActionButtonWidget.handleTextAlignment(this, xml);
 	}
 
 	@Override
@@ -72,13 +74,15 @@ public class BoolButtonWidget extends PVWidget
 	        int size = Math.min(width, height);
             final int r = (int) (size/3.7);
             size = r+r;
-
-            html.append("<svg class=\"LED\" style=\"width: " + size + "px; height: " + size + "px;\">");
+            html.append("<div class=\"AlignedText AlignedVertCenter\" style=\"height: " +size + "px;\">");
+            html.append("<svg class=\"LED\" style=\"width: " + size + "px; height: " + size + "px; padding-right: 5px;\">");
             html.append("<ellipse cx=\"" + r + "\" cy=\"" +  r + "\" rx=\"" + r + "\" ry=\"" + r + "\" fill=\"grey\"></ellipse>");
     	    html.append("</svg>");
 	    }
         html.append("<span>");
         html.append(" The Label");
         html.append("</span>");
+        if(show_led)
+        	html.append("</div>");
 	}
 }
