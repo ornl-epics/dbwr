@@ -155,12 +155,34 @@ public class ActionButtonWidget extends Widget
         getRuleSupport().handleColorRule(parent, xml, this,
                 "background_color", background_color,
                 "set_action_button_background_color");
+        
+        handleTextAlignment(this, xml);
     }
 
     @Override
     protected String getHTMLElement()
     {
         return "button";
+    }
+    
+    static void handleTextAlignment(final Widget widget, final Element xml) throws Exception
+    {
+        widget.classes.add("AlignedText");
+        int align = XMLUtil.getChildInteger(xml, "horizontal_alignment").orElse(1);
+        if (align == 0)
+            widget.classes.add("AlignedHorizLeft");
+        else if (align == 1)
+            widget.classes.add("AlignedHorizCenter");
+        else if (align == 2)
+            widget.classes.add("AlignedRight");
+
+        align = XMLUtil.getChildInteger(xml, "vertical_alignment").orElse(1);
+        if (align == 0)
+            widget.classes.add("AlignedVertTop");
+        else if (align == 1)
+            widget.classes.add("AlignedVertCenter");
+        else if (align == 2)
+            widget.classes.add("AlignedBottom");
     }
 
     @Override
