@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2020 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2023 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -251,6 +251,28 @@ public class XMLUtil
         try
         {
             return Optional.of(Integer.valueOf(getString(child)));
+        }
+        catch (final NumberFormatException ex)
+        {
+            throw new Exception("Expected integer for <" + name +">", ex);
+        }
+    }
+
+    /** Given a parent element, locate integer value of a child node.
+     *  @param macros Macros
+     *  @param parent Parent element
+     *  @param name Name of child element
+     *  @return Value of child element, or empty result
+     *  @throws Exception on error parsing the number
+     */
+    public static Optional<Integer> getChildInteger(final MacroProvider macros, final Element parent, final String name) throws Exception
+    {
+        final Element child = getChildElement(parent, name);
+        if (child == null)
+            return Optional.empty();
+        try
+        {
+            return Optional.of(Integer.valueOf(MacroUtil.expand(macros, getString(child))));
         }
         catch (final NumberFormatException ex)
         {

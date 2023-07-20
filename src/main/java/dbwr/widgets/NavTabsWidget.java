@@ -73,7 +73,7 @@ public class NavTabsWidget extends BaseMacroWidget
         tab_width = XMLUtil.getChildInteger(xml, "tab_width").orElse(100);
         tab_height = XMLUtil.getChildInteger(xml, "tab_height").orElse(30);
         tab_spacing = XMLUtil.getChildInteger(xml, "tab_spacing").orElse(2);
-        active_tab = XMLUtil.getChildInteger(xml, "active_tab").orElse(0);
+        active_tab = XMLUtil.getChildInteger(parent, xml, "active_tab").orElse(0);
     }
 
     @Override

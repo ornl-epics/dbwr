@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2023 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -10,9 +10,12 @@ import static dbwr.WebDisplayRepresentation.json_factory;
 import static dbwr.WebDisplayRepresentation.logger;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.w3c.dom.Element;
 
@@ -22,8 +25,12 @@ import com.fasterxml.jackson.core.JsonToken;
 
 import dbwr.parser.XMLUtil;
 
+/* Macro support */
 public class MacroUtil
 {
+    // This is simplified from the macro support in the desktop version
+    // TODO Update to use desktop version of macro support?
+    
     /** @param xml XML that contains '&lt;macros>'
      *  @return Name, value map of macros. May be empty.
      */
@@ -91,6 +98,10 @@ public class MacroUtil
         return buf.toString();
     }
 
+    // From Desktop 'Macros.MACRO_NAME_PATTERN'
+    private static String MACRO_NAME_PATTERN = "[A-Za-z][A-Za-z0-9_.\\-\\[\\]]*";
+    // Find NAME and DEFAULT in "$(NAME=DEFAULT)"
+    private static Pattern MACRO_WITH_DEFAULT = Pattern.compile("\\$\\((" + MACRO_NAME_PATTERN + ")=([^)]+)\\)");
 
     /** @param macros Macros
      *  @param text Text that might contain macro references
@@ -109,6 +120,18 @@ public class MacroUtil
         while (result.contains("${")  &&  --recursions > 0)
             for (final String name : macros.getMacroNames())
                 result = result.replace("${" + name + "}", macros.getMacroValue(name));
+        
+        // Expand unresolved macros that have default values
+        Matcher mac_w_def = MACRO_WITH_DEFAULT.matcher(result);
+        while (mac_w_def.find())
+        {
+            final String expression = mac_w_def.group(0);
+            final String name = mac_w_def.group(1);
+            final String def_val = mac_w_def.group(2);
+            final String value = macros.getMacroValue(name);
+            result =result.replace(expression, value != null ? value : def_val);
+            mac_w_def = MACRO_WITH_DEFAULT.matcher(result);
+        }
 
         return result;
     }
@@ -120,5 +143,19 @@ public class MacroUtil
     public static void expand(MacroProvider parent, Map<String, String> macros)
     {
         macros.replaceAll((name, value) ->  expand(parent, value));
+    }
+
+    // Demo
+    public static void main(String[] args)
+    {
+        final Map<String, String> values = new HashMap<>();
+        values.put("S", "System");
+        values.put("N", "2");
+        final MacroProvider macros = MacroProvider.forMap(values);
+
+        System.out.println(expand(macros, "$(S):Motor$(N)"));
+        System.out.println(expand(macros, "$(TAB=7)"));
+        System.out.println(expand(macros, "$(S):Motor$(N=99)"));
+        System.out.println(expand(macros, "$(S):Motor$(N=99) on tab $(TAB=7)"));
     }
 }
