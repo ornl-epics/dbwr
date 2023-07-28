@@ -9,7 +9,8 @@ This web runtime then provides convenient remote access.
  * Supports most widgets and their key features
 
 For more, see [DisplayBuilderWebRuntime.pdf](https://indico.cern.ch/event/766611/contributions/3438289/attachments/1855426/3047296/DisplayBuilderWebRuntime.pdf) 
-presentation from [2019 EPICS Meeting at ITER](https://indico.cern.ch/event/766611/)
+presentation from [2019 EPICS Meeting at ITER](https://indico.cern.ch/event/766611/).
+If you are using EDM, see related [Web EDM Runtime](https://github.com/JeffersonLab/wedm).
 
 Version Info
 ------------

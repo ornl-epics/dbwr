@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2023 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -22,6 +22,10 @@ public class CachedDisplay
     private volatile Instant stamp;
     private final long ms;
 
+    /** @param key Display and macros (but only display is used in most cases)
+     *  @param html HTML of the display
+     *  @param ms Time it took to create the HTML
+     */
     CachedDisplay(final DisplayKey key, final String html, final long ms)
     {
         this.key = key;
@@ -30,42 +34,50 @@ public class CachedDisplay
         this.ms = ms;
     }
 
+    /** Notify cache that entry has been re-used */
     void registerAccess()
     {
         stamp = Instant.now();
         calls.incrementAndGet();
     }
 
+    /** @return Display path */
     public String getDisplay()
     {
         return key.getDisplay();
     }
 
+    /** @return Display macros */
     public Map<String, String> getMacros()
     {
         return key.getMacros();
     }
 
+    /** @return Time when cache entry was created */
     public Instant getCreated()
     {
         return created;
     }
 
+    /** @return Time when cache entry was last re-used */
     public Instant getTimestamp()
     {
         return stamp;
     }
 
+    /** @return Number of cache entry re-use */
     public int getCalls()
     {
         return calls.get();
     }
 
+    /** @return Time it took to create the display */
     public long getMillisec()
     {
         return ms;
     }
 
+    /** @return HTML representation of display */
     public String getHTML()
     {
         return html;
