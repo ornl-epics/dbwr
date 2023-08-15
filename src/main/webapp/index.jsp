@@ -120,6 +120,7 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
+  2023-08-15 Preserve spaces in labels, text updates<br>
   2023-07-28 Cache invalidates entry based on modification time<br>
   2023-07-20 Handle macros with default value<br>
   2023-05-11 Navigation Tabs: Use parent macros even if no instance macros<br>

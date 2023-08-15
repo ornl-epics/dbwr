@@ -58,6 +58,8 @@ svg.Widget
 .AlignedText
 {
 	display: inline-flex;
+    /** Generally preserve spaces, but do wrap to next line at end of box */
+    white-space: pre-wrap;
 }
 .AlignedHorizCenter
 {
