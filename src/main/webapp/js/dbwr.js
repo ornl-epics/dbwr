@@ -525,7 +525,7 @@ function is_bit_set(widget, data)
 {
     let bit = widget.data("bit");
     if (bit < 0)
-        return data.value > 0;
+        return data.value != 0;
     
     let mask = 1 << bit;
     return data.value & mask; 
