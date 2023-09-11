@@ -83,22 +83,24 @@ public class ByteMonitorWidget extends SvgPVWidget
         {
             if (horizontal)
             {
+                final double dsize = (double)width/bits;
                 final int size = width/bits;
                 for (int i=0; i<bits; ++i)
                 {
-                    html.append("<rect x=\"" + (i*size) + "\" y=\"" +  0 + "\" width=\"" + size + "\" height=\"" + height + "\" fill=\"grey\"></rect>");
+                    html.append("<rect x=\"" + (int)(i*dsize) + "\" y=\"" +  0 + "\" width=\"" + size + "\" height=\"" + height + "\" fill=\"grey\"></rect>");
                     if (i < labels.size())
-                        html.append("<text text-anchor=\"middle\" dominant-baseline=\"middle\" transform=\"rotate(-90) translate(" + (-height/2) + "," + (i*size + size/2) + ")\">" + labels.get(reversed ? i : bits-i-1) + "</text>");
+                        html.append("<text text-anchor=\"middle\" dominant-baseline=\"middle\" transform=\"rotate(-90) translate(" + (-height/2) + "," + (int)(i*dsize + dsize/2) + ")\">" + labels.get(reversed ? i : bits-i-1) + "</text>");
                 }
             }
             else
             {
+                final double dsize = (double)height/bits;
                 final int size = height/bits;
                 for (int i=0; i<bits; ++i)
                 {
-                    html.append("<rect x=\"" + 0 + "\" y=\"" + (i*size) + "\" width=\"" + width + "\" height=\"" + size + "\" fill=\"grey\"></rect>");
+                    html.append("<rect x=\"" + 0 + "\" y=\"" + (int)(i*dsize) + "\" width=\"" + width + "\" height=\"" + size + "\" fill=\"grey\"></rect>");
                     if (i < labels.size())
-                        html.append("<text text-anchor=\"middle\" dominant-baseline=\"middle\" x=\"" + (width/2) + "\" y=\"" + (i*size + size/2) + "\">" + labels.get(reversed ? i : bits-i-1) + "</text>");
+                        html.append("<text text-anchor=\"middle\" dominant-baseline=\"middle\" x=\"" + (width/2) + "\" y=\"" + (int)(i*dsize + dsize/2) + "\">" + labels.get(reversed ? i : bits-i-1) + "</text>");
                 }
             }
         }
@@ -106,22 +108,24 @@ public class ByteMonitorWidget extends SvgPVWidget
         {
             if (horizontal)
             {
+                final double dsize = (double)width/bits;
                 final int size = width/bits, r = size/2;
                 for (int i=0; i<bits; ++i)
                 {
-                    html.append("<ellipse cx=\"" + (i*size + r) + "\" cy=\"" +  r + "\" rx=\"" + r + "\" ry=\"" + r + "\" fill=\"grey\"></ellipse>");
+                    html.append("<ellipse cx=\"" + (int)(i*dsize + r) + "\" cy=\"" +  r + "\" rx=\"" + r + "\" ry=\"" + r + "\" fill=\"grey\"></ellipse>");
                     if (i < labels.size())
-                        html.append("<text text-anchor=\"end\" dominant-baseline=\"middle\" transform=\"rotate(-90) translate(" + (-size-2) + "," + (i*size + size/2) + ")\">" + labels.get(reversed ? i : bits-i-1) + "</text>");
+                        html.append("<text text-anchor=\"end\" dominant-baseline=\"middle\" transform=\"rotate(-90) translate(" + (-size-2) + "," + (int)(i*dsize + dsize/2) + ")\">" + labels.get(reversed ? i : bits-i-1) + "</text>");
                 }
             }
             else
             {
+                final double dsize = (double)height/bits;
                 final int size = height/bits, r = size/2;
                 for (int i=0; i<bits; ++i)
                 {
-                    html.append("<ellipse cx=\"" + r + "\" cy=\"" + (i*size + r) + "\" rx=\"" + r + "\" ry=\"" + r + "\" fill=\"grey\"></ellipse>");
+                    html.append("<ellipse cx=\"" + r + "\" cy=\"" + (int)(i*dsize + r) + "\" rx=\"" + r + "\" ry=\"" + r + "\" fill=\"grey\"></ellipse>");
                     if (i < labels.size())
-                        html.append("<text dominant-baseline=\"middle\" x=\"" + (2+size) + "\" y=\"" + (i*size + size/2) + "\">" + labels.get(reversed ? i : bits-i-1) + "</text>");
+                        html.append("<text dominant-baseline=\"middle\" x=\"" + (2+size) + "\" y=\"" + (int)(i*dsize + dsize/2) + "\">" + labels.get(reversed ? i : bits-i-1) + "</text>");
                 }
             }
         }
