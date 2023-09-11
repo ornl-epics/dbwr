@@ -26,7 +26,6 @@ public class GroupWidget extends BaseMacroWidget
     {
         WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.groupingContainer", "group");
         WidgetFactory.addCSS("group.css");
-        WidgetFactory.addJavaScript("group.js");
     }
 
     private final String name;
