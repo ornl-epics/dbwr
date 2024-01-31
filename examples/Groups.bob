@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Saved on 2024-01-31 13:04:28 by ky9-->
+<display version="2.0.0">
+  <name>Display</name>
+  <width>710</width>
+  <height>598</height>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <class>TITLE</class>
+    <text>Groups</text>
+    <x use_class="true">0</x>
+    <y use_class="true">0</y>
+    <width>550</width>
+    <height>31</height>
+    <font use_class="true">
+      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
+      </font>
+    </font>
+    <foreground_color use_class="true">
+      <color name="Text" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <transparent use_class="true">true</transparent>
+  </widget>
+  <widget type="rectangle" version="2.0.0">
+    <name>Rectangle</name>
+    <x>60</x>
+    <y>31</y>
+    <width>300</width>
+    <height>80</height>
+    <line_width>1</line_width>
+    <line_color>
+      <color red="230" green="179" blue="230">
+      </color>
+    </line_color>
+    <transparent>true</transparent>
+  </widget>
+  <widget type="rectangle" version="2.0.0">
+    <name>Rectangle_1</name>
+    <x>398</x>
+    <y>31</y>
+    <width>264</width>
+    <height>100</height>
+    <line_width>1</line_width>
+    <line_color>
+      <color red="230" green="179" blue="230">
+      </color>
+    </line_color>
+    <transparent>true</transparent>
+  </widget>
+  <widget type="rectangle" version="2.0.0">
+    <name>Rectangle_3</name>
+    <y>111</y>
+    <width>60</width>
+    <height>200</height>
+    <line_width>1</line_width>
+    <line_color>
+      <color red="230" green="179" blue="230">
+      </color>
+    </line_color>
+    <transparent>true</transparent>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group</name>
+    <x>60</x>
+    <y>111</y>
+    <widget type="label" version="2.0.0">
+      <name>Label_1</name>
+      <text>'Group Box' Style</text>
+      <x>2</x>
+      <y>2</y>
+      <width>260</width>
+      <height>160</height>
+      <background_color>
+        <color name="Read_Background" red="240" green="240" blue="240">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+  </widget>
+  <widget type="rectangle" version="2.0.0">
+    <name>Rectangle_7</name>
+    <x>360</x>
+    <y>111</y>
+    <width>20</width>
+    <height>200</height>
+    <line_width>1</line_width>
+    <line_color>
+      <color red="230" green="179" blue="230">
+      </color>
+    </line_color>
+    <transparent>true</transparent>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group_1</name>
+    <x>398</x>
+    <y>129</y>
+    <width>264</width>
+    <height>164</height>
+    <style>3</style>
+    <widget type="label" version="2.0.0">
+      <name>Label_2</name>
+      <text>'None' Style</text>
+      <x>2</x>
+      <y>2</y>
+      <width>260</width>
+      <height>160</height>
+      <background_color>
+        <color name="Read_Background" red="240" green="240" blue="240">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+  </widget>
+  <widget type="rectangle" version="2.0.0">
+    <name>Rectangle_4</name>
+    <x>380</x>
+    <y>131</y>
+    <width>20</width>
+    <height>162</height>
+    <line_width>1</line_width>
+    <line_color>
+      <color red="230" green="179" blue="230">
+      </color>
+    </line_color>
+    <transparent>true</transparent>
+  </widget>
+  <widget type="rectangle" version="2.0.0">
+    <name>Rectangle_2</name>
+    <x>662</x>
+    <y>131</y>
+    <width>48</width>
+    <height>162</height>
+    <line_width>1</line_width>
+    <line_color>
+      <color red="230" green="179" blue="230">
+      </color>
+    </line_color>
+    <transparent>true</transparent>
+  </widget>
+  <widget type="rectangle" version="2.0.0">
+    <name>Rectangle_6</name>
+    <x>398</x>
+    <y>293</y>
+    <width>264</width>
+    <height>98</height>
+    <line_width>1</line_width>
+    <line_color>
+      <color red="230" green="179" blue="230">
+      </color>
+    </line_color>
+    <transparent>true</transparent>
+  </widget>
+  <widget type="rectangle" version="2.0.0">
+    <name>Rectangle_5</name>
+    <x>60</x>
+    <y>311</y>
+    <width>300</width>
+    <height>80</height>
+    <line_width>1</line_width>
+    <line_color>
+      <color red="230" green="179" blue="230">
+      </color>
+    </line_color>
+    <transparent>true</transparent>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group</name>
+    <x>60</x>
+    <y>391</y>
+    <height>167</height>
+    <style>1</style>
+    <foreground_color>
+      <color name="OK" red="0" green="255" blue="0">
+      </color>
+    </foreground_color>
+    <line_color>
+      <color name="Grid" red="128" green="128" blue="128">
+      </color>
+    </line_color>
+    <widget type="label" version="2.0.0">
+      <name>Label_4</name>
+      <text>'Title' Style:
+'Foreground' green,
+'Line Color' gray</text>
+      <x>-1</x>
+      <width>297</width>
+      <height>146</height>
+      <background_color>
+        <color name="Read_Background" red="240" green="240" blue="240">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+  </widget>
+  <widget type="rectangle" version="2.0.0">
+    <name>Rectangle_8</name>
+    <x>360</x>
+    <y>392</y>
+    <width>38</width>
+    <height>166</height>
+    <line_width>1</line_width>
+    <line_color>
+      <color red="230" green="179" blue="230">
+      </color>
+    </line_color>
+    <transparent>true</transparent>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group_2</name>
+    <x>398</x>
+    <y>391</y>
+    <width>266</width>
+    <height>166</height>
+    <style>2</style>
+    <widget type="label" version="2.0.0">
+      <name>Label_3</name>
+      <text>'Line' Style</text>
+      <x>-1</x>
+      <y>-1</y>
+      <width>260</width>
+      <height>160</height>
+      <background_color>
+        <color name="Read_Background" red="240" green="240" blue="240">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Colors</name>
+    <x>61</x>
+    <y>620</y>
+    <width>249</width>
+    <height>150</height>
+    <style>1</style>
+    <foreground_color>
+      <color red="102" green="128" blue="230">
+      </color>
+    </foreground_color>
+    <widget type="label" version="2.0.0">
+      <name>Label_5</name>
+      <text>'Title' Style:
+'Foreground' blue,
+'Line Color' default=black</text>
+      <x>28</x>
+      <y>11</y>
+      <width>190</width>
+      <height>100</height>
+      <background_color>
+        <color name="Read_Background" red="240" green="240" blue="240">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Colors</name>
+    <x>398</x>
+    <y>620</y>
+    <width>266</width>
+    <height>150</height>
+    <foreground_color>
+      <color name="MAJOR" red="255" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color name="OK" red="0" green="255" blue="0">
+      </color>
+    </background_color>
+    <widget type="label" version="2.0.0">
+      <name>Label_6</name>
+      <text>'Group Box' Style</text>
+      <x>24</x>
+      <y>12</y>
+      <width>182</width>
+      <height>90</height>
+      <background_color>
+        <color name="Read_Background" red="240" green="240" blue="240">
+        </color>
+      </background_color>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+  </widget>
+</display>

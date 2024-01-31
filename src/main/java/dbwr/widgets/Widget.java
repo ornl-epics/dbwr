@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2024 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -59,6 +59,9 @@ public class Widget implements ParentWidget
     /** Styles (inline) to add to the HTML for this widget */
     protected final Map<String, String> styles = new LinkedHashMap<>();
 
+    /** Widget version */
+    protected final Version version;
+
     /** Widget position and size */
     protected final int x, y, width, height;
 
@@ -88,6 +91,8 @@ public class Widget implements ParentWidget
     public Widget(final ParentWidget parent, final Element xml, final String type, final int default_width, final int default_height) throws Exception
     {
         this.parent = parent;
+
+        version = Version.parse(xml.getAttribute("version"));
         x = XMLUtil.getChildInteger(xml, "x").orElse(0);
         y = XMLUtil.getChildInteger(xml, "y").orElse(0);
         width = XMLUtil.getChildInteger(xml, "width").orElse(default_width);

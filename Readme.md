@@ -167,7 +167,7 @@ The following widget types and features have been implemented with basic functio
  * Action Button to open display or web link
  * Action Button to write value to PV
  * Combo
- * Group with group border
+ * Group with 'Group', 'Title, 'Line' or 'None' styles 
  * Embedded Displays
  * Tabs
  * Navigation Tabs
