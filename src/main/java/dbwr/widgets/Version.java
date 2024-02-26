@@ -34,7 +34,7 @@ public class Version
      */
     public static Version parse(final String version)
     {
-        if (version == null)
+        if (version == null  ||  version.isBlank())
             return new Version(0, 0, 0);
             
         // First try the long format
