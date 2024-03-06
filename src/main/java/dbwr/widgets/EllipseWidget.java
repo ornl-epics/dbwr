@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2021 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2024 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -33,12 +33,12 @@ public class EllipseWidget extends SvgWidget
 
 	public EllipseWidget(final ParentWidget parent, final Element xml) throws Exception
 	{
-	    this(parent, xml, "ellipse");
+	    this(parent, xml, "ellipse", 100, 50);
 	}
 
-	protected EllipseWidget(final ParentWidget parent, final Element xml, final String type) throws Exception
+	protected EllipseWidget(final ParentWidget parent, final Element xml, final String type, final int default_width, final int default_height) throws Exception
 	{
-		super(parent, xml, type);
+		super(parent, xml, type, default_width, default_height);
 		line_width = XMLUtil.getChildInteger(xml, "line_width").orElse(3);
 		line_color = XMLUtil.getColor(xml, "line_color").orElse("#00F");
 		transparent = XMLUtil.getChildBoolean(xml, "transparent").orElse(false);

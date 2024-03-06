@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2024-03-06 10:55:41 by ky9-->
+<!--Saved on 2024-03-06 11:36:40 by ky9-->
 <display version="2.0.0">
   <name>Display</name>
   <width>320</width>
@@ -58,6 +58,11 @@
       </color>
     </background_color>
   </widget>
+  <widget type="rectangle" version="2.0.0">
+    <name>Rectangle_2</name>
+    <x>180</x>
+    <y>100</y>
+  </widget>
   <widget type="ellipse" version="2.0.0">
     <name>Ellipse</name>
     <x>70</x>
@@ -67,6 +72,17 @@
       </color>
     </background_color>
   </widget>
+  <widget type="rectangle" version="2.0.0">
+    <name>Ellipse_1</name>
+    <x>70</x>
+    <y>159</y>
+    <height>50</height>
+    <background_color>
+      <color red="30" green="144" blue="255" alpha="123">
+      </color>
+    </background_color>
+    <transparent>true</transparent>
+  </widget>
   <widget type="arc" version="2.0.0">
     <name>Arc</name>
     <x>70</x>
@@ -75,6 +91,17 @@
       <color red="30" green="144" blue="255" alpha="123">
       </color>
     </background_color>
+  </widget>
+  <widget type="rectangle" version="2.0.0">
+    <name>Ellipse_2</name>
+    <x>70</x>
+    <y>229</y>
+    <height>50</height>
+    <background_color>
+      <color red="30" green="144" blue="255" alpha="123">
+      </color>
+    </background_color>
+    <transparent>true</transparent>
   </widget>
   <widget type="polygon" version="2.0.0">
     <name>Polygon</name>

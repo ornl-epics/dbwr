@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2024 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the LICENSE
  * which accompanies this distribution
@@ -33,7 +33,7 @@ public class ArcWidget extends SvgWidget
 
 	protected ArcWidget(final ParentWidget parent, final Element xml, final String type) throws Exception
 	{
-		super(parent, xml, type);
+		super(parent, xml, type, 100, 100);
 		arc_start = XMLUtil.getChildDouble(xml, "start_angle").orElse(0.0);
 		arc_size = XMLUtil.getChildDouble(xml, "total_angle").orElse(90.0);
 		line_width = XMLUtil.getChildInteger(xml, "line_width").orElse(3);
