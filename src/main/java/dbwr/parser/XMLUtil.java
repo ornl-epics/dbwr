@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2023 Oak Ridge National Laboratory.
+ * Copyright (c) 2019-2024 Oak Ridge National Laboratory.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -363,16 +363,24 @@ public class XMLUtil
         if (col_xml.getAttribute("red").isEmpty())
             return null;
         // <color name="OK" red="0" green="255" blue="0"></color>
-        final int red = Integer.parseInt(col_xml.getAttribute("red"));
+        final int red   = Integer.parseInt(col_xml.getAttribute("red"));
         final int green = Integer.parseInt(col_xml.getAttribute("green"));
-        final int blue = Integer.parseInt(col_xml.getAttribute("blue"));
-        return new Color(red, green, blue);
+        final int blue  = Integer.parseInt(col_xml.getAttribute("blue"));
+        final int alpha = col_xml.hasAttribute("alpha")
+                        ? Integer.parseInt(col_xml.getAttribute("alpha"))
+                        : 255;
+        return new Color(red, green, blue, alpha);
     }
 
     public static String getWebColor(final Color awt_color)
     {
         if (awt_color == null)
             return null;
+        if (awt_color.getAlpha() < 255)
+            return String.format("#%02X%02X%02X%02X", awt_color.getRed(),
+                                                      awt_color.getGreen(),
+                                                      awt_color.getBlue(),
+                                                      awt_color.getAlpha());
         return String.format("#%02X%02X%02X", awt_color.getRed(),
                                               awt_color.getGreen(),
                                               awt_color.getBlue());

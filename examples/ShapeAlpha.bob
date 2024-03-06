@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Saved on 2024-03-06 10:55:41 by ky9-->
+<display version="2.0.0">
+  <name>Display</name>
+  <width>320</width>
+  <height>490</height>
+  <widget type="rectangle" version="2.0.0">
+    <name>Rectangle_1</name>
+    <x>70</x>
+    <width>80</width>
+    <height>490</height>
+    <line_color>
+      <color name="Off" red="60" green="100" blue="60">
+      </color>
+    </line_color>
+    <background_color>
+      <color name="OK" red="0" green="255" blue="0">
+      </color>
+    </background_color>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <text>Colors with Alpha</text>
+    <x>20</x>
+    <y>10</y>
+    <width>290</width>
+    <height>31</height>
+    <font>
+      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
+      </font>
+    </font>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_1</name>
+    <text>Colors with Alpha</text>
+    <x>20</x>
+    <y>41</y>
+    <width>290</width>
+    <height>31</height>
+    <font>
+      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
+      </font>
+    </font>
+    <background_color>
+      <color red="179" green="179" blue="179" alpha="102">
+      </color>
+    </background_color>
+    <transparent>false</transparent>
+  </widget>
+  <widget type="rectangle" version="2.0.0">
+    <name>Rectangle</name>
+    <x>30</x>
+    <y>80</y>
+    <width>190</width>
+    <height>60</height>
+    <background_color>
+      <color red="30" green="144" blue="255" alpha="123">
+      </color>
+    </background_color>
+  </widget>
+  <widget type="ellipse" version="2.0.0">
+    <name>Ellipse</name>
+    <x>70</x>
+    <y>159</y>
+    <background_color>
+      <color red="30" green="144" blue="255" alpha="123">
+      </color>
+    </background_color>
+  </widget>
+  <widget type="arc" version="2.0.0">
+    <name>Arc</name>
+    <x>70</x>
+    <y>229</y>
+    <background_color>
+      <color red="30" green="144" blue="255" alpha="123">
+      </color>
+    </background_color>
+  </widget>
+  <widget type="polygon" version="2.0.0">
+    <name>Polygon</name>
+    <x>10</x>
+    <y>289</y>
+    <width>260</width>
+    <height>170</height>
+    <points>
+      <point x="0.0" y="50.0">
+      </point>
+      <point x="160.0" y="0.0">
+      </point>
+      <point x="240.0" y="30.0">
+      </point>
+      <point x="260.0" y="110.0">
+      </point>
+      <point x="210.0" y="150.0">
+      </point>
+      <point x="90.0" y="170.0">
+      </point>
+      <point x="20.0" y="150.0">
+      </point>
+    </points>
+    <background_color>
+      <color red="30" green="144" blue="255" alpha="123">
+      </color>
+    </background_color>
+  </widget>
+</display>

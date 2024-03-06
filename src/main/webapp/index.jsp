@@ -120,6 +120,7 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
+  2024-03-06 Support alpha for shape backgrounds<br>
   2024-02-26 Version: Treat missing as 0.0.0<br>
   2024-01-31 Group widget: Correct inset for style 'None' and fix colors for newly added example.<br>
   2023-09-11 LED only displayed values above zero instead of non-zero, incl. negative. Byte monitor layout float calc<br>
