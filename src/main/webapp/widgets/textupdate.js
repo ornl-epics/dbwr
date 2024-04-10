@@ -50,7 +50,7 @@ function format_pv_data_as_text(widget, data)
     // Otherwise use precision from data
     if (precision === undefined  &&  data.precision !== undefined)
         precision = data.precision;
-    
+
     let text;
     if (data.text !== undefined)
     {
@@ -89,7 +89,18 @@ function format_pv_data_as_text(widget, data)
                 if (data.precision === undefined)
                     text = data.value.toString();
                 else
-                    if (typeof data.value.toFixed == 'function')
+                    if (Array.isArray(data.value)) {
+                        text = "";
+                        for (let i = 0; i < data.value.length; i++){
+                            if (typeof data.value[i].toFixed == 'function')
+                                text = text.concat(data.value[i].toFixed(precision));
+                            else
+                                text = text.concat(data.value[i].toString());
+                            if (i < data.value.length - 1) 
+                                text = text.concat(", ");
+                        }
+                    }
+                    else if (typeof data.value.toFixed == 'function')
                         text = data.value.toFixed(precision);
                     else
                         text = data.value.toString();
