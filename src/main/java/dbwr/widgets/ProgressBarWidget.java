@@ -29,12 +29,14 @@ public class ProgressBarWidget extends PVWidget
     }
 
     public ProgressBarWidget(final ParentWidget parent, final Element xml) throws Exception
-	{
-		super(parent, xml, "progressbar");
+    {
+        super(parent, xml, "progressbar");
 
-		attributes.put("min", XMLUtil.getChildString(parent, xml, "minimum").orElse("0"));
+        // Turn some parameters from widget XML into HTML attributes
+        // "min" and "max" will be used by the <meter/>
+        attributes.put("min", XMLUtil.getChildString(parent, xml, "minimum").orElse("0"));
         attributes.put("max", XMLUtil.getChildString(parent, xml, "maximum").orElse("255"));
-
+        // "data-..." attributes are for our widget-specific javascript (progressbar.js)
         if (XMLUtil.getChildBoolean(xml, "limits_from_pv").orElse(true))
             attributes.put("data-limits-from-pv", "true");
 	}
@@ -42,6 +44,7 @@ public class ProgressBarWidget extends PVWidget
     @Override
     protected String getHTMLElement()
     {
+        // Create a "<meter/>"
         return "meter";
     }
 }
