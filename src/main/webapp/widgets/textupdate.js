@@ -50,7 +50,7 @@ function format_pv_data_as_text(widget, data)
     // Otherwise use precision from data
     if (precision === undefined  &&  data.precision !== undefined)
         precision = data.precision;
-
+    
     let text;
     if (data.text !== undefined)
     {
