@@ -84,6 +84,10 @@ function format_pv_data_as_text(widget, data)
                 text = (data.value | 0).toString(2);
                 text = "0b" + text;
             }
+            else if (widget.data("format") == "string" && Array.isArray(data.value))
+            {
+                text = String.fromCharCode.apply(String, data.value);
+            }
             else
             {
                 if (data.precision === undefined)
