@@ -37,6 +37,20 @@ function format_engineering(number, precision)
     return text;
 }
 
+/** Convert data from EPICS that might arrive as negative number
+ *  into "unsigned" positive number
+ *  @param number Any number
+ *  @returns Number as "unsigned"
+ */
+function makeUnsigned(number)
+{
+    // Truncate to int32
+    number = number | 0;
+    // Wrap around to positive
+    if (number < 0)
+        number += 0x100000000;
+    return number;
+}
 
 /** Format data as text (e.g. number with precision, units)
  *  @param widget Widget that has 'format' etc.
@@ -76,12 +90,12 @@ function format_pv_data_as_text(widget, data)
                 text = format_engineering(data.value, precision);
             else if (widget.data("format") == "hex")
             {
-                text = (data.value | 0).toString(16);
+                text = makeUnsigned(data.value).toString(16).toUpperCase();
                 text = "0x" + text;
             }
             else if (widget.data("format") == "binary")
             {
-                text = (data.value | 0).toString(2);
+                text = makeUnsigned(data.value).toString(2);
                 text = "0b" + text;
             }
             else if (widget.data("format") == "string" && Array.isArray(data.value))
@@ -93,9 +107,11 @@ function format_pv_data_as_text(widget, data)
                 if (data.precision === undefined)
                     text = data.value.toString();
                 else
-                    if (Array.isArray(data.value)) {
+                    if (Array.isArray(data.value))
+                    {
                         text = "";
-                        for (let i = 0; i < data.value.length; i++){
+                        for (let i = 0; i < data.value.length; i++)
+                        {
                             if (typeof data.value[i].toFixed == 'function')
                                 text = text.concat(data.value[i].toFixed(precision));
                             else
