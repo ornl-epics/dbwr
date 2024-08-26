@@ -6,7 +6,10 @@
  ******************************************************************************/
 package dbwr.widgets;
 
+import static dbwr.WebDisplayRepresentation.logger;
+
 import java.io.PrintWriter;
+import java.util.logging.Level;
 
 import org.w3c.dom.Element;
 
@@ -22,7 +25,13 @@ public class PolylineWidget extends SvgWidget
         WidgetFactory.registerLegacy("org.csstudio.opibuilder.widgets.polyline", "polyline");
     }
 
+    private enum Arrows
+    {
+        NONE, FROM, TO, BOTH
+    }
+
     protected final int line_width;
+    protected Arrows arrows;
 	protected String line_color, points;
     protected String dasharray;
 
@@ -85,6 +94,17 @@ public class PolylineWidget extends SvgWidget
             dasharray = null;
         }
 
+        int arrows_code = XMLUtil.getChildInteger(xml, "arrows").orElse(0);
+        try
+        {
+            arrows = Arrows.values()[arrows_code];
+        }
+        catch (Throwable ex)
+        {
+            logger.log(Level.WARNING, "Invalid <arrrow> index " + arrows_code, ex);
+            arrows = Arrows.NONE;
+        }
+
 	    final StringBuilder buf = new StringBuilder();
 	    final Element pe = XMLUtil.getChildElement(xml, "points");
 	    if (pe != null)
@@ -126,10 +146,27 @@ public class PolylineWidget extends SvgWidget
 	protected void fillHTML(final PrintWriter html, final int indent)
 	{
         HTMLUtil.indent(html, indent+2);
+
+        if (arrows != Arrows.NONE)
+        {   // Define arrow head. Magically scales with line_width!
+            html.print("<defs> <marker id=\"arrow\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" " +
+                       "markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\"> " +
+                       "<path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"" + line_color + "\" /> " +
+                       "</marker> </defs>");
+            HTMLUtil.indent(html, indent+2);
+        }
+
         html.print("<polyline fill=\"transparent\" points=\"" + points +
                    "\" stroke=\"" + line_color + "\" stroke-width=\"" + line_width + "\"");
         if (dasharray != null)
             html.print(" stroke-dasharray=\"" + dasharray + "\"");
+
+        // Add arrow heads
+        if (arrows == Arrows.FROM  ||  arrows == Arrows.BOTH)
+            html.print("marker-start=\"url(#arrow)\"");
+        if (arrows == Arrows.TO    ||  arrows == Arrows.BOTH)
+            html.print("marker-end=\"url(#arrow)\"");
+
         html.println("/>");
 	}
 }
