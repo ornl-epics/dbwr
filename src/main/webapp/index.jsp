@@ -120,7 +120,7 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
-  2024-08-27 Polyline: Arrow heads update with color rules.<br>
+  2024-08-27 Polyline: Arrow heads update with color rules. jQuery 3.7.1.<br>
   2024-08-26 Polyline: Support arrow heads.<br>
   2024-05-22 Treat hex-formatted numbers in text update as "unsigned".<br>
   2024-05-10 Text update handles 'string' format since PVWS now sends long strings as byte array<br>
