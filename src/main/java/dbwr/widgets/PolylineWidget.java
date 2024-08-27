@@ -147,9 +147,12 @@ public class PolylineWidget extends SvgWidget
 	{
         HTMLUtil.indent(html, indent+2);
 
+        // ID for arrow head marker, based on widget ID
+        final String arr_id = getWID() + "-arrow";
+
         if (arrows != Arrows.NONE)
         {   // Define arrow head. Magically scales with line_width!
-            html.print("<defs> <marker id=\"arrow\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" " +
+            html.print("<defs> <marker id=\"" + arr_id + "\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" " +
                        "markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\"> " +
                        "<path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"" + line_color + "\" /> " +
                        "</marker> </defs>");
@@ -163,9 +166,9 @@ public class PolylineWidget extends SvgWidget
 
         // Add arrow heads
         if (arrows == Arrows.FROM  ||  arrows == Arrows.BOTH)
-            html.print("marker-start=\"url(#arrow)\"");
+            html.print("marker-start=\"url(#" + arr_id + ")\"");
         if (arrows == Arrows.TO    ||  arrows == Arrows.BOTH)
-            html.print("marker-end=\"url(#arrow)\"");
+            html.print("marker-end=\"url(#" + arr_id + ")\"");
 
         html.println("/>");
 	}
