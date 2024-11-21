@@ -213,15 +213,41 @@ public class RuleSupport
         return XMLUtil.getChildString(mac, exp, "value").orElseThrow(() -> new Exception("Missing value"));
     };
 
-    public void handleNumericRule(final MacroProvider macros, final Element xml,
-            final Widget widget, final String property, final double default_value,
-            final String update_code) throws Exception
+    public void handleNumericRule(final MacroProvider macros, 
+                                  final Element xml,
+                                  final Widget widget, 
+                                  final String property, 
+                                  final double default_value,            
+                                  final String update_code) throws Exception
     {
         handleRule(macros, xml, widget, property,
                    parse_string_value,
                    Double.toString(default_value),
                    text -> text, update_code);
     }
+
+    /** Check if there is a rule for the reset y_pos
+     *
+     *  @param macros Macro provider, usually the parent widget
+     *  @param xml XML for this widget
+     *  @param widget Widget where rule might need to be added
+     *  @param property Original value for the visibility
+     *  @throws Exception on error
+     */
+    public void handleYPositionRule(final MacroProvider macros, 
+                                   final Element xml,
+                                   final Widget widget, 
+                                   final String property,  
+                                   final double default_y_pos,
+                                   final String update_code) throws Exception
+    {
+        handleRule(macros, xml, widget, property,
+                   parse_string_value,
+                   Double.toString(default_y_pos),
+                   text -> text, update_code);
+    }
+
+
 
     private static final ValueParser parse_color_value = (mac, use_expression, exp) ->
     {
@@ -275,6 +301,8 @@ public class RuleSupport
                    Boolean.toString(default_visibility),
                    truefalse -> truefalse, "set_visibility");
     }
+
+
 
     public void addScripts(final PrintWriter html)
     {

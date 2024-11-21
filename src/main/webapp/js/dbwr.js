@@ -618,6 +618,12 @@ function set_x_pos(widget, value)
 {
     widget.css("left", value + "px");        
 }
+// zyuan
+function set_y_pos(widget, value)
+{
+    widget.css("top", value + "px");
+}
+
 
 function set_text_background_color(widget, color)
 {

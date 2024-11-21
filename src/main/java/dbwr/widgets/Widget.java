@@ -119,6 +119,7 @@ public class Widget implements ParentWidget
         {
             getRuleSupport().handleVisibilityRule(parent, xml, this, visible);
             getRuleSupport().handleNumericRule(parent, xml, this, "x", x, "set_x_pos");
+            getRuleSupport().handleYPositionRule(parent, xml, this, "y", y, "set_y_pos");
         }
         catch (final Exception ex)
         {
