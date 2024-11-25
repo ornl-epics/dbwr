@@ -629,6 +629,11 @@ function set_text_background_color(widget, color)
 {
     widget.css("background-color", color);
 }
+//zyuan
+function set_text_foreground_color(widget, color)
+{
+    widget.css("foreground-color", color);
+}
 
 function set_svg_background_color(widget, color)
 {
@@ -638,6 +643,20 @@ function set_svg_background_color(widget, color)
 function set_visibility(widget, visible)
 {
     widget.css("display", visible ? "block" : "none");        
+}
+function set_enabled(widget, enabled)
+{
+    widget.css("data-enabled", enabled);    
+}
+//zyuan
+function set_width(widget, value)
+{
+    widget.css("width", value + "px");
+}
+//zyuan
+function set_height(widget, value)
+{
+    widget.css("height", value + "px");
 }
 // End of common WidgetRule.update methods
 

@@ -246,7 +246,7 @@ public class RuleSupport
                    Double.toString(default_y_pos),
                    text -> text, update_code);
     }
-
+    
 
 
     private static final ValueParser parse_color_value = (mac, use_expression, exp) ->
@@ -302,7 +302,17 @@ public class RuleSupport
                    truefalse -> truefalse, "set_visibility");
     }
 
+    public void handleEnabledRule(final MacroProvider macros, 
+                                 final Element xml,
+                                 final Widget widget, 
+                                 final boolean default_enabled) throws Exception
+    {
+        handleRule(macros, xml, widget, "enabled",
+                   parse_boolean_value,
+                   Boolean.toString(default_enabled),
+                   truefalse -> truefalse, "set_enabled");
 
+    }
 
     public void addScripts(final PrintWriter html)
     {

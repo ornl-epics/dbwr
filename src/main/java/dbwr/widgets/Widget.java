@@ -64,6 +64,7 @@ public class Widget implements ParentWidget
 
     /** Widget position and size */
     protected final int x, y, width, height;
+    protected final String background_color;
 
     /** Is widget enabled? */
     protected final boolean enabled;
@@ -97,6 +98,7 @@ public class Widget implements ParentWidget
         y = XMLUtil.getChildInteger(xml, "y").orElse(0);
         width = XMLUtil.getChildInteger(xml, "width").orElse(default_width);
         height = XMLUtil.getChildInteger(xml, "height").orElse(default_height);
+        background_color = XMLUtil.getColor(xml, "background_color").orElse("#1E90FF");
 
         classes.add("Widget");
 
@@ -120,6 +122,12 @@ public class Widget implements ParentWidget
             getRuleSupport().handleVisibilityRule(parent, xml, this, visible);
             getRuleSupport().handleNumericRule(parent, xml, this, "x", x, "set_x_pos");
             getRuleSupport().handleYPositionRule(parent, xml, this, "y", y, "set_y_pos");
+        
+            getRuleSupport().handleColorRule(parent, xml, this,
+                                             "background_color", background_color,
+                                             "set_svg_background_color");
+        
+        
         }
         catch (final Exception ex)
         {
