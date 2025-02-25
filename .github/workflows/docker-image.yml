@@ -1,15 +1,43 @@
-name: Docker Image CI
+name: Build and Push Docker Image
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - fnal  # Only run on pushes to the main branh
+  workflow_dispatch:  # Allows you to run this workflow manually from the Actions tab
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker compose build
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+          images: adregistry.fnal.gov/epics/phoebus-dbwr
+          tags: |
+            # This is the default tag for the last commit of the default branch
+            type=edge
+            # This sets the latest tag for default branch
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=v${{ github.run_number }},enable={{is_default_branch}}
+  
+    - name: Log in to Docker Registry
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@v3
+      with:
+        registry: adregistry.fnal.gov
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    
+    - name: Build and push Docker Image
+      uses: docker/build-push-action@v5
+      with:
+        context: docker/
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
