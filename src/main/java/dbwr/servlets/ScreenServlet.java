@@ -57,7 +57,8 @@ public class ScreenServlet extends HttpServlet
 	    }
 	    catch (final Exception ex)
 	    {
-	        throw new Error("Cannot create display " + key, ex);
+	        //throw new Error("Cannot create display " + key, ex);
+			return null;
 	    }
 	}
 
@@ -120,7 +121,7 @@ public class ScreenServlet extends HttpServlet
 			response.setContentType("text/html");
             final PrintWriter writer = response.getWriter();
             writer.append("<pre id=\"error\">\n");
-            writer.append(ex.toString());
+            writer.append("File not found.");
             writer.append("\n</pre>\n");
 		}
 	}
