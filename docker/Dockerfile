@@ -1,11 +1,7 @@
 FROM alpine/git:latest as source_fetch
 
-RUN git clone https://github.com/fermi-ad/dbwr.git /dbwr
-ARG GIT_TAG=fnal
-RUN cd /dbwr && git checkout ${GIT_TAG}
-
-RUN git clone https://github.com/ornl-epics/pvws.git /pvws
-RUN cd /pvws && git checkout main
+RUN git clone --branch fnal https://github.com/fermi-ad/dbwr.git /dbwr
+RUN git clone --branch fnal https://github.com/fermi-ad/pvws.git /pvws
 
 FROM maven:3.8.7-eclipse-temurin-17 as maven_builder
 
