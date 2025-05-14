@@ -1,18 +1,14 @@
-# Display Runtime Default Files
-#export DBWR1=file:/bob/rules.bob
-#export DBWR2=file:/bob/macros.bob
-#export DBWR3=file:/bob/monitors_textupdate.bob
-#export DBWR4=file:/bob/DTDInsertion.bob
-
-# Configure PVWS URL 
-#export PVWS_HOST=localhost:8081
-#export PVWS_WS_PROTOCOL=ws
-#export PVWS_HTTP_PROTOCOL=http
-#
-
-export EPICS_CA_AUTO_ADDR_LIST= NO
-export EPICS_CA_ADDR_LIST=`cat /usr/local/epics/Config/EPICS_ADDR_LIST | xargs echo`
-export EPICS_PVA_AUTO_ADDR_LIST=NO
-export EPICS_PVA_ADDR_LIST=`cat /usr/local/epics/Config/EPICS_ADDR_LIST | xargs echo`
 export WHITELIST1=file:/displays/CSS/.*
-#export PV_DEFAULT_TYPE=pva
+export WHITELIST2=http://vclx4.fnal.gov/.*
+export PV_DEFAULT_TYPE=pva
+
+# ========== End old settings (unicast) =========== #
+export EPICS_HOST_INTERFACE='enp65s0f0'
+export EPICS_PVA_ADDR_LIST="239.128.1.6,8@$EPICS_HOST_INTERFACE 239.128.1.6"
+
+# Uncomment to restore NFS/Git repo epicsENV source
+# This cannot be done until https://ghe-pip2.fnal.gov/epics-controls/Config/issues/508 is solved
+#source /usr/local/epics/Config/epicsENV
+
+# Uncomment to use local, modified epicsENV source from configMap
+source /usr/local/dbwr/epicsENV
