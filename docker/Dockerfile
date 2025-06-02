@@ -22,8 +22,7 @@ RUN apt-get update && apt-get install -y net-tools && \
 COPY --from=maven_builder /dbwr/target/dbwr.war ${CATALINA_HOME}/webapps
 COPY --from=maven_builder /pvws/target/pvws.war ${CATALINA_HOME}/webapps
 
-RUN mkdir /displays && \
-    ln -s /usr/local/epics/Config/CSS/ /displays
+
 
 COPY ./setenv.sh ${CATALINA_HOME}/bin
 RUN chmod +x ${CATALINA_HOME}/bin/setenv.sh
