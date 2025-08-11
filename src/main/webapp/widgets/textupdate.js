@@ -64,9 +64,9 @@ function format_pv_data_as_text(widget, data)
     {   // No value. Fall back to PV name
         pv = widget.data("pv");
         if (pv === undefined)
-            return "&lt;?&gt;";
+            return "<?>";
         else
-            return "&lt;" + pv + "&gt;";
+            return "<" + pv + ">";
     }
 
     // If precision is defined on widget, use it
@@ -150,7 +150,8 @@ function update_text_widget(widget, data)
 {
     // Use newlines to start new line via <br>
     let lines = format_pv_data_as_text(widget, data).split("\n");
-    widget.html("<span>" + lines.join("<br>") + "</span>");
+    widget.html("<span>" + lines.join("<br>").replaceAll('<', '&lt;')
+                                             .replaceAll('>', '&gt;') + "</span>");
 }
 
 DisplayBuilderWebRuntime.prototype.widget_update_methods["textupdate"] = update_text_widget
