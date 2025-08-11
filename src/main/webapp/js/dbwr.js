@@ -10,7 +10,7 @@ Severity.INVALID = "INVALID";
 Severity.UNDEFINED = "UNDEFINED";
 
 /** Apply alarm-based outline to widget
- * 
+ *
  *  Default unless widget registers with widget_alarm_methods[].
  *  Adds/remove BorderXXX classes.
  */
@@ -33,7 +33,7 @@ function apply_alarm_outline(widget, severity)
 }
 
 /** Apply alarm-based border around widget by adding a 'border' <div>
- * 
+ *
  *  Used for example by LEDs which already have a wide 'stroke'
  *  that interferes with the normal CSS-based border
  *  unless more 'padding' is added.
@@ -51,7 +51,7 @@ function update_alarm_div(widget, severity, pad, round)
                                 .addClass("Widget");
         widget.before(border);
     }
-    
+
     let width = parseInt(widget.css("width"));
     let height = parseInt(widget.css("height"));
     if (round)
@@ -76,7 +76,7 @@ function update_alarm_div(widget, severity, pad, round)
             border.css("border", "3px dashed #F0F");
     }
 }
-        
+
 /** Info for one subscription */
 class Subscription
 {
@@ -96,10 +96,10 @@ class PVInfo
     constructor(pv_name)
     {
         this.pv_name = pv_name;
-        
+
         // Most recent data
         this.data = { severity: Severity.UNDEFINED };
-        
+
         // Subscriptions, i.e. callbacks to invoke with received PV data
         this.subscriptions = [];
     }
@@ -126,23 +126,23 @@ class DisplayBuilderWebRuntime
         // Map of PV name to PVInfo
         this.pv_infos = {}
     }
-    
+
     /** @param message Message to log in 'info' span and console */
     log(message)
     {
         this.info.html(message);
         console.log(message);
     }
-    
+
     clear_log()
     {
         this.info.html("");
     }
-    
+
     /** Lifecycle step 1: Load display
-     * 
+     *
      *  Will then connect to PVs
-     *  
+     *
      *  @param display URL of display to load
      *  @param macros Macros (JSON)
      */
@@ -150,7 +150,7 @@ class DisplayBuilderWebRuntime
     {
         this.display = display;
         this.log("Loading '" + display + "' with " + macros);
-        
+
         jQuery.get("screen",
                 { display: this.display, macros: macros, cache: cache },
                 data =>
@@ -158,7 +158,7 @@ class DisplayBuilderWebRuntime
                     // Place display's HTML into content
                     let content = jQuery("#content");
                     content.html(data);
-                    
+
                     if (jQuery("#content>#error").length > 0)
                     {
                         this.log("Cannot load display");
@@ -168,11 +168,11 @@ class DisplayBuilderWebRuntime
                     // so we can add further HTML for info etc.
                     // below.
                     content.height(content.prop("scrollHeight"));
-                    
+
                     let name = content.children().data("name");
                     if (name !== undefined)
                         document.title = name;
-                    
+
                     this.log("Connecting PVs");
                     this.pvws.open();
                 })
@@ -185,9 +185,9 @@ class DisplayBuilderWebRuntime
     }
 
     /** Lifecycle step 2: PV web socket connected
-     * 
+     *
      *  When connected, will initialize widgets
-     *  
+     *
      *  @param connected True/false as PVWS connects/disconnects
      */
     _handle_connection(connected)
@@ -211,7 +211,7 @@ class DisplayBuilderWebRuntime
                 for (sub of info.subscriptions)
                     sub.callback(info.data);
             }
-            
+
             // Need to re-subscribe when we reconnect
             this.pv_infos = {}
             this.log("Disconnected");
@@ -219,7 +219,7 @@ class DisplayBuilderWebRuntime
     }
 
     /** Lifecycle step 3: Start widget
-     * 
+     *
      *  @param widget Widget that's initialized so it can subscribe to PVs
      */
     _initWidget(widget)
@@ -241,14 +241,14 @@ class DisplayBuilderWebRuntime
         if (pv_name)
         {
             this.subscribe(widget, type, pv_name);
-            
+
             widget.mousedown(event =>
             {
                 if (event.which == 2)
                     copyTextToClipboard(pv_name);
             });
         }
-        
+
         // Init rules of this widget
         let wid = widget.attr("id");
         let rules = this.widget_rules[wid];
@@ -259,14 +259,14 @@ class DisplayBuilderWebRuntime
                 rule.init();
             }
     }
-    
+
     /** Subscribe to a PV and register for value updates
-     * 
+     *
      *  This is called automatically for widgets with a 'data-pv' attribute.
      *  When value udates are received from the PV,
      *  `widget_update_methods[type]` will be invoked,
      *  i.e. the widget should register such an update handler.
-     *  
+     *
      *  @param widget jQuery widget object
      *  @param type Widget type, used to obtain the widget update method
      *  @param pv_name PV name to which to subscribe
@@ -274,7 +274,7 @@ class DisplayBuilderWebRuntime
     subscribe(widget, type, pv_name)
     {
         // console.log("Subscribe for " + type + " widget to PV " + pv_name);
-        
+
         // If specifically set to 'false', skip alarms.
         // Otherwise (true, undefined) show alarms
         if (widget.data("alarm-border") !== false)
@@ -286,12 +286,12 @@ class DisplayBuilderWebRuntime
             else
                 apply_alarm_outline(widget, Severity.UNDEFINED);
         }
-        
+
         this._subscribe(widget, pv_name, data => this._handle_widget_pv_update(widget, type, data));
     }
 
     /** Step 4: Subscribe to PV updates
-     * 
+     *
      *  @param widget jQuery widget object
      *  @param pv_name PV name
      *  @param callback Will be invoked with PV data
@@ -323,9 +323,9 @@ class DisplayBuilderWebRuntime
 
         // console.log("Subscribed " + wid +  " to '"  + pv_name + "', " + info.subscriptions.length + " subscriptions total");
     }
-    
+
     /** Step 5: Message from web socket
-     * 
+     *
      *  Checks for 'update' messages and invokes the registered callbacks for the PV
      *  @param message Web socket message
      */
@@ -335,7 +335,7 @@ class DisplayBuilderWebRuntime
         {
             // console.log(message);
             let pv_name = message['pv'];
-            
+
             let info = this.pv_infos[pv_name];
             if (info === undefined)
                 console.error("PV Update for unknown " + pv_name + ": " + JSON.stringify(message));
@@ -358,7 +358,7 @@ class DisplayBuilderWebRuntime
     }
 
     /** Step 6: Callback for a PV update
-     * 
+     *
      *  Updates the widget with data from PV
      *  @param widget Widget to update
      *  @param type Widget type
@@ -366,6 +366,10 @@ class DisplayBuilderWebRuntime
      */
     _handle_widget_pv_update(widget, type, data)
     {
+        // Force UNDEFINED severity when there's nothing useful in the data
+        if (data.value == undefined && data.text === undefined)
+            data.severity = Severity.UNDEFINED;
+
         // If specifically set to 'false', skip alarms.
         // Otherwise (true, undefined) show alarms
         if (widget.data("alarm-border") !== false)
@@ -377,13 +381,13 @@ class DisplayBuilderWebRuntime
             else
                 apply_alarm_outline(widget, data.severity);
         }
-        
+
         // Widget's own update method handles the rest
         let update = this.widget_update_methods[type];
         if (update)
             update(widget, data)
     }
-    
+
     /** Write to PV
      *  @param pvs PV name
      *  @param value number or string
@@ -397,16 +401,16 @@ class DisplayBuilderWebRuntime
             return;
         }
         this.clear_log();
-        
+
         if (typeof(info.data.value) == "number")
         {
             value = parseFloat(value);
             console.log("Writing " + pv + " as number " + value);
         }
-        
+
         this.pvws.write(pv, value);
     }
-    
+
     /** Remove all subscriptions of a widget
      *  @param widget jQuery widget object
      */
@@ -428,18 +432,18 @@ class DisplayBuilderWebRuntime
                 if (sub.wid == wid)
                     info.subscriptions.splice(i);
             }
-            
+
             // Clear PV if there is no remaining subscription
             if (info.subscriptions.length <= 0)
             {
                 // console.log("Cancelling PV " + pv_name);
                 // console.log(info);
-                this.pvws.clear(pv_name);                
+                this.pvws.clear(pv_name);
                 delete this.pv_infos[pv_name];
             }
         }
     }
-    
+
     /** List info about all PVs */
     show_pvs()
     {
@@ -495,7 +499,7 @@ DisplayBuilderWebRuntime.prototype.widget_rules = {};
 
 
 /** Helper for handling limits-from-pv, min, max
- * 
+ *
  *  @param widget Widget with 'limits-from-pv', 'min', 'max'
  *  @param data PV data
  *  @returns [ min, max ]
@@ -515,7 +519,7 @@ function get_min_max(widget, data)
 }
 
 /** Helper for handling updates based on a "bit"
- * 
+ *
  *  Checks for bits 0, 1, .. or any non-zero value for bit = -1
  *  @param widget Widget with 'data-bit'
  *  @param data PV data
@@ -526,9 +530,9 @@ function is_bit_set(widget, data)
     let bit = widget.data("bit");
     if (bit < 0)
         return data.value != 0;
-    
+
     let mask = 1 << bit;
-    return data.value & mask; 
+    return data.value & mask;
 }
 
 /** @param data PV Data
@@ -538,10 +542,10 @@ function get_data_string(data)
 {
     if (data.labels === undefined)
         return '' + data.value;
-    
+
     if (data.value >= 0  &&  data.value < data.labels.length)
         return data.labels[data.value];
-    
+
     return 'Invalid enum ' + data.value;
 }
 
@@ -562,7 +566,7 @@ class WidgetRule
         this.value = {};
         // valueStr['NameOfPV'] is updated to latest string value
         this.valueStr = {};
-        
+
         // Register rule so it will be initialized
         // console.log("Register for " + wid + ":");
         // console.log(this);
@@ -572,7 +576,7 @@ class WidgetRule
         else
             rules.push(this);
     }
-    
+
     /** Subscribe to PVs */
     init()
     {
@@ -588,7 +592,7 @@ class WidgetRule
             });
         }
     }
-    
+
     _trigger(pv)
     {
         let value = this.eval();
@@ -597,14 +601,14 @@ class WidgetRule
                     "' triggered by " + pv + ": " + value);
         this.update(this.widget, value);
     }
-    
+
     eval()
     {
         // Override should use this.value[..] or valueStr[..] and rule expressions to determine value
         console.error("WidgetRule.eval() needs to be overridden");
         return undefined;
     }
-    
+
     update(widget, value)
     {
         // Override should use value to update widget's property
@@ -616,7 +620,7 @@ class WidgetRule
 // Methods used for WidgetRule.update
 function set_x_pos(widget, value)
 {
-    widget.css("left", value + "px");        
+    widget.css("left", value + "px");
 }
 
 function set_text_background_color(widget, color)
@@ -631,7 +635,7 @@ function set_svg_background_color(widget, color)
 
 function set_visibility(widget, visible)
 {
-    widget.css("display", visible ? "block" : "none");        
+    widget.css("display", visible ? "block" : "none");
 }
 // End of common WidgetRule.update methods
 
@@ -644,26 +648,26 @@ let __active_menu = undefined;
 /** Given a widget with 'id',
  *  create a 'id_context' div
  *  with the provided entries.
- *  
+ *
  *  Items may be plain text
  *  or jQuery items that handle click() etc.
- *  
+ *
  *  @param widget
  *  @param ...items
  */
 function create_contextmenu(widget, items)
 {
     let menu_id = widget.attr("id") + "_context";
-    
+
     // In case menu already exists, remove
     jQuery("#" + menu_id).remove();
-    
+
     let entries = jQuery("<ul>");
-    
+
     // jQuery("<li>").html(menu_id).appendTo(entries);
-    
+
     items.forEach(item => jQuery("<li>").html(item).appendTo(entries));
-    
+
     let menu = jQuery("<div>").addClass("ContextMenu")
                               .attr("id", menu_id)
                               .append(entries);
@@ -712,7 +716,7 @@ function toggle_contextmenu(event)
         menu.show();
         __active_menu = widget;
     }
-    
+
     event.preventDefault();
 }
 

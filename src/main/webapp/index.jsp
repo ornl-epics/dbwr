@@ -29,7 +29,7 @@
     </tr>
     <tr>
       <td></td>
-      <td>     
+      <td>
         <select name="options" style="width: 95%;">
 		<% for (String dsp : WebDisplayRepresentation.display_options)
 		        out.println("<option>" + dsp + "</option>");
@@ -120,6 +120,7 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
+  2025-08-11 Texts: Show PV name for undefined data.<br>
   2024-08-27 Polyline: Arrow heads update with color rules. jQuery 3.7.1.<br>
   2024-08-26 Polyline: Support arrow heads.<br>
   2024-05-22 Treat hex-formatted numbers in text update as "unsigned".<br>
@@ -171,7 +172,7 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
   2019-07-04 Initial version presented at EPICS Meeting<br>
 </div>
 
-<script type="text/javascript" src="js/index.js"></script> 
+<script type="text/javascript" src="js/index.js"></script>
 
 </body>
 

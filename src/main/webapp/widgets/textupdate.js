@@ -14,26 +14,26 @@ function format_engineering(number, precision)
         else
             return number.toFixed(precision) + "E0";
         return number.toFi
-        
+
     }
     let neg = number < 0;
     number = Math.abs(number);
     let e = Math.round(Math.log10(number));
-    
+
     e = Math.floor(e/3) * 3;
-    
+
     let m = (e == 0) ? number : number * Math.pow(10, -e);
-    
+
     let text;
     if (precision === undefined)
         text = m.toString();
     else
         text = m.toFixed(precision);
-    
+
     text = text + "E" + e;
     if (neg)
         return "-" + text;
-    
+
     return text;
 }
 
@@ -64,7 +64,7 @@ function format_pv_data_as_text(widget, data)
     // Otherwise use precision from data
     if (precision === undefined  &&  data.precision !== undefined)
         precision = data.precision;
-    
+
     let text;
     if (data.text !== undefined)
     {
@@ -116,7 +116,7 @@ function format_pv_data_as_text(widget, data)
                                 text = text.concat(data.value[i].toFixed(precision));
                             else
                                 text = text.concat(data.value[i].toString());
-                            if (i < data.value.length - 1) 
+                            if (i < data.value.length - 1)
                                 text = text.concat(", ");
                         }
                     }
@@ -131,8 +131,14 @@ function format_pv_data_as_text(widget, data)
            text = text + " " + data.units;
     }
     else
-        return "";
-    
+    {   // No value. Fall back to PV name
+        pv = widget.data("pv");
+        if (pv === undefined)
+            text = "&lt;?&gt;";
+        else
+            text = "&lt;" + pv + "&gt;";
+    }
+
     return text;
 }
 
