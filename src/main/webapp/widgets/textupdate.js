@@ -59,6 +59,16 @@ function makeUnsigned(number)
  */
 function format_pv_data_as_text(widget, data)
 {
+    if (data.severity == Severity.UNDEFINED ||
+        (data.text === undefined   &&   data.value === undefined))
+    {   // No value. Fall back to PV name
+        pv = widget.data("pv");
+        if (pv === undefined)
+            return "&lt;?&gt;";
+        else
+            return "&lt;" + pv + "&gt;";
+    }
+
     // If precision is defined on widget, use it
     let precision = widget.data("precision");
     // Otherwise use precision from data
@@ -131,13 +141,7 @@ function format_pv_data_as_text(widget, data)
            text = text + " " + data.units;
     }
     else
-    {   // No value. Fall back to PV name
-        pv = widget.data("pv");
-        if (pv === undefined)
-            text = "&lt;?&gt;";
-        else
-            text = "&lt;" + pv + "&gt;";
-    }
+        text = "";
 
     return text;
 }
