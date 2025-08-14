@@ -7,6 +7,7 @@ class XYTrace
 {
     /** @param pvx Name of 'X' PV
      *  @param pvy Name of 'Y' PV
+     *  @param yaxis Y axis index 1, 2, ...
      *  @param label Trace label
      *  @param color Color of the trace
      *  @param linewidth Line width
@@ -17,17 +18,17 @@ class XYTrace
     {
         this.pvx = pvx;
         this.pvy = pvy;
-        
+
         // Most recent value for X, Y
         this.x = [];
         this.y = [];
-        
+
         // Flot plot object with
         // data: [ [ x0, y0 ], [ x1, y1 ], ..., [ xn, yn ] ]
-        this.plotobj = 
+        this.plotobj =
         {
             label: label,
-            color: color,   
+            color: color,
             clickable: true,
             hoverable: true,
             data: [],
@@ -40,7 +41,7 @@ class XYTrace
         else
             this.plotobj.lines = { lineWidth: linewidth };
     }
-    
+
     /** @param pv Name of PV, might be X, Y or unknown PV
      *  @param value Value of that PV
      */
@@ -61,7 +62,7 @@ class XYTrace
             this.x = [];
         if (this.y === undefined)
             this.y = [];
-        
+
         // Recompute plot data
         this.plotobj.data = [];
         if (this.x.length > 0  &&  this.y.length > 0)
@@ -69,31 +70,27 @@ class XYTrace
             let i, N = Math.min(this.x.length, this.y.length);
             // console.log("Plotting x[], y[]: " + N);
             for (i=0; i<N; ++i)
-                this.plotobj.data.push( [ this.x[i], this.y[i] ] );        
+                this.plotobj.data.push( [ this.x[i], this.y[i] ] );
         }
         else if (this.y.length > 0)
         {
             let i, N = this.y.length;
             // console.log("Plotting i, y[]: " + N);
             for (i=0; i<N; ++i)
-                this.plotobj.data.push( [ i, this.y[i] ] );        
+                this.plotobj.data.push( [ i, this.y[i] ] );
         }
         else
         {
             let i, N = this.x.length;
             // console.log("Plotting x[], i: " + N);
             for (i=0; i<N; ++i)
-                this.plotobj.data.push( [ this.x[i], i ] );        
+                this.plotobj.data.push( [ this.x[i], i ] );
         }
     }
-}    
+}
 
 DisplayBuilderWebRuntime.prototype.widget_init_methods["xyplot"] = widget =>
 {
-    let i=0, xpv = widget.data("pvx" + i), ypv = widget.data("pvy" + i);
-    let traces = [];
-
-
     let options =
     {
         zoom:
@@ -117,8 +114,8 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["xyplot"] = widget =>
 		},
 		yaxes:
 		[
-			{show: true, axisLabel: 'Y Axis', mode: null},
-			{show: false, axisLabel: 'Y2 Axis', mode: null, position: "right"}
+			{ show: true,  axisLabel: 'Y Axis',  mode: null },
+			{ show: false, axisLabel: 'Y2 Axis', mode: null, position: "right" }
 		]
     };
 
@@ -130,7 +127,7 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["xyplot"] = widget =>
 	let x_axis_visible = widget.data("x_axis_visible");
 	// console.log("xaxis visible: " + x_axis_visible)
 	options.xaxis.show = widget.data("x_axis_visible");
-	
+
 	let y_axis_0_title = widget.data("y_axis_0_title");
 	// console.log("xaxis title: " + y_axis_0_title)
 	if (y_axis_0_title !== undefined)
@@ -139,7 +136,7 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["xyplot"] = widget =>
 	// console.log("xaxis title: " + y_axis_0_mode)
 	if (y_axis_0_mode !== undefined)
 		options.yaxes[0].mode = y_axis_0_mode
-			
+
 	let y_axis_1_title = widget.data("y_axis_1_title");
 	// console.log("xaxis title: " + y_axis_1_title)
 	if (y_axis_1_title !== undefined)
@@ -148,19 +145,22 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["xyplot"] = widget =>
 	// console.log("xaxis title: " + y_axis_1_mode)
 	if (y_axis_1_mode !== undefined)
 		options.yaxes[1].mode = y_axis_1_mode
-		
+
 	let y_axis_1_on_right = widget.data("y_axis_1_on_right");
 	// console.log("yaxis location: " + y_axis_1_on_right)
 	if (y_axis_1_on_right !== undefined)
 		options.yaxes[1].position = y_axis_1_on_right
-		
+
 	let y_axis_1_visible = widget.data("y_axis_1_visible");
 	// console.log("xaxis visible: " + y_axis_1_visible)
 	options.yaxes[1].show = widget.data("y_axis_1_visible");
-			
+
+    let i=0, xpv = widget.data("pvx" + i), ypv = widget.data("pvy" + i);
+    let traces = [];
+    console.log("XYPlot " + widget.attr('id') + " PVs");
     while (xpv  ||  ypv)
     {
-        console.log("Should connect to X/Y " + i + ": " + xpv + ", " + ypv);
+        console.log("X/Y " + i + " = '" + xpv + "', '" + ypv + "'");
         if (ypv)
             dbwr.subscribe(widget, "xyplot", ypv);
         if (xpv)
@@ -176,7 +176,7 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["xyplot"] = widget =>
 		// .bob files the axis index starts from 0 while flot axis index starts from 1
 		let axis = widget.data("y_axis"+i) + 1
         traces.push(new XYTrace(xpv, ypv, axis, name, color, linewidth, pointsize, bars));
-        
+
         ++i;
         xpv = widget.data("pvx" + i);
         ypv = widget.data("pvy" + i);
@@ -190,14 +190,13 @@ DisplayBuilderWebRuntime.prototype.widget_update_methods["xyplot"] = function(wi
     let id = widget.attr("id");
     // console.log("XYPlot " + id + " update: " + data.pv);
     // console.log("XYPlot update for " + data.value);
-    
-    
-    let trace, traces = widget.data("traces"), options = widget.data("options"), plots = [];
-    for (trace of traces)
+
+    let trace, plots = [];
+    for (trace of widget.data("traces"))
     {
         trace.update(data.pv, data.value);
         plots.push( trace.plotobj );
     }
-    
-    jQuery.plot("#" + id, plots, options);
+
+    jQuery.plot("#" + id, plots, widget.data("options"));
 }
