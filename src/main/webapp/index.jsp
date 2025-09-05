@@ -120,6 +120,7 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
+  2025-09-05 Text Update: Word-break long text.<br>
   2025-08-11 Texts: Show PV name for undefined data.<br>
   2024-08-27 Polyline: Arrow heads update with color rules. jQuery 3.7.1.<br>
   2024-08-26 Polyline: Support arrow heads.<br>
