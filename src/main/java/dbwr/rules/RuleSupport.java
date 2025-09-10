@@ -53,7 +53,7 @@ public class RuleSupport
         /** Parse value from a rule's '&lt;exp&gt;'
          *
          *  @param macros Macro provider, typically parent widget
-         *  @param use_expression Use use '&lt;expression&gt;'? Otherwise use '&lt;value&gt;'
+         *  @param use_expression Use '&lt;expression&gt;'? Otherwise use '&lt;value&gt;'
          *  @param exp XML '&lt;exp&gt;'
          *  @return Value to place in client-side javaScript
          *  @throws Exception on error
@@ -80,23 +80,24 @@ public class RuleSupport
                             final String update_code) throws Exception
     {
         try
-        {
+        {   // Locate <rules>
             final Element rules = XMLUtil.getChildElement(xml, "rules");
             if (rules == null)
                 return;
-
+            // Iterate over each <rule>
             for (final Element re : XMLUtil.getChildElements(rules, "rule"))
-            {
+            {   // Does it apply to the desired property?
                 if (! property.equals(re.getAttribute("prop_id")))
                     continue;
 
+                // Is it "Value as Expression" mode?
                 final boolean use_exp = Boolean.parseBoolean(re.getAttribute("out_exp"));
 
                 // Collect PVs,..
                 final List<String> pvs = new ArrayList<>();
                 for (final Element e : XMLUtil.getChildElements(re, "pv_name"))
                     pvs.add(MacroUtil.expand(macros, XMLUtil.getString(e)));
-                // Legacy PV names
+                // Legacy rule PV names
                 for (final Element e : XMLUtil.getChildElements(re, "pv"))
                     pvs.add(MacroUtil.expand(macros, XMLUtil.getString(e)));
 

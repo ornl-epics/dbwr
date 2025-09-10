@@ -1,6 +1,6 @@
 
 // RGB for color index 0..255
-let _viridis = 
+let _viridis =
 [
     [ 68, 1, 84 ],
     [ 68, 2, 85 ],
@@ -265,7 +265,7 @@ let _viridis =
 // map = plt.get_cmap('magma')
 // for i,c in enumerate(map.colors):
 //     print("    [ %3d, %3d, %3d ]," % ( c[0]*255, c[1]*255, c[2]*255) )
-let _magma = 
+let _magma =
 [
     [   0,   0,   3 ],
     [   0,   0,   4 ],
@@ -544,9 +544,9 @@ function __redraw_image_with_data(widget, data)
     // but https://developer.mozilla.org/en-US/docs/Web/API/Transferable
     // might help to avoid copies.
     // Or try http://keithwhor.github.io/multithread.js to get started.
-    
+
     let canvas = widget.get(0);
-    
+
     let colormap = widget.data('colormap');
 
     // Data width, height, range
@@ -556,13 +556,15 @@ function __redraw_image_with_data(widget, data)
         hei = 0;
     else
         hei = Math.floor(data.value.length / wid);
-    
+
     // Screen width, height
     let scr_wid = canvas.width, scr_hei = canvas.height;
-    
-//    console.log("Image update: " + data.value.length + " elements for " + wid + "x" + hei + 
-//                " (" + scr_wid + "x" + scr_hei + "px)" +
-//                ", range " + min + " .. " + max);
+
+    // console.log("Image update: " + data.value.length + " elements for " + wid + "x" + hei +
+    //             " (" + scr_wid + "x" + scr_hei + "px)" +
+    //             ", range " + min + " .. " + max);
+
+    // console.log("Image update: size " + wid + "x" + hei);
 
     if (hei <= 0)
     {
@@ -576,13 +578,13 @@ function __redraw_image_with_data(widget, data)
         gc.fillText('No data', 10, 30);
         return;
     }
-    
+
     // Auto-scale the value range by determining the overall max
     // (only possible if there is data, hei > 0)
     // Leaving min unchanged
     if (widget.data("autoscale"))
         max = data.value.reduce( (a, b) => Math.max(a, b) );
-    
+
     // Draw data into the off-screen image buffer canvas
     _img_buf.width = wid;
     _img_buf.height = hei;
@@ -608,7 +610,7 @@ function __redraw_image_with_data(widget, data)
             img.data[i++] = 255;
         }
     gc.putImageData(img, 0, 0);
-    
+
     // Scale onto display canvas
     gc = canvas.getContext("2d", { alpha: false });
     gc.imageSmoothingEnabled = scr_wid < wid;
@@ -621,11 +623,19 @@ function __redraw_image(widget)
     __redraw_image_with_data(widget, data);
 }
 
-// Called by rules on 'maximum'
+// Called by rules for 'maximum'
 function set_image_maximum(widget, maximum)
 {
     widget.data("max", maximum);
-    // console.log("Rule sets image max to " + maximum + ", redrawing");
+    // console.log("Rule sets image " + widget.attr('id') + " max to " + maximum + ", redrawing");
+    __redraw_image(widget);
+}
+
+// Called by rules for 'data_width'
+function set_image_data_width(widget, width)
+{
+    widget.data("width", width);
+    // console.log("Rule sets image " + widget.attr('id') + " data_width to " + width + ", redrawing");
     __redraw_image(widget);
 }
 
@@ -641,8 +651,8 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["image"] = function(widge
     else
         // Default
         widget.data('colormap', _viridis);
-    
-    // Image colormap, min/max, autoscale config UI for context menu    
+
+    // Image colormap, min/max, autoscale config UI for context menu
     let viridis = jQuery("<input>").attr("type", "radio").attr("name", "colormap");
     viridis.click(() =>
     {
@@ -656,7 +666,7 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["image"] = function(widge
         widget.data('colormap', _magma);
         __redraw_image(widget);
     });
-    
+
     let gray = jQuery("<input>").attr("type", "radio").attr("name", "colormap");
     gray.click(() =>
     {
@@ -670,21 +680,21 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["image"] = function(widge
         widget.data("min", parseFloat(mintext.val()));
         __redraw_image(widget);
     });
-    
+
     let maxtext = jQuery("<input>").attr("type", "text");
     maxtext.change(event =>
     {
         widget.data("max", parseFloat(maxtext.val()));
         __redraw_image(widget);
     });
- 
+
     let checkbox = jQuery("<input>").attr("type", "checkbox");
     checkbox.click(event =>
     {
         widget.data("autoscale", checkbox.prop('checked'));
         __redraw_image(widget);
     });
-    
+
     create_contextmenu(widget,
                        [
                            jQuery("<div class=\"Header\">").append("Image Settings"),
@@ -694,22 +704,22 @@ DisplayBuilderWebRuntime.prototype.widget_init_methods["image"] = function(widge
                            jQuery("<label>").append("Min: ").append(mintext),
                            jQuery("<label>").append("Max: ").append(maxtext),
                            jQuery("<label>").append(checkbox).append("&nbsp; Autoscale")
-                           
+
                        ]);
-    
+
     widget.click(event =>
     {
         // Update menu UI from image widget
-        
+
         viridis.prop('checked', widget.data("colormap") === _viridis);
         magma.prop('checked', widget.data("colormap") === _magma);
         gray.prop('checked', widget.data("colormap") === _grayscale);
 
-        
+
         checkbox.prop('checked', widget.data("autoscale"));
         mintext.val(widget.data("min"));
         maxtext.val(widget.data("max"));
-        
+
         toggle_contextmenu(event);
     });
 }
