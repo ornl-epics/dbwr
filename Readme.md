@@ -8,7 +8,7 @@ This web runtime then provides convenient remote access.
  * Use any web browser with zero client-side installation, including smart phones
  * Supports most widgets and their key features
 
-For more, see [DisplayBuilderWebRuntime.pdf](https://indico.cern.ch/event/766611/contributions/3438289/attachments/1855426/3047296/DisplayBuilderWebRuntime.pdf) 
+For more, see [DisplayBuilderWebRuntime.pdf](https://indico.cern.ch/event/766611/contributions/3438289/attachments/1855426/3047296/DisplayBuilderWebRuntime.pdf)
 presentation from [2019 EPICS Meeting at ITER](https://indico.cern.ch/event/766611/).
 If you are using EDM, see related [Web EDM Runtime](https://github.com/JeffersonLab/wedm).
 
@@ -38,11 +38,9 @@ via File, Import, Maven, Existing Maven Projects.
 
 **Docker**
 
-Edit .env file with settings for git version and port number and docker/setenv.sh with your local site settings for Display/web socket settings. Then:
+Edit `.env` file with settings for git version and port number and `docker/setenv.sh` with your local site settings for Display/web socket settings. Then:
 
-```
-docker-compose build
-```
+    docker-compose build
 
 Basic Configuration and Running under Tomcat
 --------------------------------------------
@@ -82,14 +80,11 @@ Additional Configuration Options
 
 To run docker container (use -d option to run in detached mode):
 
-```
-docker-compose up
-```
+    docker-compose up
 
 The status can be seen with docker ps. The status will be healthy if the dbwr index page loads
-```
-docker ps
-```
+
+    docker ps
 
 Client URLs
 -----------
@@ -99,7 +94,7 @@ of URLs used to open displays.
 Assuming Tomcat on `localhost:8080`, open
 
     http://localhost:8080/dbwr
-    
+
 
 
 When you then open a display, you'll find that the resulting URL has the general format
@@ -167,7 +162,7 @@ The following widget types and features have been implemented with basic functio
  * Action Button to open display or web link
  * Action Button to write value to PV
  * Combo
- * Group with 'Group', 'Title, 'Line' or 'None' styles 
+ * Group with 'Group', 'Title, 'Line' or 'None' styles
  * Embedded Displays
  * Tabs
  * Navigation Tabs
@@ -176,13 +171,13 @@ The following widget types and features have been implemented with basic functio
  * Image, runtime options to change scaling and color map
  * Macro support
  * Alarm-sensitive border based on PV
- * Limited Rule support: Color of rect/circle/label, visibility
+ * Limited Rule support, see below
  * Caching
 
 In principle, the PV Web Socket supports both Channel Access and PV Access,
 but so far all testing of the display builder web runtime has concentrated
 on Channel Access.
- 
+
 Widget Implementation
 =====================
 
@@ -214,3 +209,28 @@ For an example, see `ProgressBarWidget.java`.
 
 PVs with multiple PVs can subscribe to additional PVs in their `widget_init_methods`.
 
+Scripts
+-------
+
+Display scripts are not supported.
+In principle, widgets could provide JavaScript code,
+but the execution environment of the web runtime inside
+the browser is completely different from the Java desktop.
+For example, a desktop script that calls
+`widget.setPropertyValue("x", 123)`
+would have to change into `widget.css("left", "123px")`.
+
+
+Rules
+-----
+
+Support for rules is limited to the following
+
+| Widget                                                                    | Property                         |
+| ------------------------------------------------------------------------- | -------------------------------- |
+| any                                                                       | `x`, `visible`                   |
+| `Arc`, `Ellipse`, `Rectangle`, `ActionButton`, `TextEntry`, `TextUpdate`  | `background_color`               |
+| `Image`                                                                   | `maximum`, `data_width`          |
+|  `LED`                                                                    | `off_color`, `on_color`          |
+| `Polygon`                                                                 | `line_color`, `background_color` |
+| `Polyline`                                                                | `line_color`                     |
