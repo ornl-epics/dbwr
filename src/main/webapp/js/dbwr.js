@@ -633,6 +633,11 @@ function set_svg_background_color(widget, color)
     widget.find("ellipse,rect,path,polygon").attr("fill", color);
 }
 
+function set_text_foreground_color(widget, color)
+{
+    widget.css("color", color);
+}
+
 function set_visibility(widget, visible)
 {
     widget.css("display", visible ? "block" : "none");

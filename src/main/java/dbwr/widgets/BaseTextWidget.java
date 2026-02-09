@@ -62,6 +62,9 @@ public class BaseTextWidget extends PVWidget
 			getRuleSupport().handleColorRule(parent, xml, this,
                                              "background_color", background_color,
                                              "set_text_background_color");
+            getRuleSupport().handleColorRule(parent, xml, this,
+                                            "foreground_color", foreground_color,
+                                            "set_text_foreground_color");
 		}
 
 		LabelWidget.handleTextAlignment(this, xml);

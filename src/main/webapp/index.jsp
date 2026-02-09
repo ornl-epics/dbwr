@@ -120,6 +120,7 @@ view.jsp?cache=false&amp;display=file:/Path/to/Display+Builder/01_main.bob
 <hr>
 
 <div id="versions">
+  2026-02-09 Support color rule for 'foreground_color' in textentry, textupdate.<br>
   2025-11-18 Since 'choice' is not implemented, use 'combo'.<br>
   2025-09-10 Image: Support simple 'Value as Expression' rule for "data_width".<br>
   2025-09-05 Text Update: Word-break long text.<br>
