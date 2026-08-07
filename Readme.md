@@ -107,12 +107,22 @@ You can make them available in the web server's file system, for example via a n
 or by periodically fetching a copy of the current displays from a version control system. In that case,
 use URLs like `...view.jsp?display=file:/path/to/display.bob`, where the file path refers to the
 file system of the web server.
+
 Alternatively, you may expose the display files themselves via a web server. For example, assume that
 `http://my_control_system_host/displays/path/to/display.bob` serves a display file, then a URL like
 `...view.jsp?display=http://my_control_system_host/displays/path/to/display.bob` will
 instruct the display web runtime to fetch that display file and render it.
 
-You might be concerned that the web runtime could be misused to probe the file
+The web server approach to making display files available is overall preferred.
+One reason is image files.
+Assume you have a display `example.bob` that contains a picture widget to show `image.png`.
+If you access `example.bob` as `...view.jsp?display=file:/path/to/example.bob`,
+the remote display client will now try to open the image as `file:/path/to/image.png`.
+That file path may be valid on the web server, but not in the client which now fails to fetch the image.
+If you instead access `example.bob` as `...view.jsp?display=http://my_control_system_host/displays/path/to/example.bob`,
+the picture will be fetched as `http://my_control_system_host/displays/path/to/image.png` and succeed.
+
+If you do prefer the `file:...` approach, you should be concerned that the web runtime can be misused to probe the file
 system of the tomcast host via for example `...view.jsp?display=file:/etc/password`.
 To prevent this, refer to the `WHITELIST..` settings mentioned above and use them to limit
 access to only the `file:/path/to/.*` or `http://my_control_system_host/displays/path/to/.*` paths
